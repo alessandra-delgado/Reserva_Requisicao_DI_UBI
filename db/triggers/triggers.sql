@@ -15,3 +15,17 @@ BEGIN
     LEFT JOIN tipo_utilizador tu ON i.id_tipo = tu.id_tipo;
 END;
 GO
+
+--drop trigger set_initial_equipment_state
+CREATE TRIGGER set_initial_equipment_state
+ON equipamento
+INSTEAD OF INSERT
+AS
+BEGIN
+	INSERT INTO equipamento(nome, estado)
+	SELECT
+		i.nome,
+		estado = 'Available'
+	FROM inserted i
+END;
+GO
