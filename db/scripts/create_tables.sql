@@ -6,74 +6,86 @@ CREATE TABLE Tipo_utilizador
   PRIMARY KEY (id_tipo)
 );
 
-CREATE TABLE Equipamento
-(
-  estado VARCHAR(10) NOT NULL,
-  nome VARCHAR(50) NOT NULL,
-  ide INT NOT NULL,
-  PRIMARY KEY (ide)
-);
-
 CREATE TABLE Utilizador
 (
-  prioridade_corrente VARCHAR(6),
   idu VARCHAR(10) NOT NULL UNIQUE,
   id_tipo VARCHAR(2) NOT NULL,
+  prioridade_corrente VARCHAR(6),
+  faltas int,
   PRIMARY KEY (idu),
   FOREIGN KEY (id_tipo) REFERENCES Tipo_utilizador(id_tipo)
-);
-
-CREATE TABLE Reserva
-(
-  idr INT NOT NULL,
-  periodo_uso DATE NOT NULL,
-  data DATE NOT NULL,
-  estado VARCHAR(10) NOT NULL,
-  idu VARCHAR(10) NOT NULL,
-  PRIMARY KEY (idr),
-  FOREIGN KEY (idu) REFERENCES Utilizador(idu)
+			ON Delete No ACTION On UpDate No Action,
 );
 
 CREATE TABLE Email
 (
-  email VARCHAR(50) NOT NULL,
   idm INT NOT NULL,
   idu VARCHAR(10) NOT NULL,
+  email VARCHAR(50) NOT NULL,
   PRIMARY KEY (idm),
   FOREIGN KEY (idu) REFERENCES Utilizador(idu)
+			ON Delete No ACTION On UpDate No Action,
 );
 
 CREATE TABLE Telemovel
 (
-  telemovel INT NOT NULL,
   idt INT NOT NULL,
   idu VARCHAR(10) NOT NULL,
+  telemovel INT NOT NULL,
   PRIMARY KEY (idt),
   FOREIGN KEY (idu) REFERENCES Utilizador(idu)
 );
 
+CREATE TABLE Equipamento
+(
+  ide INT NOT NULL,
+  estado VARCHAR(10) NOT NULL,
+  nome VARCHAR(50) NOT NULL,
+  PRIMARY KEY (ide)
+);
+
+
+CREATE TABLE Reserva
+(
+  idr INT NOT NULL,
+  idu VARCHAR(10) NOT NULL,
+  data_registo DATE NOT NULL,
+  periodo_uso_inicio DATETIME NOT NULL,
+  periodo_uso_fim DATETIME NOT NULL,
+  estado VARCHAR(10) NOT NULL,
+  PRIMARY KEY (idr),
+  FOREIGN KEY (idu) REFERENCES Utilizador(idu)
+			ON Delete No ACTION On UpDate No ACTION,
+);
+
+
 CREATE TABLE Requisicao
 (
-  estado VARCHAR(10) NOT NULL,
   idq INT NOT NULL,
   idu VARCHAR(10) NOT NULL,
+  estado VARCHAR(10) NOT NULL,
   PRIMARY KEY (idq),
   FOREIGN KEY (idu) REFERENCES Utilizador(idu)
 );
 
-CREATE TABLE Reservado
+CREATE TABLE ReservaPossuiEquipamento
 (
-  essencial VARCHAR(3) NOT NULL,
   idr INT NOT NULL,
   ide INT NOT NULL,
-  FOREIGN KEY (idr) REFERENCES Reserva(idr),
+  essencial VARCHAR(1) NOT NULL,
+  assigned_to VARCHAR(1) NOT NULL,
+  FOREIGN KEY (idr) REFERENCES Reserva(idr)
+			ON Delete No ACTION On UpDate Cascade,
   FOREIGN KEY (ide) REFERENCES Equipamento(ide)
+			ON Delete No ACTION On UpDate Cascade,
 );
 
-CREATE TABLE Levantamento
+CREATE TABLE RequisicaoPossuiEquipamento
 (
   idq INT NOT NULL,
   ide INT NOT NULL,
-  FOREIGN KEY (idq) REFERENCES Requisicao(idq),
+  FOREIGN KEY (idq) REFERENCES Requisicao(idq)
+			ON Delete No ACTION On UpDate Cascade,
   FOREIGN KEY (ide) REFERENCES Equipamento(ide)
+			ON Delete No ACTION On UpDate Cascade,
 );
