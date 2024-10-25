@@ -27,15 +27,6 @@ CREATE TABLE Contacto
 			ON Delete No ACTION On UpDate No Action,
 );
 
-CREATE TABLE Telemovel
-(
-  idt INT NOT NULL IDENTITY(1,1),
-  idu VARCHAR(10) NOT NULL,
-  telemovel INT NOT NULL,
-  PRIMARY KEY (idt),
-  FOREIGN KEY (idu) REFERENCES utilizador(idu)
-);
-
 CREATE TABLE Equipamento
 (
   ide INT NOT NULL IDENTITY(1,1),
@@ -43,7 +34,6 @@ CREATE TABLE Equipamento
   nome VARCHAR(50) NOT NULL,
   PRIMARY KEY (ide)
 );
-
 
 CREATE TABLE Reserva
 (
