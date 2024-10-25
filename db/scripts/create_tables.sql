@@ -88,4 +88,5 @@ CREATE TABLE RequisicaoPossuiEquipamento
 			ON Delete No ACTION On UpDate Cascade,
   FOREIGN KEY (ide) REFERENCES Equipamento(ide)
 			ON Delete No ACTION On UpDate Cascade,
+      
 );
