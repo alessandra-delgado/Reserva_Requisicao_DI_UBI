@@ -29,7 +29,7 @@ CREATE TABLE Contacto
 
 CREATE TABLE Equipamento
 (
-  ide INT NOT NULL IDENTITY(1,1),
+  ide INT IDENTITY(1,1),
   estado VARCHAR(10) NOT NULL,
   nome VARCHAR(50) NOT NULL,
   PRIMARY KEY (ide)
