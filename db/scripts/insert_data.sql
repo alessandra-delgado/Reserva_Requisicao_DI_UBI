@@ -57,7 +57,7 @@ INSERT INTO equipamento(nome) values
 ('Sony DCR405'),
 ('Sony DCR405'),
 ('Sony DCR405'),
-('Asus Tuff'),
+('Asus Tuf F16'),
 ('GB 5KF');
 
 -- presidente do departamento deveria ser um tipo de utilizador?
