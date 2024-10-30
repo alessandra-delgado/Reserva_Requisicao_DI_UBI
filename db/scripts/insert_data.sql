@@ -57,17 +57,33 @@ INSERT INTO equipamento(nome) values
 ('Sony DCR405'),
 ('Sony DCR405'),
 ('Sony DCR405'),
-('Asus Tuf F16'),
+('Asus Tuff'),
 ('GB 5KF');
+
+INSERT INTO reserva (idu, periodo_uso_inicio, periodo_uso_fim, estado) values
+('BS_YUNA', GETDATE(), GETDATE(), 'Cancelled'),
+('BS_CAROL', GETDATE(), GETDATE(), 'Waiting'),
+('BS_ANA', GETDATE(), GETDATE(), 'Forgotten'),
+('PR_SPECIAL', GETDATE(), GETDATE(), 'Active');
+
 
 -- presidente do departamento deveria ser um tipo de utilizador?
 
 
 --query area-----------------------------------------------------------------
+
+
 SELECT * FROM utilizador
 SELECT * FROM tipo_utilizador
 SELECT * FROM EQUIPAMENTO
+
+
+delete from reserva
+exec ResetSequence
+select * from reserva
+SELECT * FROM ReservaSequenceId;
 --delete from tipo_utilizador
 --delete from utilizador
---delete from 
+--delete from reserva
+--delete from ReservaSequenceId
 --delete from equipamento
