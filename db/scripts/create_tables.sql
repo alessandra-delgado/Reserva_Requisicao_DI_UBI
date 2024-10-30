@@ -37,7 +37,7 @@ CREATE TABLE Equipamento
 
 CREATE TABLE Reserva
 (
-  idr INT NOT NULL IDENTITY(20240001,1),
+  idr varchar(8),
   idu VARCHAR(10) NOT NULL,
   data_registo DATE NOT NULL,
   periodo_uso_inicio DATETIME NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE Requisicao
 
 CREATE TABLE ReservaPossuiEquipamento
 (
-  idr INT NOT NULL,
+  idr varchar(8),
   ide INT NOT NULL,
   essencial VARCHAR(1) NOT NULL,
   assigned_to VARCHAR(1) NOT NULL,
