@@ -78,3 +78,9 @@ CREATE TABLE RequisicaoPossuiEquipamento
   FOREIGN KEY (ide) REFERENCES Equipamento(ide)
 			ON Delete No ACTION On UpDate Cascade,
 );
+
+CREATE TABLE ReservaSequenceId
+(
+	Ano INT PRIMARY KEY,
+    CurrentSequence INT
+);
