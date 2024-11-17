@@ -1,6 +1,5 @@
 DROP PROCEDURE IF EXISTS MakeID;
-CREATE PROCEDURE MakeID
-    @GeneratedID VARCHAR(8) OUTPUT
+CREATE PROCEDURE MakeID @GeneratedID VARCHAR(8) OUTPUT
 AS
 BEGIN
     DECLARE @Ano INT = YEAR(GETDATE());
@@ -56,3 +55,15 @@ BEGIN
     SET CurrentSequence = 1;
 END;
 
+
+--------------------------------------------------------------------------
+drop procedure if exists Reserve2Requisition;
+create procedure Reserve2Requisition @idu varchar(10), @idr varchar(8), @periodo_uso_inicio DATETIME, @periodo_uso_fim DATETIME
+as
+begin
+	insert into Requisicao (idu, periodo_uso_inicio, periodo_uso_fim, estado)
+	values (@idu, @periodo_uso_inicio, @periodo_uso_fim, 'Active');
+	INSERT INTO RequisicaoPossuiEquipamento(re.ide, idq)
+	SELECT re.ide, SCOPE_IDENTITY() as idq from ReservaPossuiEquipamento as re where re.idr = @idr and re.assigned_to like 'T' 
+
+end;
