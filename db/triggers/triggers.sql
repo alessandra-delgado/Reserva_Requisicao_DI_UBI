@@ -110,6 +110,7 @@ create trigger EquipmentInUse
 on RequisicaoPossuiEquipamento
 after insert
 as
+begin
 	declare @ide int;
 	declare @idq int;
 
