@@ -111,3 +111,21 @@ SET @tmp = GETDATE()
 exec Reserve2Requisition 'BS_YUNA', @tmp, @tmp
 select * from Requisicao
 select *from RequisicaoPossuiEquipamento
+
+
+--inserir reserva
+--inserir equipamentos nessa reserva
+--mudar estado da reserva para active
+INSERT INTO reserva (idu, periodo_uso_inicio, periodo_uso_fim, estado) values
+('BS_YUNA', GETDATE(), GETDATE(), 'Active');
+select * from Reserva
+INSERT INTO ReservaPossuiEquipamento(idr, ide, essencial, assigned_to) values
+('20240006', 37, 'F', 'T');
+select * from ReservaPossuiEquipamento
+
+update reserva
+set estado = 'Satisfied'
+where idu like 'BS_YUNA';
+
+select * from RequisicaoPossuiEquipamento
+select * from Equipamento

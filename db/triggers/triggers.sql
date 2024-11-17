@@ -104,3 +104,27 @@ end;
 go
 
 
+drop trigger if exists EquipmentInUse;
+go
+create trigger EquipmentInUse
+on RequisicaoPossuiEquipamento
+after insert
+as
+	declare @ide int;
+	declare @idq int;
+
+	declare equipment_fetch cursor for
+	select ide, idq from inserted
+
+	open equipment_fetch;
+
+	fetch next from equipment_fetch into @ide, @idq
+	while @@FETCH_STATUS = 0
+		begin
+			update Equipamento set estado = 'inUse' where ide = @ide
+			fetch next from equipment_fetch into @ide, @idq
+		end
+	close equipment_fetch;
+	deallocate equipment_fetch;
+end;
+go
