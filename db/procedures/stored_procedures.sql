@@ -63,7 +63,7 @@ as
 begin
 	insert into Requisicao (idu, periodo_uso_inicio, periodo_uso_fim, estado)
 	values (@idu, @periodo_uso_inicio, @periodo_uso_fim, 'Active');
-	INSERT INTO RequisicaoPossuiEquipamento(re.ide, idq)
-	SELECT re.ide, SCOPE_IDENTITY() as idq from ReservaPossuiEquipamento as re where re.idr = @idr and re.assigned_to like 'T' 
 
+	INSERT INTO RequisicaoPossuiEquipamento(re.ide, idq)
+	SELECT re.ide, SCOPE_IDENTITY() as idq from ReservaPossuiEquipamento as re where re.idr = @idr and re.assigned_to like 'T'
 end;
