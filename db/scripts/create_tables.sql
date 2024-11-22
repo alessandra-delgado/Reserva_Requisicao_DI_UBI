@@ -86,3 +86,18 @@ CREATE TABLE ReservaSequenceId
 	Ano INT PRIMARY KEY,
     CurrentSequence INT
 );
+
+CREATE TABLE PrioridadeNC
+(
+  num_prioridade INT NOT NULL,
+  class_prioridade varchar (6) NOT NULL,
+  PRIMARY KEY (num_prioridade)
+);
+
+CREATE TABLE PrioridadeTN
+(
+	id_tipo varchar (2) NOT NULL,
+	num_prioridade INT NOT NULL,
+	PRIMARY KEY (id_tipo),
+  foreign key (num_prioridade) references PrioridadeNC (num_prioridade)
+);

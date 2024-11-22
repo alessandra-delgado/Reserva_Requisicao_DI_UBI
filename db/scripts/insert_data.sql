@@ -66,6 +66,23 @@ INSERT INTO reserva (idu, periodo_uso_inicio, periodo_uso_fim, estado) values
 ('BS_ANA', GETDATE(), GETDATE(), 'Forgotten'),
 ('PR_SPECIAL', GETDATE(), GETDATE(), 'Active');
 
+INSERT INTO prioridadet (id_tipo, num_prioridade) values
+('PD', 5),
+('PR', 4),
+('RS', 3),
+('BS', 3),
+('MS', 3),
+('DS', 3),
+('SF', 3),
+('XT', 3);
+
+INSERT INTO prioridadeu (class_prioridade) values
+(5, 'Máxima'),
+(4, 'Acima'),
+(3, 'Média'),
+(2, 'Abaixo'),
+(1, 'Mínima');
+
 
 -- presidente do departamento deveria ser um tipo de utilizador?
 
