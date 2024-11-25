@@ -13,11 +13,11 @@ class Page1:
 
     def build_page(self):
         main = ctk.CTkFrame(master=self.tab) 
-        main.pack(side=ctk.TOP, padx=10, pady=10, anchor='nw', fill="both", expand=True)
+        main.pack(side=ctk.LEFT, padx=10, pady=10, anchor='nw', fill="both", expand=True)
 
         # Nome
         name_frame = ctk.CTkFrame(master=main)  # Sub-frame para organizar melhor
-        name_frame.pack(side=ctk.TOP, padx=10, pady=10, fill="x")
+        name_frame.pack(side=ctk.LEFT, padx=10, pady=10, fill="x")
 
         labelName = ctk.CTkLabel(master=name_frame, text="Nome: ")
         labelName.pack(side=ctk.LEFT, padx=10, pady=10)

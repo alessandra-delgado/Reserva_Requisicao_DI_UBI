@@ -12,6 +12,7 @@ tabview = ctk.CTkTabview(app)
 tabview.pack(padx=20, pady=20)
 tab_1 = tabview.add("tab 1")
 tab_2 = tabview.add("tab 2")
+tab_3 = tabview.add("tab 3")
 
 page1.Page1(tabview, tab_1)
 page2.Page2(tabview, tab_2)
