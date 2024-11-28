@@ -2,7 +2,7 @@ import customtkinter
 from PIL import Image
 
 
-class HomeFrame(customtkinter.CTkFrame):
+class FrameHome(customtkinter.CTkFrame):
     def __init__(self, parent, images):
         super().__init__(parent, corner_radius=0, fg_color="transparent")
         self.grid_columnconfigure(0, weight=1)
