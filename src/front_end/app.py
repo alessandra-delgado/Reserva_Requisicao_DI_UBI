@@ -86,6 +86,7 @@ class App(customtkinter.CTk):
 
 
         navigation_frames = ["Página Inicial", "Reservas", "Requisições"]
+        
         self.nav_buttons = {
             name: self.add_nav_button(name.title(), self.select_frame, name, row=i + 1)
             for i, name in enumerate(navigation_frames)
