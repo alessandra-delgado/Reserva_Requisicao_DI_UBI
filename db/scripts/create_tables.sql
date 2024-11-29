@@ -2,7 +2,7 @@ CREATE TABLE Tipo_utilizador
 (
   id_tipo VARCHAR(2) NOT NULL,
   descricao VARCHAR(12) NOT NULL,
-  prioridade_base VARCHAR(6) NOT NULL,
+  prioridade_base int NOT NULL,
   PRIMARY KEY (id_tipo)
 );
 
