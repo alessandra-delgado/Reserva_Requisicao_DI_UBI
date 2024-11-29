@@ -1,15 +1,12 @@
---procedura para criar reservas que recebe os parametros da aplicação python
-
+--procedura para criar reservas que recebe os parametros da aplicaï¿½ï¿½o python
+/*
 CREATE PROCEDURE CriarReserva
-<<<<<<< HEAD
 --parametros de entrada da funcao
-=======
->>>>>>> origin/CriarReservaProc
+
 	@IDutilizador VARCHAR(10),
 	@inicio DATETIME,
 	@fim DATETIME,
 	@ide INT,
-<<<<<<< HEAD
 	@essencial VARCHAR(3),
 	@inUse VARCHAR(25) OUTPUT
 AS
@@ -26,7 +23,7 @@ BEGIN
 	BEGIN
 		--inserir os dados recebidos a tabela reserva criando uma nova reserva
 		INSERT INTO Reserva(idu, data_registo, periodo_uso_inicio, periodo_uso_fim, estado)
-		--guarda o valor gerado pelo trigger MakeID numa tabela temporária
+		--guarda o valor gerado pelo trigger MakeID numa tabela temporï¿½ria
 		OUTPUT INSERTED.idr INTO @temp_idr
 		VALUES (@IDutilizador, GETDATE(), @inicio, @fim, 'Active')
 
@@ -57,7 +54,7 @@ BEGIN
 			--NOSSA RESERVA
 				--inserir os dados recebidos a tabela reserva criando uma nova reserva
 				INSERT INTO Reserva(idu, data_registo, periodo_uso_inicio, periodo_uso_fim, estado)
-				--guarda o valor gerado pelo trigger MakeID numa tabela temporária
+				--guarda o valor gerado pelo trigger MakeID numa tabela temporï¿½ria
 				OUTPUT INSERTED.idr INTO @temp_idr
 				VALUES (@IDutilizador, GETDATE(), @inicio, @fim, 'Active')
 
@@ -74,18 +71,18 @@ BEGIN
 				SET estado = 'Waiting'
 				WHERE idr = @idr_outro
 
-				--alterar o assigned_to de sim para nao pois agora o uti atual é que tem o equi
+				--alterar o assigned_to de sim para nao pois agora o uti atual ï¿½ que tem o equi
 				UPDATE ReservaPossuiEquipamento
 				SET assigned_to = 'Nao'
 				WHERE idr = @idr_outro
 			END
 			ELSE
 			BEGIN
-			--quando a nossa prioridade é mais baixa
+			--quando a nossa prioridade ï¿½ mais baixa
 			--NOSSA RESERVA
 				--inserir os dados recebidos a tabela reserva criando uma nova reserva
 				INSERT INTO Reserva(idu, data_registo, periodo_uso_inicio, periodo_uso_fim, estado)
-				--guarda o valor gerado pelo trigger MakeID numa tabela temporária
+				--guarda o valor gerado pelo trigger MakeID numa tabela temporï¿½ria
 				OUTPUT INSERTED.idr INTO @temp_idr
 				VALUES (@IDutilizador, GETDATE(), @inicio, @fim, 'Waiting')
 
@@ -102,13 +99,13 @@ BEGIN
 		--VER SE O PERIODO DE USO INTERFERE
 			--estado inUse
 			--se o periodo de uso da nossa reserva nunca for possivel
-			IF ( @fim_outro < @fim) --entao a reserva não acontece
+			IF ( @fim_outro < @fim) --entao a reserva nï¿½o acontece
 			BEGIN
-				SET @inUse = 'A reserva atual não é possível.';
+				SET @inUse = 'A reserva atual nï¿½o ï¿½ possï¿½vel.';
 			END
 		END
 	END
-=======
+
 	@essencial VARCHAR(3)
 AS
 BEGIN
@@ -123,5 +120,4 @@ BEGIN
 	INSERT INTO ReservaPossuiEquipamento(idr, ide, essencial) 
 	VALUES (@idr, @ide, @essencial)
 
->>>>>>> origin/CriarReservaProc
-END
+END*/
