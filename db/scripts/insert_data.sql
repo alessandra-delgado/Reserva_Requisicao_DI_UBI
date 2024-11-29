@@ -67,7 +67,7 @@ INSERT INTO reserva (idu, periodo_uso_inicio, periodo_uso_fim, estado) values
 ('PR_SPECIAL', GETDATE(), GETDATE(), 'Active');
 
 INSERT INTO ReservaPossuiEquipamento(idr, ide, essencial, assigned_to) values
-('2024000', 34, 'F', 'T');
+('20240001', 34, 'F', 'T');
 
 
 -- presidente do departamento deveria ser um tipo de utilizador?
@@ -120,12 +120,19 @@ INSERT INTO reserva (idu, periodo_uso_inicio, periodo_uso_fim, estado) values
 ('BS_YUNA', GETDATE(), GETDATE(), 'Active');
 select * from Reserva
 INSERT INTO ReservaPossuiEquipamento(idr, ide, essencial, assigned_to) values
-('20240006', 37, 'F', 'T');
+('20240001', 13, 'F', 'T'),
+('20240001', 14, 'F', 'T'),
+('20240001', 15, 'F', 'T'),
+('20240001', 16, 'F', 'T'),
+('20240001', 17, 'F', 'T'),
+('20240001', 21, 'F', 'T');
+
+
 select * from ReservaPossuiEquipamento
 
 update reserva
 set estado = 'Satisfied'
-where idu like 'BS_YUNA';
+where idu like 'BS_YUNA' and idr like '20240001';
 
 select * from RequisicaoPossuiEquipamento
 select * from Equipamento
