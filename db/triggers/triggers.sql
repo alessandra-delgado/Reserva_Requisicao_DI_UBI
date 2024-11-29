@@ -71,3 +71,61 @@ BEGIN
     DEALLOCATE reserva_cursor; --FREE DO CURSOR (POTERO)
 END;
 GO
+
+
+drop trigger if exists Reservation2Satisfied;
+go
+create trigger Reservation2Satisfied
+on reserva
+after update
+as
+if (update (estado))
+begin
+		declare @idu varchar(10);
+		declare @idr varchar(8);
+		declare @periodo_uso_inicio DATETIME;
+		declare @periodo_uso_fim DATETIME;
+
+		declare for_satisfied cursor for
+		select idu, idr, periodo_uso_inicio, periodo_uso_fim from inserted
+		where estado like 'Satisfied'
+
+		open for_satisfied;
+
+		fetch next from for_satisfied into @idu, @idr, @periodo_uso_inicio, @periodo_uso_fim
+		while @@FETCH_STATUS = 0
+			begin
+				exec Reserve2Requisition @idu, @idr, @periodo_uso_inicio, @periodo_uso_fim
+				fetch next from for_satisfied into @idu, @idr, @periodo_uso_inicio, @periodo_uso_fim
+			end
+		close for_satisfied;
+		deallocate for_satisfied;
+end;
+go
+
+
+drop trigger if exists EquipmentInUse;
+go
+create trigger EquipmentInUse
+on RequisicaoPossuiEquipamento
+after insert
+as
+begin
+	declare @ide int;
+	declare @idq int;
+
+	declare equipment_fetch cursor for
+	select ide, idq from inserted
+
+	open equipment_fetch;
+
+	fetch next from equipment_fetch into @ide, @idq
+	while @@FETCH_STATUS = 0
+		begin
+			update Equipamento set estado = 'inUse' where ide = @ide
+			fetch next from equipment_fetch into @ide, @idq
+		end
+	close equipment_fetch;
+	deallocate equipment_fetch;
+end;
+go
