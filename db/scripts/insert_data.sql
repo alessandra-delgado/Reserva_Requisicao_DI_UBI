@@ -8,18 +8,19 @@ INSERT INTO Tipo_utilizador (id_tipo, descricao, prioridade_base) VALUES
 ('SF', 'Apoio', 3),
 ('XT', 'Externo', 3);
 
+-- set to default on utilizador: prioridade corrente -> 3 e faltas -> 0
 INSERT INTO utilizador(idu, id_tipo, prioridade_corrente, telemovel, faltas) VALUES
-('PD_Frutuos', 'PD', 5, '274638468', 0),
-('PR_SPECIAL', 'PR', 4, '123456789', 0),
-('RS_FABIO', 'RS', 3, '347826592', 0),
-('DS_DARIO', 'DS', 3, '48527573', 0),
-('MS_DAVINA', 'MS', 3, '384396001', 0),
-('BS_Dragon', 'BS', 3,'999028458', 0),
-('BS_YUNA', 'BS', 3,'448566772', 0),
-('BS_ANA', 'BS', 3, '999586709',0),
-('BS_CAROL', 'BS', 3,  '88857472',0),
-('SF_BETTEN', 'SF', 3, '848393582',0),
-('XT_MONIZ', 'XT', 3, '885748209',0);
+('PD_Frutuos', 'PD', '274638468'),
+('PR_SPECIAL', 'PR', '123456789'),
+('RS_FABIO', 'RS', '347826592'),
+('DS_DARIO', 'DS', '48527573'),
+('MS_DAVINA', 'MS', '384396001'),
+('BS_Dragon', 'BS','999028458'),
+('BS_YUNA', 'BS', '448566772'),
+('BS_ANA', 'BS', '999586709'),
+('BS_CAROL', 'BS',  '88857472'),
+('SF_BETTEN', 'SF', '848393582'),
+('XT_MONIZ', 'XT', '885748209');
 
 INSERT INTO contacto(idu, email) VALUES
 ('PD_Frutuos', 'frutuoso@di.ubi.pt'),
@@ -66,6 +67,7 @@ INSERT INTO reserva (idu, periodo_uso_inicio, periodo_uso_fim, estado) values
 ('BS_ANA', GETDATE(), GETDATE(), 'Forgotten'),
 ('PR_SPECIAL', GETDATE(), GETDATE(), 'Active');
 
+/*
 INSERT INTO PrioridadeTN(id_tipo, num_prioridade) values
 ('PD', 5),
 ('PR', 4),
@@ -75,7 +77,8 @@ INSERT INTO PrioridadeTN(id_tipo, num_prioridade) values
 ('DS', 3),
 ('SF', 3),
 ('XT', 3);
-
+-- to delete? (does the same as Tipo_utilizador)
+*/
 
 INSERT INTO PrioridadeNC(num_prioridade, class_prioridade) values
 (5, 'Máxima'),
@@ -88,7 +91,7 @@ select * from prioridadeNC
 select * from PrioridadeTN 
 select * from Utilizador
 
---testing
+--testing...................................................................................
 INSERT INTO ReservaPossuiEquipamento(idr, ide, essencial, assigned_to) values
 ('20240001', 34, 'F', 'T');
 
