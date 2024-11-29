@@ -44,7 +44,7 @@ CREATE TABLE Equipamento
 
 CREATE TABLE Reserva
 (
-  idr varchar(8),
+  idr varchar(8) NOT NULL UNIQUE,
   idu VARCHAR(10) NOT NULL,
   data_registo DATE NOT NULL,
   periodo_uso_inicio DATETIME NOT NULL,
