@@ -67,7 +67,9 @@ CREATE TABLE Reservations
   reg_data DATE NOT NULL,
   time_start DATETIME NOT NULL,
   time_end DATETIME NOT NULL,
-  status VARCHAR(10) NOT NULL,
+  status_res VARCHAR(10) NOT NULL,
+
+  CONSTRAINT CHECK_STATUS CHECK (status_res in ('Active', 'Satisfied', 'Cancelled', 'Forgotten', 'Waiting')), 
   PRIMARY KEY (id_reserv),
   FOREIGN KEY (id_user) REFERENCES User_DI(id_user)
 			ON Delete No ACTION On UpDate No ACTION,
@@ -80,6 +82,8 @@ CREATE TABLE Requisitions
   status_req VARCHAR(10) default 'Active',
   time_start DATETIME NOT NULL,
   time_end DATETIME NOT NULL,
+
+  CONSTRAINT CHK_STATUS CHECK (status_req in ('Active', 'Closed')),
   PRIMARY KEY (id_req),
   FOREIGN KEY (id_user) REFERENCES User_DI(id_user)
 );
@@ -88,8 +92,8 @@ CREATE TABLE Res_Equip
 (
   id_reserv VARCHAR(8),
   id_equip INT NOT NULL,
-  essential VARCHAR(1) NOT NULL,
-  assigned_to VARCHAR(1) NOT NULL,
+  essential BIT NOT NULL,
+  assigned_to BIT NOT NULL DEFAULT 0,
   --estado VARCHAR(10), (DA RESERVA?)
   FOREIGN KEY (id_reserv) REFERENCES Reservations(id_reserv)
 			ON Delete No ACTION On UpDate Cascade,
