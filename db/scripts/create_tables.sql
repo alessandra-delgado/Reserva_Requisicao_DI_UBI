@@ -52,7 +52,7 @@ CREATE TABLE Requisicao
 (
   idq INT NOT NULL IDENTITY(1,1),
   idu VARCHAR(10) NOT NULL,
-  estado VARCHAR(10) NOT NULL,
+  estado VARCHAR(10) default 'Active',
   periodo_uso_inicio DATETIME NOT NULL,
   periodo_uso_fim DATETIME NOT NULL,
   PRIMARY KEY (idq),
