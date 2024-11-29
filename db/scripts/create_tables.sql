@@ -2,7 +2,7 @@ CREATE TABLE Tipo_utilizador
 (
   id_tipo VARCHAR(2) NOT NULL,
   descricao VARCHAR(12) NOT NULL,
-  prioridade_base VARCHAR(6) NOT NULL,
+  prioridade_base int NOT NULL,
   PRIMARY KEY (id_tipo)
 );
 
@@ -10,7 +10,7 @@ CREATE TABLE Utilizador
 (
   idu VARCHAR(10) NOT NULL UNIQUE,
   id_tipo VARCHAR(2) NOT NULL,
-  prioridade_corrente VARCHAR(6),
+  prioridade_corrente INT,
   telemovel INT NOT NULL UNIQUE,
   faltas int,
   PRIMARY KEY (idu),
@@ -85,4 +85,19 @@ CREATE TABLE ReservaSequenceId
 (
 	Ano INT PRIMARY KEY,
     CurrentSequence INT
+);
+
+CREATE TABLE PrioridadeNC
+(
+  num_prioridade INT NOT NULL,
+  class_prioridade varchar (6) NOT NULL,
+  PRIMARY KEY (num_prioridade)
+);
+
+CREATE TABLE PrioridadeTN
+(
+	id_tipo varchar (2) NOT NULL,
+	num_prioridade INT NOT NULL,
+	PRIMARY KEY (id_tipo),
+  foreign key (num_prioridade) references PrioridadeNC (num_prioridade)
 );
