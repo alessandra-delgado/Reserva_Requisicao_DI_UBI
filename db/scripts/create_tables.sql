@@ -10,9 +10,11 @@ CREATE TABLE Utilizador
 (
   idu VARCHAR(10) NOT NULL UNIQUE,
   id_tipo VARCHAR(2) NOT NULL,
-  prioridade_corrente INT,
+  prioridade_corrente INT
+  CONSTRAINT ckt_prio CHECK (prioridade_corrente BETWEEN 1 AND 5) DEFAULT 3, 
   telemovel INT NOT NULL UNIQUE,
-  faltas int,
+  faltas int
+  CONSTRAINT ckt_faltas CHECK (faltas BETWEEN 0 AND 5) DEFAULT 0,
   PRIMARY KEY (idu),
   FOREIGN KEY (id_tipo) REFERENCES Tipo_utilizador(id_tipo)
 			ON Delete No ACTION On UpDate No Action,
