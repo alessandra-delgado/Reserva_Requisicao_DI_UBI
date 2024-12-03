@@ -3,9 +3,9 @@ CREATE TABLE Res_SeqId
 	current_year INT PRIMARY KEY,
     current_seq INT
 );
---Perguntar ao stor se no esquema fica só lá à parte
+--Perguntar ao stor se no esquema fica sï¿½ lï¿½ ï¿½ parte
 
-CREATE TABLE Priority_Map --horrible criation not anymore
+CREATE TABLE Priority_Map --horrible criation not anymore (what did it even do D:)
 (
   id_priority INT NOT NULL,
   desc_priority VARCHAR(6) NOT NULL,
@@ -82,6 +82,9 @@ CREATE TABLE Requisitions
   status_req VARCHAR(10) default 'Active',
   time_start DATETIME NOT NULL,
   time_end DATETIME NOT NULL,
+  returned INT DEFAULT 0,
+  collected INT NOT NULL,
+
 
   CONSTRAINT CHK_STATUS CHECK (status_req in ('Active', 'Closed')),
   PRIMARY KEY (id_req),
@@ -111,4 +114,12 @@ CREATE TABLE Req_Equip
 			ON Delete No ACTION On UpDate Cascade,
 );
 
-
+CREATE TABLE Devolution
+(
+  id_req INT NOT NULL,
+  id_equip INT NOT NULL,
+  return_date DATETIME NOT NULL,
+  PRIMARY KEY (id_req, id_equip),
+  FOREIGN KEY (id_req) REFERENCES Requisitions (id_req),
+  FOREIGN KEY (id_equip) REFERENCES Equipments (id_equip)
+);
