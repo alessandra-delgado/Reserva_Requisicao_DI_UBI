@@ -9,7 +9,7 @@ BEGIN
     DECLARE @id_user VARCHAR(10);
     DECLARE @time_start DATETIME;
     DECLARE @time_end DATETIME;
-    DECLARE @status_res VARCHAR(50); -- Ajuste o tipo conforme necessário
+    DECLARE @status_res VARCHAR(50);
 
     -- Cursor para iterar sobre cada linha inserida
     DECLARE set_id_at CURSOR FOR 
