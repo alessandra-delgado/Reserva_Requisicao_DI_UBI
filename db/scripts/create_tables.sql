@@ -85,7 +85,8 @@ CREATE TABLE Requisitions
   returned INT DEFAULT 0,
   collected INT DEFAULT -1,
 
-
+  CONSTRAINT CHK_COLLECTED check (collected >= -1),
+  CONSTRAINT CHK_RETURN CHECK (returned >= 0),
   CONSTRAINT CHK_STATUS CHECK (status_req in ('Active', 'Closed')),
   PRIMARY KEY (id_req),
   FOREIGN KEY (id_user) REFERENCES User_DI(id_user)

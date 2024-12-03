@@ -5,8 +5,8 @@ begin
     declare @id_req INT;
     declare @collected INT;
 
-    insert into Requisitions (id_user, time_start, time_end, status_req, collected)
-	values (@id_user, @time_start, @time_end, 'Active', -1);
+    insert into Requisitions (id_user, time_start, time_end, status_req)
+	values (@id_user, @time_start, @time_end, 'Active');
 
     set @id_req = SCOPE_IDENTITY();
 
