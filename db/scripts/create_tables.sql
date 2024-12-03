@@ -83,7 +83,7 @@ CREATE TABLE Requisitions
   time_start DATETIME NOT NULL,
   time_end DATETIME NOT NULL,
   returned INT DEFAULT 0,
-  collected INT NOT NULL,
+  collected INT DEFAULT -1,
 
 
   CONSTRAINT CHK_STATUS CHECK (status_req in ('Active', 'Closed')),

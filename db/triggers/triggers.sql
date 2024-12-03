@@ -6,9 +6,9 @@ INSTEAD OF INSERT
 AS
 BEGIN
     -- Insere os novos registros com a prioridade corrente definida
-    INSERT INTO utilizador (idu, id_tipo, prioridade_corrente, telemovel, faltas)
+    INSERT INTO utilizador (id_user, id_tipo, prioridade_corrente, telemovel, faltas)
     SELECT 
-        i.idu,
+        i.id_user,
         i.id_tipo,
         tu.prioridade_base, -- COALESCE(tu.prioridade_base, 'Média'),
 		i.telemovel,
@@ -21,39 +21,40 @@ GO
 DROP TRIGGER IF EXISTS set_initial_equipment_state;
 GO
 CREATE TRIGGER set_initial_equipment_state
-ON equipamento
+ON Equipments
 INSTEAD OF INSERT
 AS
 BEGIN
-	INSERT INTO equipamento(nome, estado)
+	INSERT INTO Equipments(nome, status_res)
 	SELECT
 		i.nome,
-		estado = 'Available'
+		status_res = 'Available'
 	FROM inserted i
 END;
 GO
+-- ^^^^^^^^^^^^^^^^^^^^^TO DELETE -> DEFAULT!!!!!!!
 
-DROP TRIGGER IF EXISTS set_id_reserva;
+DROP TRIGGER IF EXISTS set_reserv_id;
 GO
-CREATE TRIGGER set_id_reserva
-ON reserva
+CREATE TRIGGER set_reserv_id
+ON Reservations
 INSTEAD OF INSERT
 AS
 BEGIN
     DECLARE @GeneratedID VARCHAR(8);
-    DECLARE @idu VARCHAR(10);
-    DECLARE @periodo_uso_inicio DATETIME;
-    DECLARE @periodo_uso_fim DATETIME;
-    DECLARE @estado VARCHAR(50); -- Ajuste o tipo conforme necessário
+    DECLARE @id_user VARCHAR(10);
+    DECLARE @time_start DATETIME;
+    DECLARE @time_end DATETIME;
+    DECLARE @status_res VARCHAR(50); -- Ajuste o tipo conforme necessário
 
     -- Cursor para iterar sobre cada linha inserida
-    DECLARE reserva_cursor CURSOR FOR 
-    SELECT idu, periodo_uso_inicio, periodo_uso_fim, estado
+    DECLARE set_id_at CURSOR FOR 
+    SELECT id_user, time_start, time_end, status_res
     FROM inserted;
 
-    OPEN reserva_cursor;
+    OPEN set_id_at;
     
-    FETCH NEXT FROM reserva_cursor INTO @idu, @periodo_uso_inicio, @periodo_uso_fim, @estado; 
+    FETCH NEXT FROM set_id_at INTO @id_user, @time_start, @time_end, @status_res; 
 	--METER O QUE ESTÁ NO CURSOR EM CADA VARIÁVEL DECLARADA----------------
     WHILE @@FETCH_STATUS = 0 --ENQUANTO HOUVER LINHAS PARA ITERAR
 		BEGIN
@@ -61,14 +62,14 @@ BEGIN
 			EXEC MakeID @GeneratedID OUTPUT;
 
 			-- Insere a linha na tabela 'reserva' com o ID gerado
-			INSERT INTO reserva (idr, idu, data_registo, periodo_uso_inicio, periodo_uso_fim, estado)
-			VALUES (@GeneratedID, @idu, GETDATE(), @periodo_uso_inicio, @periodo_uso_fim, @estado);
+			INSERT INTO Reservations (id_reserv, id_user, data_registo, time_start, time_end, status_res)
+			VALUES (@GeneratedID, @id_user, GETDATE(), @time_start, @time_end, @status_res);
 
-			FETCH NEXT FROM reserva_cursor INTO @idu, @periodo_uso_inicio, @periodo_uso_fim, @estado; --BUSCAR PROXIMOS VALORES
+			FETCH NEXT FROM set_id_at INTO @id_user, @time_start, @time_end, @status_res; --BUSCAR PROXIMOS VALORES
 		END
 
-    CLOSE reserva_cursor;
-    DEALLOCATE reserva_cursor; --FREE DO CURSOR (POTERO)
+    CLOSE set_id_at;
+    DEALLOCATE set_id_at; --FREE DO CURSOR (POTERO)
 END;
 GO
 
@@ -76,27 +77,27 @@ GO
 drop trigger if exists Reservation2Satisfied;
 go
 create trigger Reservation2Satisfied
-on reserva
+on Reservations
 after update
 as
-if (update (estado))
+if (update (status_res))
 begin
-		declare @idu varchar(10);
-		declare @idr varchar(8);
-		declare @periodo_uso_inicio DATETIME;
-		declare @periodo_uso_fim DATETIME;
+		declare @id_user varchar(10);
+		declare @id_reserv varchar(8);
+		declare @time_start DATETIME;
+		declare @time_end DATETIME;
 
 		declare for_satisfied cursor for
-		select idu, idr, periodo_uso_inicio, periodo_uso_fim from inserted
-		where estado like 'Satisfied'
+		select id_user, id_reserv, time_start, time_end, count(id_reserv) as equips from inserted
+		where status_res like 'Satisfied'
 
 		open for_satisfied;
 
-		fetch next from for_satisfied into @idu, @idr, @periodo_uso_inicio, @periodo_uso_fim
+		fetch next from for_satisfied into @id_user, @id_reserv, @time_start, @time_end, @equips
 		while @@FETCH_STATUS = 0
 			begin
-				exec Reserve2Requisition @idu, @idr, @periodo_uso_inicio, @periodo_uso_fim
-				fetch next from for_satisfied into @idu, @idr, @periodo_uso_inicio, @periodo_uso_fim
+				exec Reserve2Requisition @id_user, @id_reserv, @time_start, @time_end, @equips
+				fetch next from for_satisfied into @id_user, @id_reserv, @time_start, @time_end, @equips
 			end
 		close for_satisfied;
 		deallocate for_satisfied;
@@ -107,23 +108,23 @@ go
 drop trigger if exists EquipmentInUse;
 go
 create trigger EquipmentInUse
-on RequisicaoPossuiEquipamento
+on Req_Equip
 after insert
 as
 begin
-	declare @ide int;
-	declare @idq int;
+	declare @id_equip int;
+	declare @id_req int;
 
 	declare equipment_fetch cursor for
-	select ide, idq from inserted
+	select id_equip, id_req from inserted
 
 	open equipment_fetch;
 
-	fetch next from equipment_fetch into @ide, @idq
+	fetch next from equipment_fetch into @id_equip, @id_req
 	while @@FETCH_STATUS = 0
 		begin
-			update Equipamento set estado = 'inUse' where ide = @ide
-			fetch next from equipment_fetch into @ide, @idq
+			update Equipments set status_equip = 'inUse' where id_equip = @id_equip
+			fetch next from equipment_fetch into @id_equip, @id_req
 		end
 	close equipment_fetch;
 	deallocate equipment_fetch;
