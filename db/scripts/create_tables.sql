@@ -27,7 +27,7 @@ CREATE TABLE User_DI
 (
   id_user VARCHAR(10) NOT NULL UNIQUE,
   id_type VARCHAR(2) NOT NULL,
-  current_priority INT DEFAULT 3,
+  current_priority INT NOT NULL DEFAULT 3,
   phone_no INT NOT NULL UNIQUE,
   misses int DEFAULT 0,
   hits int default 0,
@@ -54,7 +54,7 @@ CREATE TABLE Contacts
 CREATE TABLE Equipments
 (
   id_equip INT IDENTITY(1,1),
-  status_equip VARCHAR(10) NOT NULL,
+  status_equip VARCHAR(10) NOT NULL DEFAULT 'Available',
   name_equip VARCHAR(50) NOT NULL,
   category VARCHAR(13),
   PRIMARY KEY (id_equip)
@@ -79,7 +79,7 @@ CREATE TABLE Requisitions
 (
   id_req INT NOT NULL IDENTITY(1,1),
   id_user VARCHAR(10) NOT NULL,
-  status_req VARCHAR(10) default 'Active',
+  status_req VARCHAR(10) NOT NULL DEFAULT 'Active',
   time_start DATETIME NOT NULL,
   time_end DATETIME NOT NULL,
   returned INT DEFAULT 0,

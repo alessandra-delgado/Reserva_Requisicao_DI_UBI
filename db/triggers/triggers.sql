@@ -1,39 +1,3 @@
-DROP TRIGGER IF EXISTS set_prioridade_inicial;
-GO
-CREATE TRIGGER set_prioridade_inicial
-ON utilizador
-INSTEAD OF INSERT
-AS
-BEGIN
-    -- Insere os novos registros com a prioridade corrente definida
-    INSERT INTO utilizador (id_user, id_tipo, prioridade_corrente, telemovel, faltas)
-    SELECT 
-        i.id_user,
-        i.id_tipo,
-        tu.prioridade_base, -- COALESCE(tu.prioridade_base, 'Média'),
-		i.telemovel,
-		faltas = 0
-    FROM inserted i
-    LEFT JOIN tipo_utilizador tu ON i.id_tipo = tu.id_tipo;
-END;
-GO
-
-DROP TRIGGER IF EXISTS set_initial_equipment_state;
-GO
-CREATE TRIGGER set_initial_equipment_state
-ON Equipments
-INSTEAD OF INSERT
-AS
-BEGIN
-	INSERT INTO Equipments(nome, status_res)
-	SELECT
-		i.nome,
-		status_res = 'Available'
-	FROM inserted i
-END;
-GO
--- ^^^^^^^^^^^^^^^^^^^^^TO DELETE -> DEFAULT!!!!!!!
-
 DROP TRIGGER IF EXISTS set_reserv_id;
 GO
 CREATE TRIGGER set_reserv_id
