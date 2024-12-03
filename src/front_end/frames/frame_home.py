@@ -13,3 +13,5 @@ class FrameHome(customtkinter.CTkFrame):
             customtkinter.CTkButton(
                 self, text="CTkButton" if compound else "", image=images["icon"], compound=compound
             ).grid(row=i, column=0, padx=20, pady=10)
+
+        customtkinter.CTkFrame(self).grid(row=0, column=0, padx=20, pady=10)

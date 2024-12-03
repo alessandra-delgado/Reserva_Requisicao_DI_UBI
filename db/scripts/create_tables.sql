@@ -1,88 +1,114 @@
-CREATE TABLE Tipo_utilizador
+CREATE TABLE Res_SeqId
 (
-  id_tipo VARCHAR(2) NOT NULL,
-  descricao VARCHAR(12) NOT NULL,
-  prioridade_base VARCHAR(6) NOT NULL,
-  PRIMARY KEY (id_tipo)
+	current_year INT PRIMARY KEY,
+    current_seq INT
+);
+--Perguntar ao stor se no esquema fica só lá à parte
+
+CREATE TABLE Priority_Map --horrible criation not anymore
+(
+  id_priority INT NOT NULL,
+  desc_priority VARCHAR(6) NOT NULL,
+  PRIMARY KEY (id_priority)
 );
 
-CREATE TABLE Utilizador
+CREATE TABLE User_Priority
 (
-  idu VARCHAR(10) NOT NULL UNIQUE,
-  id_tipo VARCHAR(2) NOT NULL,
-  prioridade_corrente VARCHAR(6),
-  telemovel INT NOT NULL UNIQUE,
-  faltas int,
-  PRIMARY KEY (idu),
-  FOREIGN KEY (id_tipo) REFERENCES Tipo_utilizador(id_tipo)
+  id_type VARCHAR(2) NOT NULL,
+  id_priority INT,
+  desc_userType VARCHAR(12) NOT NULL,
+  default_priority int NOT NULL,
+  PRIMARY KEY (id_type),
+  FOREIGN KEY (id_priority) REFERENCES Priority_Map(id_priority)
 			ON Delete No ACTION On UpDate No Action,
 );
 
-CREATE TABLE Contacto
+CREATE TABLE User_DI
 (
-  idu VARCHAR(10) NOT NULL UNIQUE,
+  id_user VARCHAR(10) NOT NULL UNIQUE,
+  id_type VARCHAR(2) NOT NULL,
+  current_priority INT DEFAULT 3,
+  phone_no INT NOT NULL UNIQUE,
+  misses int DEFAULT 0,
+  hits int default 0,
+
+  CONSTRAINT CHK_TIPO CHECK (id_type in ('PD', 'PR', 'RS', 'BS', 'MS', 'DS', 'SF', 'XT')),
+  CONSTRAINT CHK_prio CHECK (current_priority BETWEEN 1 AND 5), 
+  CONSTRAINT CHK_faltas CHECK (misses BETWEEN 0 AND 5),
+  CONSTRAINT CHK_ACERTOS CHECK (hits BETWEEN 0 AND 2),
+
+  PRIMARY KEY (id_user),
+  FOREIGN KEY (id_type) REFERENCES User_Priority(id_type)
+			ON Delete No ACTION On UpDate No Action,
+);
+
+CREATE TABLE Contacts
+(
+  id_user VARCHAR(10) NOT NULL UNIQUE,
   email VARCHAR(50) NOT NULL,
-  PRIMARY KEY (idu),
-  FOREIGN KEY (idu) REFERENCES Utilizador(idu)
+  PRIMARY KEY (id_user),
+  FOREIGN KEY (id_user) REFERENCES User_DI(id_user)
 			ON Delete No ACTION On UpDate No Action,
 );
 
-CREATE TABLE Equipamento
+CREATE TABLE Equipments
 (
-  ide INT IDENTITY(1,1),
-  estado VARCHAR(10) NOT NULL,
-  nome VARCHAR(50) NOT NULL,
-  PRIMARY KEY (ide)
+  id_equip INT IDENTITY(1,1),
+  status_equip VARCHAR(10) NOT NULL,
+  name_equip VARCHAR(50) NOT NULL,
+  category VARCHAR(13),
+  PRIMARY KEY (id_equip)
 );
 
-CREATE TABLE Reserva
+CREATE TABLE Reservations
 (
-  idr varchar(8),
-  idu VARCHAR(10) NOT NULL,
-  data_registo DATE NOT NULL,
-  periodo_uso_inicio DATETIME NOT NULL,
-  periodo_uso_fim DATETIME NOT NULL,
-  estado VARCHAR(10) NOT NULL,
-  PRIMARY KEY (idr),
-  FOREIGN KEY (idu) REFERENCES Utilizador(idu)
+  id_reserv VARCHAR(8) NOT NULL UNIQUE,
+  id_user VARCHAR(10) NOT NULL,
+  reg_data DATE NOT NULL,
+  time_start DATETIME NOT NULL,
+  time_end DATETIME NOT NULL,
+  status_res VARCHAR(10) NOT NULL,
+
+  CONSTRAINT CHECK_STATUS CHECK (status_res in ('Active', 'Satisfied', 'Cancelled', 'Forgotten', 'Waiting')), 
+  PRIMARY KEY (id_reserv),
+  FOREIGN KEY (id_user) REFERENCES User_DI(id_user)
 			ON Delete No ACTION On UpDate No ACTION,
 );
 
-CREATE TABLE Requisicao
+CREATE TABLE Requisitions
 (
-  idq INT NOT NULL IDENTITY(1,1),
-  idu VARCHAR(10) NOT NULL,
-  estado VARCHAR(10) default 'Active',
-  periodo_uso_inicio DATETIME NOT NULL,
-  periodo_uso_fim DATETIME NOT NULL,
-  PRIMARY KEY (idq),
-  FOREIGN KEY (idu) REFERENCES Utilizador(idu)
+  id_req INT NOT NULL IDENTITY(1,1),
+  id_user VARCHAR(10) NOT NULL,
+  status_req VARCHAR(10) default 'Active',
+  time_start DATETIME NOT NULL,
+  time_end DATETIME NOT NULL,
+
+  CONSTRAINT CHK_STATUS CHECK (status_req in ('Active', 'Closed')),
+  PRIMARY KEY (id_req),
+  FOREIGN KEY (id_user) REFERENCES User_DI(id_user)
 );
 
-CREATE TABLE ReservaPossuiEquipamento
+CREATE TABLE Res_Equip
 (
-  idr varchar(8),
-  ide INT NOT NULL,
-  essencial VARCHAR(1) NOT NULL,
-  assigned_to VARCHAR(1) NOT NULL,
-  FOREIGN KEY (idr) REFERENCES Reserva(idr)
+  id_reserv VARCHAR(8),
+  id_equip INT NOT NULL,
+  essential BIT NOT NULL,
+  assigned_to BIT NOT NULL DEFAULT 0,
+  --estado VARCHAR(10), (DA RESERVA?)
+  FOREIGN KEY (id_reserv) REFERENCES Reservations(id_reserv)
 			ON Delete No ACTION On UpDate Cascade,
-  FOREIGN KEY (ide) REFERENCES Equipamento(ide)
-			ON Delete No ACTION On UpDate Cascade,
-);
-
-CREATE TABLE RequisicaoPossuiEquipamento
-(
-  idq INT NOT NULL,
-  ide INT NOT NULL,
-  FOREIGN KEY (idq) REFERENCES Requisicao(idq)
-			ON Delete No ACTION On UpDate Cascade,
-  FOREIGN KEY (ide) REFERENCES Equipamento(ide)
+  FOREIGN KEY (id_equip) REFERENCES Equipments(id_equip)
 			ON Delete No ACTION On UpDate Cascade,
 );
 
-CREATE TABLE ReservaSequenceId
+CREATE TABLE Req_Equip
 (
-	Ano INT PRIMARY KEY,
-    CurrentSequence INT
+  id_req INT NOT NULL,
+  id_equip INT NOT NULL,
+  FOREIGN KEY (id_req) REFERENCES Requisitions(id_req)
+			ON Delete No ACTION On UpDate Cascade,
+  FOREIGN KEY (id_equip) REFERENCES Equipments(id_equip)
+			ON Delete No ACTION On UpDate Cascade,
 );
+
+

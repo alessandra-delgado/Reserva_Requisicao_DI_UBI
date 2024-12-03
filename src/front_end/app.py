@@ -2,16 +2,30 @@ import customtkinter
 import os
 import importlib
 from PIL import Image
+from nav import nav_home
+from nav import nav_requisicao
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
+
+        self.navigation_frame = None
+        self.frames = None
+        self.images = None
+        self.nav_frames = {}
 
         self.title("Gestor de Reservas e Requisições - DI")
         self.geometry("800x600")
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
+
+        # Frames mapping
+        self.frame_name_mapping = {
+            "frame_home.py": "Página Inicial",
+            "frame_requisicao.py": "Requisição",
+            "frame_reserva.py": "Reserva",
+        }
 
         # Loaders
         self.load_images()
@@ -20,7 +34,7 @@ class App(customtkinter.CTk):
         self.create_navigation_panel()
 
         # Select the default frame (home)
-        self.select_frame("Página Inicial")
+        self.select_frame("Página Inicial", "Página Inicial")
 
     def load_images(self):
         # Load all images used in the application (I included the example ones)
@@ -40,31 +54,27 @@ class App(customtkinter.CTk):
         }
 
     def load_frames(self):
-        frame_name_mapping = {
-            "frame_home.py": "Página Inicial",
-            "frame_reserva.py": "Reservas",
-            "frame_requisicao.py": "Requisições"
-        }
-
-        self.loaded_frames = {}
+        loaded_frames = {}
         frames_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "frames")
 
         for file in os.listdir(frames_dir):
-            if file in frame_name_mapping:  # Check if the file is in the mapping
+            if file in self.frame_name_mapping:  # Check if the file is in the mapping
                 module_name = f"frames.{file[:-3]}"  # Remove .py to get module name
                 try:
                     module = importlib.import_module(module_name)
                     class_name = file[:-3].title().replace("_", "")
                     frame_class = getattr(module, class_name)
-                    logical_name = frame_name_mapping[file]
-                    self.loaded_frames[logical_name] = frame_class
+                    logical_name = self.frame_name_mapping[file]
+                    loaded_frames[logical_name] = frame_class
                 except (ImportError, AttributeError) as e:
                     print(f"Error loading frame '{file}': {e}")
 
+        return loaded_frames
+
     def create_frames(self):
-        self.load_frames()
         self.frames = {}
-        for logical_name, frame_class in self.loaded_frames.items():
+        loaded_frames = self.load_frames()
+        for logical_name, frame_class in loaded_frames.items():
             try:
                 self.frames[logical_name] = frame_class(self, self.images)
             except TypeError as e:
@@ -84,13 +94,8 @@ class App(customtkinter.CTk):
         anchor="w"  # Aligns content to the left
         ).grid(row=0, column=0, padx=(10, 0), pady=20, sticky="w")
 
-
-        navigation_frames = ["Página Inicial", "Reservas", "Requisições"]
-        
-        self.nav_buttons = {
-            name: self.add_nav_button(name.title(), self.select_frame, name, row=i + 1)
-            for i, name in enumerate(navigation_frames)
-        }
+        self.nav_frames['Página Inicial'] = nav_home.FrameHome(self.navigation_frame, 0, self.select_frame, 'Página Inicial')
+        self.nav_frames['Requisição'] = nav_requisicao.FrameHome(self.navigation_frame, 1, self.select_frame, 'Requisição')
 
         # Option menu for themes
         customtkinter.CTkOptionMenu(
@@ -98,22 +103,15 @@ class App(customtkinter.CTk):
             command = customtkinter.set_appearance_mode
         ).grid(row = 6, column = 0, padx = 20, pady = 20, sticky = 's')
 
-    def add_nav_button(self, text, command, frame_name, row):
-        button = customtkinter.CTkButton(
-            self.navigation_frame, corner_radius=0, height=40, border_spacing=10, text=text,
-            fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-            anchor="w", command=lambda: command(frame_name)
-        )
-        button.grid(row=row, column=0, sticky="ew")
-        return button
-
-    def select_frame(self, frame_name):
+    def select_frame(self, frame_name, button_name):
         for name, frame in self.frames.items():
             frame.grid_forget()
-            self.nav_buttons[name].configure(fg_color="transparent")
-        self.frames[frame_name].grid(row=0, column=1, sticky="nsew")
-        self.nav_buttons[frame_name].configure(fg_color=("gray75", "gray25"))
 
+        for name, frame in self.nav_frames.items():
+            self.nav_frames[name].unselect()
+
+        self.frames[button_name].grid(row=0, column=1, sticky="nsew")
+        self.nav_frames[frame_name].select(button_name)
 
 if __name__ == "__main__":
     app = App()
