@@ -1,4 +1,5 @@
 drop procedure if exists Reserve2Requisition;
+GO
 create procedure Reserve2Requisition @id_user varchar(10), @id_reserv varchar(8), @time_start DATETIME, @time_end DATETIME
 as
 begin
@@ -11,11 +12,11 @@ begin
     set @id_req = SCOPE_IDENTITY();
 
 	INSERT INTO Req_Equip(re.id_equip, id_req)
-	SELECT re.id_equip, @id_req, count(id_reserv) from Res_Equip as re where re.id_reserv = @id_reserv and re.assigned_to = 1;
+	SELECT re.id_equip, @id_req from Res_Equip as re where re.id_reserv = @id_reserv and re.assigned_to = 1;
     
     SET @collected = @@ROWCOUNT;
-    update Requisitions as req
-    set req.collected = @collected
-    where req.id = @id_req;
+    update Requisitions
+    set Requisitions.collected = @collected
+    where Requisitions.id_req = @id_req;
 
 end;
