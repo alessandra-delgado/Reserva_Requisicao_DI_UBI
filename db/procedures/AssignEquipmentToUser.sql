@@ -1,3 +1,4 @@
+/*
 DROP PROCEDURE IF EXISTS AssignEquipmentToUser;
 GO
 CREATE PROCEDURE AssignEquipmentToUser @ide VARCHAR(10)
@@ -43,3 +44,4 @@ BEGIN
 
         END
 END
+*/

@@ -16,7 +16,7 @@ BEGIN
     FETCH NEXT FROM equipment_fetch INTO @id_equip, @id_req
     WHILE @@FETCH_STATUS = 0
         BEGIN
-            UPDATE Equipments SET status_equip = 'inUse' WHERE id_equip = @id_equip
+            UPDATE Equipment SET status_equip = 'inUse' WHERE id_equip = @id_equip
             FETCH NEXT FROM equipment_fetch INTO @id_equip, @id_req
         END
     CLOSE equipment_fetch;

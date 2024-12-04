@@ -16,7 +16,7 @@ FROM User_DI
 SELECT *
 FROM User_Priority
 SELECT *
-FROM Equipments
+FROM Equipment
 
 
 --delete from Reserva
@@ -40,7 +40,7 @@ SET status_res = 'Active'
 WHERE id_user LIKE 'DS_DARIO';
 
 INSERT INTO Reservation (id_user, reg_date, time_start, time_end, status_res)
-VALUES ('DS_DARIO', GETDATE(), GETDATE(), 'Active');
+VALUES ('DS_DARIO', GETDATE(), GETDATE(), GETDATE(), 'Available');
 SELECT *
 FROM Reservation
 INSERT INTO Res_Equip(id_reserv, id_equip, essential, assigned_to)
@@ -58,8 +58,8 @@ FROM Req_Equip
 --inserir Reservations
 --inserir equipamentos nessa Reservations
 --mudar status_res da Reservations para active
-INSERT INTO Reservation (id_user, time_start, time_end, status_res)
-VALUES ('BS_YUNA', GETDATE(), GETDATE(), 'Active');
+INSERT INTO Reservation (id_user, reg_date, time_start, time_end, status_res)
+VALUES ('BS_YUNA',GETDATE(),GETDATE(), GETDATE(), 'Active');
 SELECT *
 FROM Reservation
 INSERT INTO Res_Equip(id_reserv, id_equip, essential, assigned_to)
