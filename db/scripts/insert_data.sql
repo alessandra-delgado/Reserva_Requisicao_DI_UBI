@@ -1,4 +1,4 @@
-INSERT INTO Tipo_utilizador (id_tipo, descricao, prioridade_base) VALUES
+INSERT INTO User_Priority (id_type, desc_userType, default_priority) VALUES
 ('PD', 'Presidente', 5),
 ('PR', 'Professor', 4),
 ('RS', 'Investigador', 3),
@@ -9,7 +9,7 @@ INSERT INTO Tipo_utilizador (id_tipo, descricao, prioridade_base) VALUES
 ('XT', 'Externo', 3);
 
 -- set to default on utilizador: prioridade corrente -> 3 e faltas -> 0
-INSERT INTO utilizador(idu, id_tipo, prioridade_corrente, telemovel, faltas) VALUES
+INSERT INTO User_DI(id_user, id_type, phone_no) VALUES
 ('PD_Frutuos', 'PD', '274638468'),
 ('PR_SPECIAL', 'PR', '123456789'),
 ('RS_FABIO', 'RS', '347826592'),
@@ -22,7 +22,7 @@ INSERT INTO utilizador(idu, id_tipo, prioridade_corrente, telemovel, faltas) VAL
 ('SF_BETTEN', 'SF', '848393582'),
 ('XT_MONIZ', 'XT', '885748209');
 
-INSERT INTO contacto(idu, email) VALUES
+INSERT INTO Contacts(id_user, email) VALUES
 ('PD_Frutuos', 'frutuoso@di.ubi.pt'),
 ('PR_SPECIAL', 'mrspecial@di.ubi.pt'),
 ('RS_FABIO', 'fabio@di.upi.pt'),
@@ -35,7 +35,7 @@ INSERT INTO contacto(idu, email) VALUES
 ('SF_BETTEN', 'guilherme@gmail.com'),
 ('XT_MONIZ', 'moniz4@gmail.com');
 
-INSERT INTO equipamento(nome) values
+INSERT INTO Equipments (name_equip) values
 ('Toshiba TDP-S8U DLP'),
 ('Toshiba TDP-S8U DLP'),
 ('Toshiba TDP-S8U DLP'),
@@ -61,7 +61,7 @@ INSERT INTO equipamento(nome) values
 ('Asus Tuff'),
 ('GB 5KF');
 
-INSERT INTO reserva (idu, periodo_uso_inicio, periodo_uso_fim, estado) values
+INSERT INTO Reservations (id_user, time_start, time_end, status_res) values
 ('BS_YUNA', GETDATE(), GETDATE(), 'Cancelled'),
 ('BS_CAROL', GETDATE(), GETDATE(), 'Waiting'),
 ('BS_ANA', GETDATE(), GETDATE(), 'Forgotten'),
@@ -80,19 +80,18 @@ INSERT INTO PrioridadeTN(id_tipo, num_prioridade) values
 -- to delete? (does the same as Tipo_utilizador)
 */
 
-INSERT INTO PrioridadeNC(num_prioridade, class_prioridade) values
+INSERT INTO Priority_Map (id_priority, desc_priority) values
 (5, 'Máxima'),
 (4, 'Acima'),
 (3, 'Média'),
 (2, 'Abaixo'),
 (1, 'Mínima');
 
-select * from prioridadeNC 
-select * from PrioridadeTN 
-select * from Utilizador
+select * from Priority_Map 
+select * from User_DI
 
 --testing...................................................................................
-INSERT INTO ReservaPossuiEquipamento(idr, ide, essencial, assigned_to) values
+INSERT INTO Res_Equip (id_reserv, id_equip, essential, assigned_to) values
 ('20240001', 34, 'F', 'T');
 
 
@@ -102,50 +101,50 @@ INSERT INTO ReservaPossuiEquipamento(idr, ide, essencial, assigned_to) values
 --query area-----------------------------------------------------------------
 
 
-SELECT * FROM utilizador
-SELECT * FROM tipo_utilizador
-SELECT * FROM EQUIPAMENTO
+SELECT * FROM User_DI
+SELECT * FROM User_Priority
+SELECT * FROM Equipments
 
 
---delete from reserva
+--delete from Reserva
 --exec ResetSequence
 --SELECT * FROM ReservaSequenceId;
 --delete from tipo_utilizador
 --delete from utilizador
---delete from reserva
+--delete from Reserva
 --delete from ReservaSequenceId
 --delete from equipamento
 
 -- 29-11-24 requisition testing
-update reserva
-set estado = 'Satisfied'
-where idu like 'DS_DARIO';
-select * from reserva
+update Reservations
+set status_res = 'Satisfied'
+where id_user like 'DS_DARIO';
+select * from Reservations
 
-update reserva
-set estado = 'Active'
-where idu like 'DS_DARIO';
+update Reservations
+set status_res = 'Active'
+where id_user like 'DS_DARIO';
 
-INSERT INTO reserva (idu, periodo_uso_inicio, periodo_uso_fim, estado) values
+INSERT INTO Reservations (id_user, time_start, time_end, status_res) values
 ('DS_DARIO', GETDATE(), GETDATE(), 'Active');
-select * from reserva
-INSERT INTO ReservaPossuiEquipamento(idr, ide, essencial, assigned_to) values
+select * from Reservations
+INSERT INTO Res_Equip(id_reserv, id_equip, essential, assigned_to) values
 ('20240005', 34, 'F', 'T');
 
 DECLARE @tmp DATETIME
 SET @tmp = GETDATE()
 exec Reserve2Requisition 'BS_YUNA', @tmp, @tmp
-select * from Requisicao
-select *from RequisicaoPossuiEquipamento
+select * from Requisitions
+select *from Req_Equip
 
 
---inserir reserva
---inserir equipamentos nessa reserva
---mudar estado da reserva para active
-INSERT INTO reserva (idu, periodo_uso_inicio, periodo_uso_fim, estado) values
+--inserir Reservations
+--inserir equipamentos nessa Reservations
+--mudar status_res da Reservations para active
+INSERT INTO Reservations (id_user, time_start, time_end, status_res) values
 ('BS_YUNA', GETDATE(), GETDATE(), 'Active');
-select * from Reserva
-INSERT INTO ReservaPossuiEquipamento(idr, ide, essencial, assigned_to) values
+select * from Reservations
+INSERT INTO Res_Equip(id_reserv, id_equip, essential, assigned_to) values
 ('20240001', 13, 'F', 'T'),
 ('20240001', 14, 'F', 'T'),
 ('20240001', 15, 'F', 'T'),
@@ -154,11 +153,11 @@ INSERT INTO ReservaPossuiEquipamento(idr, ide, essencial, assigned_to) values
 ('20240001', 21, 'F', 'T');
 
 
-select * from ReservaPossuiEquipamento
+select * from Res_Equip
 
-update reserva
-set estado = 'Satisfied'
-where idu like 'BS_YUNA' and idr like '20240001';
+update Reservations
+set status_res = 'Satisfied'
+where id_user like 'BS_YUNA' and id_reserv like '20240001';
 
-select * from RequisicaoPossuiEquipamento
+select * from Req_Equip
 select * from Equipamento

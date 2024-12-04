@@ -1,12 +1,12 @@
-drop table if exists ReservaPossuiEquipamento;
-drop table if exists RequisicaoPossuiEquipamento;
-drop table if exists Requisicao;
-drop table if exists Reserva;
-drop table if exists Contacto;
-drop table if exists PrioridadeTN;
-drop table if exists PrioridadeNC;
-drop table if exists Utilizador;
-drop table if exists Tipo_utilizador;
-drop table if exists Equipamento;
-drop table if exists ReservaSequenceId;
+drop table if exists Res_SeqId;
+drop table if exists Contacts;
+drop table if exists User_DI;
+drop table if exists User_Priority;
+drop table if exists Devolution;
+drop table if exists Res_Equip;
+drop table if exists Req_Equip;
+drop table if exists Reservations;
+drop table if exists Requisitions;
+drop table if exists Equipments;
+drop table if exists Priority_Map;
 go
