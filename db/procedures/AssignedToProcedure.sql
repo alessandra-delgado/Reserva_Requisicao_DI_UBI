@@ -1,4 +1,4 @@
-
+DROP PROCEDURE IF EXISTS AssignedTo
 CREATE PROCEDURE AssignedTo
 	@ide VARCHAR(10)
 AS
@@ -7,6 +7,9 @@ BEGIN
 	DECLARE @maxPrio INT;
 	DECLARE @countEssencial INT;
 	
+	select u.current_priority, r.status_res, re.essential from User_DI u, Reservations r, Res_Equip re
+	where u.id_user = r.id_user and r.re
+
 	SET @countReserva = (
 		SELECT COUNT(idr)
 		FROM ReservaPossuiEquipamento

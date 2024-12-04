@@ -1,7 +1,7 @@
 CREATE TABLE Res_SeqId
 (
 	current_year INT PRIMARY KEY,
-    current_seq INT
+  current_seq INT
 );
 --Perguntar ao stor se no esquema fica s� l� � parte
 
