@@ -1,5 +1,6 @@
 DROP PROCEDURE IF EXISTS MakeID;
-CREATE PROCEDURE MakeID @GeneratedID VARCHAR(8) OUTPUT
+CREATE PROCEDURE 
+	MakeID @GeneratedID VARCHAR(8) OUTPUT
 AS
 BEGIN
     DECLARE @Ano INT = YEAR(GETDATE());
@@ -10,20 +11,20 @@ BEGIN
 
     BEGIN TRY
         -- Verifica se o ano atual já existe na tabela
-        IF EXISTS (SELECT 1 FROM ReservaSequenceId WHERE Ano = @Ano)
+        IF EXISTS (SELECT 1 FROM Res_SeqId WHERE current_year = @Ano)
         BEGIN
             -- Incrementa a sequência para o ano atual
-            UPDATE ReservaSequenceId
-            SET CurrentSequence = CurrentSequence + 1
-            WHERE Ano = @Ano;
+            UPDATE Res_SeqId
+            SET current_seq = current_seq + 1
+            WHERE current_year= @Ano;
 
             -- Obtém o valor atualizado
-            SELECT @Sequence = CurrentSequence FROM ReservaSequenceId WHERE Ano = @Ano;
+            SELECT @Sequence = current_seq FROM Res_SeqId WHERE current_year = @Ano;
         END
         ELSE
         BEGIN
             -- Insere o ano atual com a sequência inicial de 1
-            INSERT INTO ReservaSequenceId (Ano, CurrentSequence) VALUES (@Ano, 1);
+            INSERT INTO Res_SeqId (current_year, current_seq) VALUES (@Ano, 1);
             SET @Sequence = 1;
         END
 
