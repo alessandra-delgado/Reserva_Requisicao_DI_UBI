@@ -60,7 +60,7 @@ CREATE TABLE Equipments
     PRIMARY KEY (id_equip)
 );
 
-CREATE TABLE Reservations
+CREATE TABLE Reservation
 (
     id_reserv  VARCHAR(8)  NOT NULL UNIQUE DEFAULT 'N/A',
     id_user    VARCHAR(10) NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE Reservations
         ON Delete No ACTION On UpDate No ACTION,
 );
 
-CREATE TABLE Requisitions
+CREATE TABLE Requisition
 (
     id_req     INT         NOT NULL IDENTITY (1,1),
     id_user    VARCHAR(10) NOT NULL,
@@ -99,7 +99,7 @@ CREATE TABLE Res_Equip
     essential   BIT NOT NULL,
     assigned_to BIT NOT NULL DEFAULT 0,
     --estado VARCHAR(10), (DA RESERVA?)
-    FOREIGN KEY (id_reserv) REFERENCES Reservations (id_reserv)
+    FOREIGN KEY (id_reserv) REFERENCES Reservation (id_reserv)
         ON Delete No ACTION On UpDate Cascade,
     FOREIGN KEY (id_equip) REFERENCES Equipments (id_equip)
         ON Delete No ACTION On UpDate Cascade,
@@ -109,7 +109,7 @@ CREATE TABLE Req_Equip
 (
     id_req   INT NOT NULL,
     id_equip INT NOT NULL,
-    FOREIGN KEY (id_req) REFERENCES Requisitions (id_req)
+    FOREIGN KEY (id_req) REFERENCES Requisition (id_req)
         ON Delete No ACTION On UpDate Cascade,
     FOREIGN KEY (id_equip) REFERENCES Equipments (id_equip)
         ON Delete No ACTION On UpDate Cascade,
@@ -121,6 +121,6 @@ CREATE TABLE Devolution
     id_equip    INT      NOT NULL,
     return_date DATETIME NOT NULL,
     PRIMARY KEY (id_req, id_equip),
-    FOREIGN KEY (id_req) REFERENCES Requisitions (id_req),
+    FOREIGN KEY (id_req) REFERENCES Requisition (id_req),
     FOREIGN KEY (id_equip) REFERENCES Equipments (id_equip)
 );

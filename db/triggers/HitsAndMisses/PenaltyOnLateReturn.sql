@@ -1,7 +1,7 @@
-DROP TRIGGER IF EXISTS notreturnedtrigger
+DROP TRIGGER IF EXISTS PenaltyOnUncollectedEquipment;
 GO
 
-CREATE TRIGGER notreturnedtrigger
+CREATE TRIGGER PenaltyOnUncollectedEquipment
 ON Devolution
 AFTER INSERT
 AS
@@ -17,8 +17,8 @@ BEGIN
             ELSE 0 
         END
     FROM User_DI u
-    INNER JOIN Requisitions req ON u.id_user = req.id_user
-    INNER JOIN Reservations res ON res.id_user = u.id_user
+    INNER JOIN Requisition req ON u.id_user = req.id_user
+    INNER JOIN Reservation res ON res.id_user = u.id_user
     INNER JOIN Devolution d ON d.id_req = req.id_req
     WHERE req.returned >= 1; -- Apenas para recursos efetivamente entregues
 END;

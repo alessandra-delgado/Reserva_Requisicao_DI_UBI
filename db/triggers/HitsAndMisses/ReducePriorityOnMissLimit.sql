@@ -1,6 +1,6 @@
-DROP TRIGGER IF EXISTS ChangePriorityWithMisses;
+DROP TRIGGER IF EXISTS ReducePriorityOnMissLimit;
 GO
-CREATE TRIGGER ChangePriorityWithMisses 
+CREATE TRIGGER ReducePriorityOnMissLimit
 ON User_DI 
 AFTER UPDATE 
 AS 

@@ -1,2 +1,0 @@
-DROP TRIGGER IF EXISTS AssignedTo_EquipStatus
-GO
