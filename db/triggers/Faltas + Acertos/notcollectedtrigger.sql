@@ -10,8 +10,8 @@ BEGIN
     UPDATE User_DI
     SET misses = 5
     FROM User_DI U
-    JOIN Reservations R ON U.idu = R.idu
-    JOIN inserted I ON R.idr = I.idr
+    JOIN Reservations R ON U.id_user = R.id_user
+    JOIN inserted I ON R.id_reserv = I.id_reserv
     WHERE I.status_res = 'forgotten' -- Verifica estados 
       AND GETDATE() > R.time_end  -- passou o periodo de uso
 END;
