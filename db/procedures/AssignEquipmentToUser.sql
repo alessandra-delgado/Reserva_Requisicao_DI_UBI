@@ -7,11 +7,11 @@ BEGIN
     DECLARE @maxPrio INT;
     DECLARE @countEssencial INT;
 
-    select u.current_priority, r.status_res, re.essential
-    from User_DI u,
+    SELECT u.current_priority, r.status_res, re.essential
+    FROM User_DI u,
          Reservation r,
          Res_Equip re
-    where u.id_user = r.id_user -- todo:select cases
+    WHERE u.id_user = r.id_user -- todo:select cases
 
     SET @countReserva = (SELECT COUNT(id_reserv)
                          FROM Res_Equip

@@ -1,5 +1,5 @@
 INSERT INTO Priority_Map (id_priority, desc_priority)
-values (5, N'Máxima'),
+VALUES (5, N'Máxima'),
        (4, 'Acima'),
        (3, N'Média'),
        (2, 'Abaixo'),
@@ -43,7 +43,7 @@ VALUES ('PD_Frutuos', 'frutuoso@di.ubi.pt'),
        ('XT_MONIZ', 'moniz4@gmail.com');
 
 INSERT INTO Equipments (name_equip)
-values ('Toshiba TDP-S8U DLP'),
+VALUES ('Toshiba TDP-S8U DLP'),
        ('Toshiba TDP-S8U DLP'),
        ('Toshiba TDP-S8U DLP'),
        ('Toshiba TDP-S8U DLP'),
@@ -69,7 +69,7 @@ values ('Toshiba TDP-S8U DLP'),
        ('GB 5KF');
 
 INSERT INTO Reservation (id_user, reg_date, time_start, time_end, status_res)
-values ('BS_YUNA', GETDATE(), GETDATE(), GETDATE(), 'Cancelled'),
+VALUES ('BS_YUNA', GETDATE(), GETDATE(), GETDATE(), 'Cancelled'),
        ('BS_CAROL', GETDATE(), GETDATE(), GETDATE(), 'Waiting'),
        ('BS_ANA', GETDATE(), GETDATE(), GETDATE(), 'Forgotten'),
        ('PR_SPECIAL', GETDATE(), GETDATE(), GETDATE(), 'Active');

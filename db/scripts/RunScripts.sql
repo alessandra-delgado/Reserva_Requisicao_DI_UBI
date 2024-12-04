@@ -1,11 +1,11 @@
 --:setvar BasePath "C:\Users\yana\Desktop\base_de_dados_git\Reserva_Requisicao_DI_UBI\db\scripts"
-:setvar BasePath ".\scripts"
+:SETVAR BasePath ".\scripts"
 
 PRINT 'Dropping all tables...';
-:r $(BasePath)\DropTables.sql
+:R $(BasePath)\DropTables.sql
 
 PRINT 'Creating tables...';
-:r $(BasePath)\CreateTables.sql
+:R $(BasePath)\CreateTables.sql
 
 PRINT 'Inserting data...';
-:r $(BasePath)\InsertData.sql
+:R $(BasePath)\InsertData.sql

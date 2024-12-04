@@ -1,30 +1,30 @@
-drop trigger if exists ReservationToSatisfied;
-go
-create trigger ReservationToSatisfied
-    on Reservation
-    after update
-    as
-    if (update(status_res))
-        begin
-            declare @id_user varchar(10);
-            declare @id_reserv varchar(8);
-            declare @time_start DATETIME;
-            declare @time_end DATETIME;
+DROP TRIGGER IF EXISTS ReservationToSatisfied;
+GO
+CREATE TRIGGER ReservationToSatisfied
+    ON Reservation
+    AFTER UPDATE
+    AS
+    IF (UPDATE(status_res))
+        BEGIN
+            DECLARE @id_user VARCHAR(10);
+            DECLARE @id_reserv VARCHAR(8);
+            DECLARE @time_start DATETIME;
+            DECLARE @time_end DATETIME;
 
-            declare for_satisfied cursor for
-                select id_user, id_reserv, time_start, time_end
-                from inserted
-                where status_res like 'Satisfied'
+            DECLARE for_satisfied CURSOR FOR
+                SELECT id_user, id_reserv, time_start, time_end
+                FROM inserted
+                WHERE status_res LIKE 'Satisfied'
 
-            open for_satisfied;
+            OPEN for_satisfied;
 
-            fetch next from for_satisfied into @id_user, @id_reserv, @time_start, @time_end
-            while @@FETCH_STATUS = 0
-                begin
-                    exec ReservationToRequisition @id_user, @id_reserv, @time_start, @time_end
-                    fetch next from for_satisfied into @id_user, @id_reserv, @time_start, @time_end
-                end
-            close for_satisfied;
-            deallocate for_satisfied;
-        end;
-go
+            FETCH NEXT FROM for_satisfied INTO @id_user, @id_reserv, @time_start, @time_end
+            WHILE @@FETCH_STATUS = 0
+                BEGIN
+                    EXEC ReservationToRequisition @id_user, @id_reserv, @time_start, @time_end
+                    FETCH NEXT FROM for_satisfied INTO @id_user, @id_reserv, @time_start, @time_end
+                END
+            CLOSE for_satisfied;
+            DEALLOCATE for_satisfied;
+        END;
+GO

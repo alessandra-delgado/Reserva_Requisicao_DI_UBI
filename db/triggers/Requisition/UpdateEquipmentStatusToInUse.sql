@@ -1,25 +1,25 @@
-drop trigger if exists UpdateEquipmentStatusToInUse;
-go
-create trigger UpdateEquipmentStatusToInUse
-    on Req_Equip
-    after insert
-    as
-begin
-    declare @id_equip int;
-    declare @id_req int;
+DROP TRIGGER IF EXISTS UpdateEquipmentStatusToInUse;
+GO
+CREATE TRIGGER UpdateEquipmentStatusToInUse
+    ON Req_Equip
+    AFTER INSERT
+    AS
+BEGIN
+    DECLARE @id_equip INT;
+    DECLARE @id_req INT;
 
-    declare equipment_fetch cursor for
-        select id_equip, id_req from inserted
+    DECLARE equipment_fetch CURSOR FOR
+        SELECT id_equip, id_req FROM inserted
 
-    open equipment_fetch;
+    OPEN equipment_fetch;
 
-    fetch next from equipment_fetch into @id_equip, @id_req
-    while @@FETCH_STATUS = 0
-        begin
-            update Equipments set status_equip = 'inUse' where id_equip = @id_equip
-            fetch next from equipment_fetch into @id_equip, @id_req
-        end
-    close equipment_fetch;
-    deallocate equipment_fetch;
-end;
-go
+    FETCH NEXT FROM equipment_fetch INTO @id_equip, @id_req
+    WHILE @@FETCH_STATUS = 0
+        BEGIN
+            UPDATE Equipments SET status_equip = 'inUse' WHERE id_equip = @id_equip
+            FETCH NEXT FROM equipment_fetch INTO @id_equip, @id_req
+        END
+    CLOSE equipment_fetch;
+    DEALLOCATE equipment_fetch;
+END;
+GO
