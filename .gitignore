@@ -17,3 +17,5 @@ db/scripts/.vs
 src/front_end/.idea/
 
 src/front_end/
+
+db/.idea/

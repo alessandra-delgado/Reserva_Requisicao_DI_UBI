@@ -1,0 +1,2 @@
+DROP TRIGGER IF EXISTS AssignedToEquipStatus
+GO
