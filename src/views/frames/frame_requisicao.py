@@ -3,5 +3,5 @@ import customtkinter
 
 class FrameRequisicao(customtkinter.CTkFrame):
     def __init__(self, parent, images):
-        super().__init__(parent, corner_radius=0, fg_color="transparent")
+        super().__init__(parent, corner_radius=0, fg_color="#EBF3FA")
         # Add content here for Frame 3 if needed.
