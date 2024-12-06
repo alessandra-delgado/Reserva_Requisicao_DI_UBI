@@ -1,11 +1,11 @@
 INSERT INTO Priority_Map (id_priority, desc_priority)
-VALUES (5, N'Máxima'),
+VALUES (5, 'Maxima'),
        (4, 'Acima'),
-       (3, N'Média'),
+       (3, 'Media'),
        (2, 'Abaixo'),
-       (1, N'Mínima');
+       (1, 'Minima');
 
-INSERT INTO User_Priority (id_type, desc_userType, default_priority)
+INSERT INTO User_Priority (id_type, desc_userType, id_priority)
 VALUES ('PD', 'Presidente', 5),
        ('PR', 'Professor', 4),
        ('RS', 'Investigador', 3),
@@ -29,7 +29,7 @@ VALUES ('PD_Frutuos', 'PD', '274638468'),
        ('SF_BETTEN', 'SF', '848393582'),
        ('XT_MONIZ', 'XT', '885748209');
 
-INSERT INTO Contacts(id_user, email)
+INSERT INTO Contact(id_user, email)
 VALUES ('PD_Frutuos', 'frutuoso@di.ubi.pt'),
        ('PR_SPECIAL', 'mrspecial@di.ubi.pt'),
        ('RS_FABIO', 'fabio@di.upi.pt'),
@@ -42,7 +42,7 @@ VALUES ('PD_Frutuos', 'frutuoso@di.ubi.pt'),
        ('SF_BETTEN', 'guilherme@gmail.com'),
        ('XT_MONIZ', 'moniz4@gmail.com');
 
-INSERT INTO Equipments (name_equip)
+INSERT INTO Equipment (name_equip)
 VALUES ('Toshiba TDP-S8U DLP'),
        ('Toshiba TDP-S8U DLP'),
        ('Toshiba TDP-S8U DLP'),

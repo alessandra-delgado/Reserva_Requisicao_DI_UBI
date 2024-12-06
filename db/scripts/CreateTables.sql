@@ -17,7 +17,6 @@ CREATE TABLE User_Priority
     id_type          VARCHAR(2)  NOT NULL,
     id_priority      INT,
     desc_userType    VARCHAR(12) NOT NULL,
-    default_priority INT         NOT NULL,
     PRIMARY KEY (id_type),
     FOREIGN KEY (id_priority) REFERENCES Priority_Map (id_priority)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -42,7 +41,7 @@ CREATE TABLE User_DI
         ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
-CREATE TABLE Contacts
+CREATE TABLE Contact
 (
     id_user VARCHAR(10) NOT NULL UNIQUE,
     email   VARCHAR(50) NOT NULL,
@@ -51,12 +50,13 @@ CREATE TABLE Contacts
         ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
-CREATE TABLE Equipments
+CREATE TABLE Equipment
 (
     id_equip     INT IDENTITY (1,1),
     status_equip VARCHAR(10) NOT NULL DEFAULT 'Available',
     name_equip   VARCHAR(50) NOT NULL,
     category     VARCHAR(13),
+    CONSTRAINT CHK_STATUS CHECK (status_equip IN ('Available', 'Reserved', 'InUse')),
     PRIMARY KEY (id_equip)
 );
 
@@ -67,9 +67,9 @@ CREATE TABLE Reservation
     reg_date   DATETIME    NOT NULL,
     time_start DATETIME    NOT NULL,
     time_end   DATETIME    NOT NULL,
-    status_res VARCHAR(10) NOT NULL,
+    status_res VARCHAR(12) NOT NULL,
 
-    CONSTRAINT CHECK_STATUS CHECK (status_res IN ('Active', 'Satisfied', 'Cancelled', 'Forgotten', 'Waiting')),
+    CONSTRAINT CHECK_STATUS CHECK (status_res IN ('Active', 'Satisfied', 'Cancelled', 'Forgotten', 'Waiting', 'NotSatisfied')),
     PRIMARY KEY (id_reserv),
     FOREIGN KEY (id_user) REFERENCES User_DI (id_user)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -101,7 +101,7 @@ CREATE TABLE Res_Equip
     --estado VARCHAR(10), (DA RESERVA?)
     FOREIGN KEY (id_reserv) REFERENCES Reservation (id_reserv)
         ON DELETE NO ACTION ON UPDATE CASCADE,
-    FOREIGN KEY (id_equip) REFERENCES Equipments (id_equip)
+    FOREIGN KEY (id_equip) REFERENCES Equipment (id_equip)
         ON DELETE NO ACTION ON UPDATE CASCADE,
 );
 
@@ -111,7 +111,7 @@ CREATE TABLE Req_Equip
     id_equip INT NOT NULL,
     FOREIGN KEY (id_req) REFERENCES Requisition (id_req)
         ON DELETE NO ACTION ON UPDATE CASCADE,
-    FOREIGN KEY (id_equip) REFERENCES Equipments (id_equip)
+    FOREIGN KEY (id_equip) REFERENCES Equipment (id_equip)
         ON DELETE NO ACTION ON UPDATE CASCADE,
 );
 
@@ -122,5 +122,5 @@ CREATE TABLE Devolution
     return_date DATETIME NOT NULL,
     PRIMARY KEY (id_req, id_equip),
     FOREIGN KEY (id_req) REFERENCES Requisition (id_req),
-    FOREIGN KEY (id_equip) REFERENCES Equipments (id_equip)
+    FOREIGN KEY (id_equip) REFERENCES Equipment (id_equip)
 );

@@ -7,39 +7,44 @@ BEGIN
     DECLARE @maxPrio INT;
     DECLARE @countEssencial INT;
 
-    SELECT u.current_priority, r.status_res, re.essential
+    SELECT u.current_priority, r.status_res, re.essential, re.assigned_to
+    INTO #temp_results
     FROM User_DI u,
          Reservation r,
          Res_Equip re
-    WHERE u.id_user = r.id_user -- todo:select cases
+    WHERE u.id_user = r.id_user
+      AND re.id_reserv = r.id_reserv
+      AND r.status_res IN ('Waiting', 'Active')
 
-    SET @countReserva = (SELECT COUNT(id_reserv)
-                         FROM Res_Equip
-                         WHERE @ide = id_equip)
+    SET @countReserva = (SELECT COUNT(re.id_reserv)
+                         FROM Res_Equip AS re,
+                              Reservation AS r
+                         WHERE @ide = id_equip
+                           AND r.status_res IN ('Active', 'Waiting'))
 
     IF (@countReserva = 1)
         BEGIN
             UPDATE Res_Equip
-            SET assigned_to = 'Sim'
+            SET assigned_to = 1
             WHERE id_equip = @ide
+            RETURN;
         END
 
-    IF (@countReserva > 1)
-        BEGIN
-            SET @countEssencial = (SELECT COUNT(essential)
-                                   FROM Res_Equip
-                                   WHERE @ide = id_equip)
 
-            --IF ( @countEssencial = 0 )
+    BEGIN
+        SELECT r.time_start, r.id_reserv FROM Reservation r ORDER BY time_start ASC
 
 
-            WITH maxPrio AS (SELECT MAX(current_priority)
-                             FROM User_DI u
-                                      INNER JOIN Reservation r ON u.id_user = r.id_user
-                                      INNER JOIN Res_Equip e ON e.id_reserv = r.id_reserv
-                             WHERE e.id_equip = 5
-                               AND essential = 0)
+        --IF ( @countEssencial = 0 )
+
+/*
+        WITH maxPrio AS (SELECT MAX(current_priority)
+                         FROM User_DI u
+                                  INNER JOIN Reservation r ON u.id_user = r.id_user
+                                  INNER JOIN Res_Equip e ON e.id_reserv = r.id_reserv
+                         WHERE e.id_equip = 5
+                           AND essential = 0)*/
 
 
-        END
+    END
 END

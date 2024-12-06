@@ -12,7 +12,7 @@ BEGIN
 
     SET @id_req = SCOPE_IDENTITY();
 
-    INSERT INTO Req_Equip(re.id_equip, id_req)
+    INSERT INTO Req_Equip(id_equip, id_req)
     SELECT re.id_equip, @id_req
     FROM Res_Equip AS re
     WHERE re.id_reserv = @id_reserv
