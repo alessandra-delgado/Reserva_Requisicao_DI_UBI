@@ -15,3 +15,5 @@
 db/scripts/.vs
 
 db/.idea/
+
+src/.idea/
