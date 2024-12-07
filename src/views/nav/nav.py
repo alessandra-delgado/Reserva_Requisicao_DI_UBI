@@ -1,5 +1,6 @@
 import customtkinter as ctk
 
+
 class Nav(ctk.CTkFrame):
     def __init__(self, parent, row, callback, name, entries):
         super().__init__(parent, corner_radius=0, fg_color="transparent")
@@ -10,10 +11,10 @@ class Nav(ctk.CTkFrame):
         self.buttons = {}
 
         # Add content
-        self.master_button = ctk.CTkButton(self, height=40, width=240, text=name, anchor="w", text_color="#163B61",
+        self.master_button = ctk.CTkButton(self, height=40, width=200, text=name, anchor="w", text_color="#163B61",
                                            hover_color="#6DA5DE",
                                            command=self.toggle)
-        self.master_button.grid(row=0, column=0, sticky="ew")
+        self.master_button.grid(row=0, column=0, sticky="nsew", padx=10)
 
         self.container = ctk.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.container.grid_forget()
@@ -22,10 +23,10 @@ class Nav(ctk.CTkFrame):
             self.buttons[el] = self.add_nav_entry(el, i, callback, name)
 
     def add_nav_entry(self, el, i, callback, name):
-        button = ctk.CTkButton(self.container, height=40, width=240, text=" • " + el,
+        button = ctk.CTkButton(self.container, height=40, width=200, text=" • " + el,
                                text_color="#163B61", hover_color="#6DA5DE", anchor="w",
                                command=lambda: callback(name, el))
-        button.grid(row=i, column=0, pady=(10, 0), sticky="ew")
+        button.grid(row=i, column=0, pady=(10, 0), sticky="nsew", padx=10)
         return button
 
     def select(self, button_name):
