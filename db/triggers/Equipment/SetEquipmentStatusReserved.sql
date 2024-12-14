@@ -21,6 +21,6 @@ DECLARE @id_equip INT;
 			WHERE i.status_equip = 'Available'
 			AND DELETED.status_equip in ('InUse', 'Reserved')
 		)
-		EXEC Assigned_To @id_equip
+		EXEC AssignEquipmentToUser @id_equip
 	END
 END
