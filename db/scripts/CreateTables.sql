@@ -18,7 +18,7 @@ CREATE TABLE TblUser_Priority
     id_priority      INT,
     desc_userType    VARCHAR(12) NOT NULL,
     PRIMARY KEY (id_type),
-    FOREIGN KEY (id_priority) REFERENCES Priority_Map (id_priority)
+    FOREIGN KEY (id_priority) REFERENCES TblPriority_Map (id_priority)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
@@ -37,7 +37,7 @@ CREATE TABLE TblUser_DI
     CONSTRAINT CHK_HITS CHECK (hits BETWEEN 0 AND 2),
 
     PRIMARY KEY (id_user),
-    FOREIGN KEY (id_type) REFERENCES User_Priority (id_type)
+    FOREIGN KEY (id_type) REFERENCES TblUser_Priority (id_type)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE TblContact
     id_user VARCHAR(10) NOT NULL UNIQUE,
     email   VARCHAR(50) NOT NULL,
     PRIMARY KEY (id_user),
-    FOREIGN KEY (id_user) REFERENCES User_DI (id_user)
+    FOREIGN KEY (id_user) REFERENCES TblUser_DI (id_user)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
@@ -71,7 +71,7 @@ CREATE TABLE TblReservation
 
     CONSTRAINT CHECK_STATUS_RESERVATION CHECK (status_res IN ('Active', 'Satisfied', 'Cancelled', 'Forgotten', 'Waiting', 'NotSatisfied')),
     PRIMARY KEY (id_reserv),
-    FOREIGN KEY (id_user) REFERENCES User_DI (id_user)
+    FOREIGN KEY (id_user) REFERENCES TblUser_DI (id_user)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
@@ -89,7 +89,7 @@ CREATE TABLE TblRequisition
     CONSTRAINT CHK_RETURN CHECK (returned >= 0),
     CONSTRAINT CHK_STATUS_REQUISITION CHECK (status_req IN ('Active', 'Closed')),
     PRIMARY KEY (id_req),
-    FOREIGN KEY (id_user) REFERENCES User_DI (id_user)
+    FOREIGN KEY (id_user) REFERENCES TblUser_DI (id_user)
 );
 
 CREATE TABLE TblRes_Equip
@@ -99,19 +99,19 @@ CREATE TABLE TblRes_Equip
     essential   BIT NOT NULL,
     assigned_to BIT NOT NULL DEFAULT 0,
     --estado VARCHAR(10), (DA RESERVA?)
-    FOREIGN KEY (id_reserv) REFERENCES Reservation (id_reserv)
+    FOREIGN KEY (id_reserv) REFERENCES TblReservation (id_reserv)
         ON DELETE NO ACTION ON UPDATE CASCADE,
-    FOREIGN KEY (id_equip) REFERENCES Equipment (id_equip)
+    FOREIGN KEY (id_equip) REFERENCES TblEquipment (id_equip)
         ON DELETE NO ACTION ON UPDATE CASCADE,
 );
 
-CREATE TABLE Req_Equip
+CREATE TABLE TblReq_Equip
 (
     id_req   INT NOT NULL,
     id_equip INT NOT NULL,
-    FOREIGN KEY (id_req) REFERENCES Requisition (id_req)
+    FOREIGN KEY (id_req) REFERENCES TblRequisition (id_req)
         ON DELETE NO ACTION ON UPDATE CASCADE,
-    FOREIGN KEY (id_equip) REFERENCES Equipment (id_equip)
+    FOREIGN KEY (id_equip) REFERENCES TblEquipment (id_equip)
         ON DELETE NO ACTION ON UPDATE CASCADE,
 );
 
@@ -121,6 +121,6 @@ CREATE TABLE TblDevolution
     id_equip    INT      NOT NULL,
     return_date DATETIME NOT NULL,
     PRIMARY KEY (id_req, id_equip),
-    FOREIGN KEY (id_req) REFERENCES Requisition (id_req),
-    FOREIGN KEY (id_equip) REFERENCES Equipment (id_equip)
+    FOREIGN KEY (id_req) REFERENCES TblRequisition (id_req),
+    FOREIGN KEY (id_equip) REFERENCES TblEquipment (id_equip)
 );
