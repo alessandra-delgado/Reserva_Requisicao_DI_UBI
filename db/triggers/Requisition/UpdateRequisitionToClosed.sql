@@ -1,7 +1,7 @@
 DROP TRIGGER IF EXISTS UpdateRequisitionToClosed;
 GO
 CREATE TRIGGER UpdateRequisitionToClosed
-    ON Requisition
+    ON TblRequisition
     AFTER UPDATE
     AS
 BEGIN
@@ -20,7 +20,7 @@ BEGIN
             -- Atualiza para o estado Closed
             UPDATE R
             SET R.status_req = 'Closed'
-            FROM Requisition R
+            FROM TblRequisition R
                      JOIN INSERTED I ON R.id_req = I.id_req
             WHERE R.returned = R.collected
               AND R.status_req = 'Active';

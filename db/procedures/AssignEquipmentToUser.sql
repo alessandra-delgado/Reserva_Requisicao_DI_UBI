@@ -7,9 +7,9 @@ BEGIN
 
     SELECT u.current_priority, r.status_res, re.essential, re.assigned_to, r.id_reserv
     INTO #temp_results
-    FROM User_DI u,
-         Reservation r,
-         Res_Equip re
+    FROM TblUser_DI u,
+         TblReservation r,
+         TblRes_Equip re
     WHERE u.id_user = r.id_user
       AND re.id_reserv = r.id_reserv
       AND r.status_res IN ('Waiting', 'Active')
@@ -17,7 +17,7 @@ BEGIN
 
 
     SET @IDR = (SELECT TOP 1 id_reserv FROM #temp_results)
-    UPDATE Res_Equip
+    UPDATE TblRes_Equip
         SET assigned_to = 1
     WHERE id_reserv = @IDR
       AND id_equip = @ide

@@ -1,7 +1,7 @@
 DROP TRIGGER IF EXISTS ReducePriorityOnMissLimit;
 GO
 CREATE TRIGGER ReducePriorityOnMissLimit
-    ON User_DI
+    ON TblUser_DI
     AFTER UPDATE
     AS
 BEGIN
@@ -18,15 +18,15 @@ BEGIN
 			WHERE INSERTED.id_user != 'PR%'
 			)
 			BEGIN
-            --atualizar a prioridade e as faltas para alguém que a prioridade ainda é positiva
-            UPDATE User_DI
+            --atualizar a prioridade e as faltas para alguï¿½m que a prioridade ainda ï¿½ positiva
+            UPDATE TblUser_DI
             SET current_priority = current_priority - 1,
                 misses           = 0
             WHERE misses = 5
               AND current_priority > 1
 
-            --atualizar apenas as faltas nas pessoas em que a prioridade já é 0
-            UPDATE User_DI
+            --atualizar apenas as faltas nas pessoas em que a prioridade jï¿½ ï¿½ 0
+            UPDATE TblUser_DI
             SET misses = 0
             WHERE misses = 5
               AND current_priority = 1

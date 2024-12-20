@@ -1,7 +1,7 @@
 DROP TRIGGER IF EXISTS newRes_assignEquip;
 GO
 CREATE TRIGGER newRes_assignEquip
-ON Res_Equip
+ON TblRes_Equip
 AFTER INSERT
 AS
 BEGIN

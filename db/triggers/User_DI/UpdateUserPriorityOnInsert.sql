@@ -1,7 +1,7 @@
 DROP TRIGGER IF EXISTS UpdateUserPriorityOnInsert;
 GO
 CREATE TRIGGER UpdateUserPriorityOnInsert
-    ON User_DI
+    ON TblUser_DI
     AFTER INSERT
     AS
 BEGIN
@@ -19,9 +19,9 @@ BEGIN
 
     WHILE @@FETCH_STATUS = 0
         BEGIN
-            UPDATE User_DI
+            UPDATE TblUser_DI
             SET current_priority = up.id_priority
-            FROM User_Priority up
+            FROM TblUser_Priority up
             WHERE id_user = @USER_ID
             AND up.id_type = @TYPE_ID
             FETCH NEXT FROM SET_PRIORITY INTO @USER_ID, @TYPE_ID

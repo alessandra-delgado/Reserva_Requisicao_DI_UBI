@@ -7,20 +7,20 @@ BEGIN
     DECLARE @id_req INT;
     DECLARE @collected INT;
 
-    INSERT INTO Requisition (id_user, time_start, time_end, status_req)
+    INSERT INTO TblRequisition (id_user, time_start, time_end, status_req)
     VALUES (@id_user, @time_start, @time_end, 'Active');
 
     SET @id_req = SCOPE_IDENTITY();
 
-    INSERT INTO Req_Equip(id_equip, id_req)
+    INSERT INTO TblReq_Equip(id_equip, id_req)
     SELECT re.id_equip, @id_req
-    FROM Res_Equip AS re
+    FROM TblRes_Equip AS re
     WHERE re.id_reserv = @id_reserv
       AND re.assigned_to = 1;
 
     SET @collected = @@ROWCOUNT;
-    UPDATE Requisition
-    SET Requisition.collected = @collected
-    WHERE Requisition.id_req = @id_req;
+    UPDATE TblRequisition
+    SET TblRequisition.collected = @collected
+    WHERE TblRequisition.id_req = @id_req;
 
 END;

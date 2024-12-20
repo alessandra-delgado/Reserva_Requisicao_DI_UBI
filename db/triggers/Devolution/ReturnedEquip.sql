@@ -1,5 +1,5 @@
 CREATE TRIGGER ReturnedEquip
-ON Devolution
+ON TblDevolution
 AFTER INSERT
 AS
 BEGIN
@@ -19,30 +19,30 @@ BEGIN
 	)
 
 	--aumentar o numero de equipamentos devolvidos na requisicao
-	UPDATE Requisitions
+	UPDATE TblRequisition
 	SET returned = returned + 1
 	WHERE id_req = @id_req
 
 	--voltar a por o estado do equipamento para available
-	UPDATE Equipments
+	UPDATE TblEquipment
 	SET status_equip = 'Available'
 	WHERE id_equip = @id_equip
 
 	SET @collected = (
 		SELECT collected 
-		FROM Requisitions
+		FROM TblRequisition
 		WHERE id_req = @id_req
 	)
 
 	SET @returned = (
 		SELECT returned 
-		FROM Requisitions
+		FROM TblRequisition
 		WHERE id_req = @id_req
 	)
 
 	IF ( @collected = @returned )
 	BEGIN
-		UPDATE Requisitions
+		UPDATE TblRequisition
 		SET status_req = 'Closed'
 		WHERE id_req = @id_req
 	END

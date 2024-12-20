@@ -1,18 +1,18 @@
-CREATE TABLE Res_SeqId
+CREATE TABLE TblRes_SeqId
 (
     current_year INT PRIMARY KEY,
     current_seq  INT
 );
 --Perguntar ao stor se no esquema fica s� l� � parte
 
-CREATE TABLE Priority_Map --horrible creation not anymore (what did it even do D:)
+CREATE TABLE TblPriority_Map --horrible creation not anymore (what did it even do D:)
 (
     id_priority   INT        NOT NULL,
     desc_priority VARCHAR(6) NOT NULL,
     PRIMARY KEY (id_priority)
 );
 
-CREATE TABLE User_Priority
+CREATE TABLE TblUser_Priority
 (
     id_type          VARCHAR(2)  NOT NULL,
     id_priority      INT,
@@ -22,7 +22,7 @@ CREATE TABLE User_Priority
         ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
-CREATE TABLE User_DI
+CREATE TABLE TblUser_DI
 (
     id_user          VARCHAR(10) NOT NULL UNIQUE,
     id_type          VARCHAR(2)  NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE User_DI
         ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
-CREATE TABLE Contact
+CREATE TABLE TblContact
 (
     id_user VARCHAR(10) NOT NULL UNIQUE,
     email   VARCHAR(50) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE Contact
         ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
-CREATE TABLE Equipment
+CREATE TABLE TblEquipment
 (
     id_equip     INT IDENTITY (1,1),
     status_equip VARCHAR(10) NOT NULL DEFAULT 'Available',
@@ -60,7 +60,7 @@ CREATE TABLE Equipment
     PRIMARY KEY (id_equip)
 );
 
-CREATE TABLE Reservation
+CREATE TABLE TblReservation
 (
     id_reserv  VARCHAR(8)  NOT NULL UNIQUE DEFAULT 'N/A',
     id_user    VARCHAR(10) NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE Reservation
         ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
-CREATE TABLE Requisition
+CREATE TABLE TblRequisition
 (
     id_req     INT         NOT NULL IDENTITY (1,1),
     id_user    VARCHAR(10) NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE Requisition
     FOREIGN KEY (id_user) REFERENCES User_DI (id_user)
 );
 
-CREATE TABLE Res_Equip
+CREATE TABLE TblRes_Equip
 (
     id_reserv   VARCHAR(8),
     id_equip    INT NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE Req_Equip
         ON DELETE NO ACTION ON UPDATE CASCADE,
 );
 
-CREATE TABLE Devolution
+CREATE TABLE TblDevolution
 (
     id_req      INT      NOT NULL,
     id_equip    INT      NOT NULL,

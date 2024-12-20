@@ -1,7 +1,7 @@
 DROP TRIGGER IF EXISTS SetReservationID;
 GO
 CREATE TRIGGER SetReservationID
-    ON Reservation
+    ON TblReservation
     INSTEAD OF INSERT
     AS
 BEGIN
@@ -26,7 +26,7 @@ BEGIN
             EXEC MakeID @GeneratedID OUTPUT;
 
             -- Insere a linha na tabela 'reserva' com o ID gerado
-            INSERT INTO Reservation (id_reserv, id_user, reg_date, time_start, time_end, status_res)
+            INSERT INTO TblReservation (id_reserv, id_user, reg_date, time_start, time_end, status_res)
             VALUES (@GeneratedID, @id_user, GETDATE(), @time_start, @time_end, @status_res);
 
             FETCH NEXT FROM set_id_at INTO @id_user, @time_start, @time_end, @status_res; --BUSCAR PROXIMOS VALORES

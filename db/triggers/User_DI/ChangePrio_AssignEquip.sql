@@ -2,7 +2,7 @@ DROP TRIGGER IF EXISTS PrioChange_AssignEquip
 GO
 CREATE TRIGGER PrioChange_AssignEquip
     ON
-        User_DI
+        TblUser_DI
     AFTER UPDATE
     AS
     IF EXISTS (SELECT 1
@@ -20,7 +20,7 @@ CREATE TRIGGER PrioChange_AssignEquip
 
             DECLARE id_go_reserv CURSOR FOR
                 SELECT r.id_reserv
-                FROM Reservation r
+                FROM TblReservation r
                 WHERE @id_user = r.id_user
                   AND r.status_res IN ('Active', 'Waiting')
 
@@ -32,7 +32,7 @@ CREATE TRIGGER PrioChange_AssignEquip
                 BEGIN
                     DECLARE id_go_equip CURSOR FOR
                         SELECT id_equip
-                        FROM Res_Equip
+                        FROM TblRes_Equip
                         WHERE @id_reserv = id_reserv
 
                     OPEN id_go_equip;
