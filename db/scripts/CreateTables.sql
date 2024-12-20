@@ -31,10 +31,10 @@ CREATE TABLE User_DI
     misses           INT                  DEFAULT 0,
     hits             INT                  DEFAULT 0,
 
-    CONSTRAINT CHK_TIPO CHECK (id_type IN ('PD', 'PR', 'RS', 'BS', 'MS', 'DS', 'SF', 'XT')),
-    CONSTRAINT CHK_prio CHECK (current_priority BETWEEN 1 AND 5),
-    CONSTRAINT CHK_faltas CHECK (misses BETWEEN 0 AND 5),
-    CONSTRAINT CHK_ACERTOS CHECK (hits BETWEEN 0 AND 2),
+    CONSTRAINT CHK_TYPE CHECK (id_type IN ('PD', 'PR', 'RS', 'BS', 'MS', 'DS', 'SF', 'XT')),
+    CONSTRAINT CHK_PRIORITY CHECK (current_priority BETWEEN 1 AND 5),
+    CONSTRAINT CHK_MISSES CHECK (misses BETWEEN 0 AND 5),
+    CONSTRAINT CHK_HITS CHECK (hits BETWEEN 0 AND 2),
 
     PRIMARY KEY (id_user),
     FOREIGN KEY (id_type) REFERENCES User_Priority (id_type)
