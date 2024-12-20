@@ -1,7 +1,7 @@
 drop trigger if EXISTS SetEquipmentStatusReserved;
 GO
 CREATE TRIGGER SetEquipmentStatusReserved
-ON Equipments
+ON Equipment
 AFTER UPDATE
 AS
 BEGIN 
