@@ -1,7 +1,7 @@
 drop trigger if EXISTS SetEquipmentStatusReserved;
 GO
 CREATE TRIGGER SetEquipmentStatusReserved
-ON Equipment
+ON Equipments
 AFTER UPDATE
 AS
 BEGIN 
@@ -21,6 +21,6 @@ DECLARE @id_equip INT;
 			WHERE i.status_equip = 'Available'
 			AND DELETED.status_equip in ('InUse', 'Reserved')
 		)
-		EXEC AssignedEquipmentToUser @id_equip
+		EXEC AssignEquipmentToUser @id_equip
 	END
 END
