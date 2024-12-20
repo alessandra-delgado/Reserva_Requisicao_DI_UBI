@@ -19,6 +19,39 @@ BEGIN
 		WHERE I.current_priority != D.current_priority
 		)
 
+	DECLARE @id_reserv VARCHAR(8)
+	DECLARE @id_equip INT
+
 	DECLARE id_go_reserv CURSOR FOR
-		SELECT id_reserv FROM Res_ed
+		SELECT id_reserv FROM Reservations
+		WHERE @id_user = id_user
+
+	OPEN id_go_reserv;
+
+	FETCH NEXT FROM id_go_reserv INTO @id_reserv;
+
+	WHILE @@FETCH_STATUS = 0
+	BEGIN 
+		DECLARE id_go_equip CURSOR FOR
+			SELECT id_equip FROM Res_Equip
+			WHERE @id_reserv = id_reserv
+
+		OPEN id_go_equip;
+
+		FETCH NEXT FROM id_go_equip INTO @id_equip;
+
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			EXEC AssignEquipmentToUser @id_equip;
+			FETCH NEXT FROM id_go_equip INTO @id_equip;
+		END
+
+		CLOSE id_go_equip;
+		DEALLOCATE id_go_equip;
+
+		FETCH NEXT FROM id_go_reserv INTO @id_reserv;
+	END
+
+	CLOSE id_go_reserv;
+	DEALLOCATE id_go_reserv;
 END
