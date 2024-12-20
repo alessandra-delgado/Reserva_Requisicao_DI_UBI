@@ -56,7 +56,7 @@ CREATE TABLE Equipment
     status_equip VARCHAR(10) NOT NULL DEFAULT 'Available',
     name_equip   VARCHAR(50) NOT NULL,
     category     VARCHAR(13),
-    CONSTRAINT CHK_STATUS CHECK (status_equip IN ('Available', 'Reserved', 'InUse')),
+    CONSTRAINT CHK_STATUS_EQUIPMENT CHECK (status_equip IN ('Available', 'Reserved', 'InUse')),
     PRIMARY KEY (id_equip)
 );
 
@@ -69,7 +69,7 @@ CREATE TABLE Reservation
     time_end   DATETIME    NOT NULL,
     status_res VARCHAR(12) NOT NULL,
 
-    CONSTRAINT CHECK_STATUS CHECK (status_res IN ('Active', 'Satisfied', 'Cancelled', 'Forgotten', 'Waiting', 'NotSatisfied')),
+    CONSTRAINT CHECK_STATUS_RESERVATION CHECK (status_res IN ('Active', 'Satisfied', 'Cancelled', 'Forgotten', 'Waiting', 'NotSatisfied')),
     PRIMARY KEY (id_reserv),
     FOREIGN KEY (id_user) REFERENCES User_DI (id_user)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -87,7 +87,7 @@ CREATE TABLE Requisition
 
     CONSTRAINT CHK_COLLECTED CHECK (collected >= -1),
     CONSTRAINT CHK_RETURN CHECK (returned >= 0),
-    CONSTRAINT CHK_STATUS CHECK (status_req IN ('Active', 'Closed')),
+    CONSTRAINT CHK_STATUS_REQUISITION CHECK (status_req IN ('Active', 'Closed')),
     PRIMARY KEY (id_req),
     FOREIGN KEY (id_user) REFERENCES User_DI (id_user)
 );
