@@ -9,6 +9,7 @@ BEGIN
     DECLARE @type VARCHAR(2)
     DECLARE @user VARCHAR(10)
 
+
     SET @user = (SELECT id_user FROM inserted)
     SET @type = (SELECT id_type FROM inserted)
     SET @id = CAST(@type AS VARCHAR(2)) + '_' + CAST(@user AS VARCHAR(7));
