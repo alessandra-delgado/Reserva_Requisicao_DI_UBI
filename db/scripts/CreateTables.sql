@@ -14,9 +14,9 @@ CREATE TABLE TblPriority_Map --horrible creation not anymore (what did it even d
 
 CREATE TABLE TblUser_Priority
 (
-    id_type          VARCHAR(2)  NOT NULL,
-    id_priority      INT,
-    desc_userType    VARCHAR(12) NOT NULL,
+    id_type       VARCHAR(2)  NOT NULL,
+    id_priority   INT,
+    desc_userType VARCHAR(12) NOT NULL,
     PRIMARY KEY (id_type),
     FOREIGN KEY (id_priority) REFERENCES TblPriority_Map (id_priority)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -26,6 +26,7 @@ CREATE TABLE TblUser_DI
 (
     id_user          VARCHAR(10) NOT NULL UNIQUE,
     id_type          VARCHAR(2)  NOT NULL,
+    name             VARCHAR(50) NOT NULL,
     current_priority INT         NOT NULL DEFAULT 3,
     phone_no         INT         NOT NULL UNIQUE,
     misses           INT                  DEFAULT 0,
@@ -69,7 +70,9 @@ CREATE TABLE TblReservation
     time_end   DATETIME    NOT NULL,
     status_res VARCHAR(12) NOT NULL,
 
-    CONSTRAINT CHECK_STATUS_RESERVATION CHECK (status_res IN ('Active', 'Satisfied', 'Cancelled', 'Forgotten', 'Waiting', 'NotSatisfied')),
+    CONSTRAINT CHECK_STATUS_RESERVATION CHECK (status_res IN
+                                               ('Active', 'Satisfied', 'Cancelled', 'Forgotten', 'Waiting',
+                                                'NotSatisfied')),
     PRIMARY KEY (id_reserv),
     FOREIGN KEY (id_user) REFERENCES TblUser_DI (id_user)
         ON DELETE NO ACTION ON UPDATE NO ACTION,
