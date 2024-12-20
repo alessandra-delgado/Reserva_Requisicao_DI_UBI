@@ -12,20 +12,20 @@ BEGIN
 
     BEGIN TRY
         -- Verifica se o ano atual já existe na tabela
-        IF EXISTS (SELECT 1 FROM Res_SeqId WHERE current_year = @Ano)
+        IF EXISTS (SELECT 1 FROM TblRes_SeqId WHERE current_year = @Ano)
             BEGIN
                 -- Incrementa a sequência para o ano atual
-                UPDATE Res_SeqId
+                UPDATE TblRes_SeqId
                 SET current_seq = current_seq + 1
                 WHERE current_year = @Ano;
 
                 -- Obtém o valor atualizado
-                SELECT @Sequence = current_seq FROM Res_SeqId WHERE current_year = @Ano;
+                SELECT @Sequence = current_seq FROM TblRes_SeqId WHERE current_year = @Ano;
             END
         ELSE
             BEGIN
                 -- Insere o ano atual com a sequência inicial de 1
-                INSERT INTO Res_SeqId (current_year, current_seq) VALUES (@Ano, 1);
+                INSERT INTO TblRes_SeqId (current_year, current_seq) VALUES (@Ano, 1);
                 SET @Sequence = 1;
             END
 

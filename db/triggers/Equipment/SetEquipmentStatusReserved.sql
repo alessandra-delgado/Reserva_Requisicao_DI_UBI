@@ -1,27 +1,26 @@
 drop trigger if EXISTS SetEquipmentStatusReserved;
 GO
 CREATE TRIGGER SetEquipmentStatusReserved
-ON Equipment
+ON TblEquipment
 AFTER UPDATE
 AS
 BEGIN 
+DECLARE @id_equip INT;
 	IF EXISTS (
 		SELECT 1
 		FROM INSERTED
 		JOIN DELETED ON INSERTED.id_equip = DELETED.id_equip
 		WHERE INSERTED.status_equip = 'Available'
-		AND DELETED.status_equip = 'InUse'
+		AND DELETED.status_equip in ('InUse', 'Reserved')
 	)
 	BEGIN
-		UPDATE Equipment
-		SET	Equipment.status_equip = 'Reserved'
-		WHERE id_equip IN (
-			SELECT e.id_equip
-			FROM Res_Equip e
-			JOIN Reservation r on r.id_reserv = e.id_reserv
-			WHERE status_equip IN ('Active', 'Waiting')
-			GROUP BY e.id_equip
-			HAVING COUNT(e.id_reserv) > 1
+		SET @id_equip = (
+			SELECT i.id_equip
+			FROM INSERTED i
+			JOIN DELETED ON i.id_equip = DELETED.id_equip
+			WHERE i.status_equip = 'Available'
+			AND DELETED.status_equip in ('InUse', 'Reserved')
 		)
+		EXEC AssignEquipmentToUser @id_equip
 	END
 END
