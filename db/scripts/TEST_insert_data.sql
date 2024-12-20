@@ -43,7 +43,7 @@ INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
 VALUES ('DS_DARIO', GETDATE(), GETDATE(), GETDATE(), 'Available');
 SELECT *
 FROM TblReservation
-INSERT INTO Res_Equip(id_reserv, id_equip, essential, assigned_to)
+INSERT INTO TblRes_Equip(id_reserv, id_equip, essential, assigned_to)
 VALUES ('20240005', 34, 'F', 'T');
 
 DECLARE @tmp DATETIME

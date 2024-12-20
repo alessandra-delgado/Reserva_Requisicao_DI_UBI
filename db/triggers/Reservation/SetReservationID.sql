@@ -37,7 +37,4 @@ BEGIN
 END;
 GO
 
--- fixme: triggers não devem ter transações...
-
-
 
