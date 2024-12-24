@@ -29,11 +29,11 @@ class FrameUserIndex(ctk.CTkFrame):
         l.grid(row=1, column=0, padx=5, pady=15, sticky="w")
         l = ctk.CTkLabel(self.scrollableFrame, text="Tipo de Utilizador", text_color="#545F71", font=("", 12, "bold"))
         l.grid(row=1, column=1, padx=5, pady=15, sticky="w")
-        l = ctk.CTkLabel(self.scrollableFrame, text="Email", text_color="#545F71", font=("", 12, "bold"))
+        l = ctk.CTkLabel(self.scrollableFrame, text="Nome", text_color="#545F71", font=("", 12, "bold"))
         l.grid(row=1, column=2, padx=5, pady=20, sticky="w")
-        l = ctk.CTkLabel(self.scrollableFrame, text="Telemóvel", text_color="#545F71", font=("", 12, "bold"))
-        l.grid(row=1, column=3, padx=5, pady=20, sticky="w")
         l = ctk.CTkLabel(self.scrollableFrame, text="Prioridade", text_color="#545F71", font=("", 12, "bold"))
+        l.grid(row=1, column=3, padx=5, pady=20, sticky="w")
+        l = ctk.CTkLabel(self.scrollableFrame, text="Telemóvel", text_color="#545F71", font=("", 12, "bold"))
         l.grid(row=1, column=4, padx=5, pady=20, sticky="w")
 
         self.add_divider(2)
@@ -43,15 +43,16 @@ class FrameUserIndex(ctk.CTkFrame):
         for user in users:
             i += 1
 
-            l = ctk.CTkLabel(self.scrollableFrame, text=user["id"], text_color="#545F71")
+            print(user)
+            l = ctk.CTkLabel(self.scrollableFrame, text=user[0], text_color="#545F71")
             l.grid(row=i, column=0, padx=5, pady=7, sticky="w")
-            l = ctk.CTkLabel(self.scrollableFrame, text=user["type"], text_color="#545F71")
+            l = ctk.CTkLabel(self.scrollableFrame, text=user[1], text_color="#545F71")
             l.grid(row=i, column=1, padx=5, pady=7, sticky="w")
-            l = ctk.CTkLabel(self.scrollableFrame, text=user["email"], text_color="#545F71")
+            l = ctk.CTkLabel(self.scrollableFrame, text=user[2], text_color="#545F71")
             l.grid(row=i, column=2, padx=5, pady=7, sticky="w")
-            l = ctk.CTkLabel(self.scrollableFrame, text=user["cellphone"], text_color="#545F71")
+            l = ctk.CTkLabel(self.scrollableFrame, text=user[3], text_color="#545F71")
             l.grid(row=i, column=3, padx=5, pady=7, sticky="w")
-            l = ctk.CTkLabel(self.scrollableFrame, text=user["priority"], text_color="#545F71")
+            l = ctk.CTkLabel(self.scrollableFrame, text=user[4], text_color="#545F71")
             l.grid(row=i, column=4, padx=5, pady=7, sticky="w")
 
             i += 1
