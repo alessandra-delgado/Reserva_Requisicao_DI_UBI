@@ -2,4 +2,5 @@ customtkinter==5.2.2
 pillow==11.0.0
 
 pyodbc~=5.2.0
-ttkwidgets~=0.13.0
+tkcalendar~=1.6.1
+tkTimePicker~=2.0.2
