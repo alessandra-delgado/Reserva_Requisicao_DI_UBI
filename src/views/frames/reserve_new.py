@@ -3,6 +3,7 @@ from datetime import datetime
 import customtkinter as ctk
 from tktimepicker import constants, SpinTimePickerModern, SpinTimePickerOld
 
+from enums.equipmentCategory import EquipmentCategory
 from enums.reservationEquipmentType import ReservationEquipmentType
 from models import Reservation, UserDI, Equipment
 from views.widgets.ctk_date_picker import CTkDatePicker
@@ -66,25 +67,38 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         # EndOf DATETIME pickers -----------------------------------------------------------------------
         # EndOf form_frame ------------------------------------------------------------------------------------------------------
 
+
         # Second frame (scrollable) ---------------------------------------------------------------------------------------------
         self.equipments_radio = {}
         # Select equipments field
         ctk.CTkLabel(self, text="Lista de Equipamentos").grid(row=1, column=0, padx=20, pady=(20, 0), sticky="w")
         self.scrollableFrame = ctk.CTkScrollableFrame(self, fg_color="#FFFFFF")
-        self.scrollableFrame.grid(row=2, column=0, sticky="nsew", padx=30, pady=(3, 0))
+        self.scrollableFrame.grid(row=3, column=0, sticky="nsew", padx=30, pady=(3, 0))
         self.scrollableFrame.grid_columnconfigure(4, weight=1)
 
-        # Load equipment entries
-        self.reload()
+
         # EndOf scrollable frame ------------------------------------------------------------------------------------------------
+
+        self.category = ctk.StringVar(self, EquipmentCategory.all.value)
+
+        ctk.CTkLabel(self, text="Categoria do Equipamento").grid(row=1, column=0, padx=20, pady=(20, 0), sticky="w")
+        self.combo = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category, command=self.reload ,width=300)
+        self.combo.grid(row=2, column=0, pady=(3, 0), padx=20, sticky="w")
 
         # Submit button
         self.button = ctk.CTkButton(self, text="Submeter", command=self.submit, width=200)
-        self.button.grid(row=4, column=0, pady=0, padx=20, sticky="s")
+        self.button.grid(row=4, column=0, pady=20, padx=20, sticky="e")
 
-    def reload(self) -> None:
+    def reload(self, category=None) -> None:
         """ Used by app.py to reload page data. """
-        equipments = Equipment.get_equipments()
+
+        for widget in self.scrollableFrame.winfo_children():
+            widget.destroy()
+
+        if category is not None:
+            equipments = Equipment.get_equipments(category)
+        else:
+            equipments = Equipment.get_equipments(self.category.get())
 
         # todo: make a combobox for category and load
         #  equipments from that category, or put all

@@ -1,5 +1,6 @@
 import customtkinter as ctk
 
+from enums.equipmentCategory import EquipmentCategory
 from enums.equipmentStatus import EquipmentStatus
 from models import Equipment
 
@@ -24,7 +25,7 @@ class FrameEquipmentIndex(ctk.CTkFrame):
 
     def reload(self) -> None:
         """ Used by app.py to reload page data. """
-        equipments = Equipment.get_equipments()
+        equipments = Equipment.get_equipments(EquipmentCategory.all.value)
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="ID", text_color="#545F71", font=("", 12, "bold"))

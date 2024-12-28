@@ -1,4 +1,6 @@
 import customtkinter as ctk
+
+from enums.equipmentCategory import EquipmentCategory
 from models import Equipment
 
 
@@ -19,14 +21,17 @@ class FrameEquipmentNew(ctk.CTkFrame):
 
         # Category field
         ctk.CTkLabel(self, text="Categoria").grid(row=1, column=3, padx=20, pady=(20, 0), sticky="w")
-        self.category = ctk.CTkEntry(self, width=200)
-        self.category.grid(row=2, column=3, pady=(3, 0), padx=20, sticky="w")
+
+        self.category = ctk.StringVar(self, EquipmentCategory.all.value)
+
+        self.combo = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category, width=200)
+        self.combo.grid(row=2, column=3, pady=(3, 0), padx=20, sticky="w")
         self.category_error = ctk.CTkLabel(self, text="", text_color="red")
         self.category_error.grid(row=3, column=3, pady=0, padx=20, sticky="w")
 
         # Submit button
         self.button = ctk.CTkButton(self, text="Submeter", command=self.submit, width=200)
-        self.button.grid(row=10, column=0, pady=0, padx=20, sticky="w")
+        self.button.grid(row=10, column=3, pady=0, padx=20, sticky="w")
 
     def submit(self) -> None:
         """
