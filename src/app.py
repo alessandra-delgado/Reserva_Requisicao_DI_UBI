@@ -2,7 +2,8 @@ import customtkinter as ctk
 import tkinter as tk
 import os
 from PIL import Image
-from views.frames import home, requisition, reserve, user_new, user_index
+from views.frames import home, reserve_index, reserve_new, reserve_edit, requisition_index, requisition_new, \
+    requisition_edit, user_new, user_index
 from views.nav import nav
 from controllers import about
 
@@ -28,8 +29,12 @@ class App(ctk.CTk):
         # Frames mapping
         self.frames = {
             "Página Inicial": home.FrameHome(self),
-            "Requisição": requisition.FrameRequisicao(self),
-            "Reserva": reserve.FrameReserva(self),
+            "Lista de Reservas": reserve_index.FrameReserveIndex(self),
+            "Criar Reserva": reserve_new.FrameReserveNew(self),
+            "Editar Reserva": reserve_edit.FrameReserveEdit(self),
+            "Lista de Requisições": requisition_index.FrameRequisitionIndex(self),
+            "Criar Requisição": requisition_new.FrameRequisitionNew(self),
+            "Editar Requsição": requisition_edit.FrameRequisitionEdit(self),
             "Lista de Utilizadores": user_index.FrameUserIndex(self),
             "Criar Utilizador": user_new.FrameUserNew(self),
         }
@@ -80,8 +85,9 @@ class App(ctk.CTk):
         )
 
         nav_entries = {
-            'Página Inicial': ['Página Inicial', 'Reserva'],
-            'Requisição': ['Requisição', 'Reserva'],
+            'Página Inicial': ['Página Inicial'],
+            'Reserva': ['Lista de Reservas', 'Criar Reserva'],
+            'Requisição': ['Lista de Requisições', 'Criar Requisição'],
             'Utilizador': ['Lista de Utilizadores', 'Criar Utilizador'],
         }
 

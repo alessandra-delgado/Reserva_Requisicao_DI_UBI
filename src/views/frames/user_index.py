@@ -43,7 +43,6 @@ class FrameUserIndex(ctk.CTkFrame):
         for user in users:
             i += 1
 
-            print(user)
             l = ctk.CTkLabel(self.scrollableFrame, text=user[0], text_color="#545F71")
             l.grid(row=i, column=0, padx=5, pady=7, sticky="w")
             l = ctk.CTkLabel(self.scrollableFrame, text=user[1], text_color="#545F71")
