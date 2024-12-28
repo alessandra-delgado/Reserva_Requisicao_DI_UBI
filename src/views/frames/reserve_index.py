@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import customtkinter as ctk
 
 from enums.reservationStatus import ReservationStatus
@@ -44,7 +42,7 @@ class FrameReserveIndex(ctk.CTkFrame):
 
         self.add_divider(2)
 
-        date_format = "%d-%m-%Y %H:%M"
+        date_format = "%d-%m-%Y %H:%M:%S"
 
         # Table Rows
         i = 2

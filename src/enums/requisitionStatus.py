@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ReservationStatus(Enum):
+class RequisitionStatus(Enum):
     cancelled = 'Cancelled'
     waiting = 'Waiting'
     forgotten = 'Forgotten'
@@ -10,13 +10,13 @@ class ReservationStatus(Enum):
     @staticmethod
     def label(status: str) -> str:
         match status:
-            case ReservationStatus.cancelled.value:
-                return 'Cancelada'
-            case ReservationStatus.waiting.value:
+            case RequisitionStatus.cancelled.value:
+                return 'Cancelado'
+            case RequisitionStatus.waiting.value:
                 return 'Em espera'
-            case ReservationStatus.forgotten.value:
+            case RequisitionStatus.forgotten.value:
                 return 'Esquecida'
-            case ReservationStatus.active.value:
+            case RequisitionStatus.active.value:
                 return 'Ativa'
             case _:
                 return status

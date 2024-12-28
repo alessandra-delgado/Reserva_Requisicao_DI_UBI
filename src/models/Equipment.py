@@ -4,7 +4,7 @@ Requisition table representation in code. Has the queries to Requisition table
 from models import DataBase as db
 
 
-def add_equipment() -> None:
+def add_equipment(name, category) -> None:
     raise NotImplementedError
 
 
