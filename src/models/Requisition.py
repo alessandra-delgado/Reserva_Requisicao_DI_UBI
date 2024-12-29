@@ -4,7 +4,12 @@ Requisition table representation in code. Has the queries to Requisition table
 from models import DataBase as db
 
 
-def add_requisition() -> None:
+def add_requisition(user, datetime_start, datetime_end, equipments_radio) -> None:
+    print(user, datetime_start, datetime_end, equipments_radio)
+    raise NotImplementedError
+
+def edit_requisition(requisition_id, equipment_devolutions) -> None:
+    print(requisition_id, equipment_devolutions)
     raise NotImplementedError
 
 

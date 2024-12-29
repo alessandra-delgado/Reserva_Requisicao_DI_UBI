@@ -101,5 +101,5 @@ class FrameRequisitionIndex(ctk.CTkFrame):
     def edit(self, reserve_id) -> None:
         self.grid_forget()
 
-        self.frame_edit = requisition_edit.FrameRequisitionEdit(self.parent, reserve_id)
+        self.frame_edit = requisition_edit.FrameRequisitionEdit(self.parent, reserve_id, self)
         self.frame_edit.grid(row=0, column=1, sticky="nsew")

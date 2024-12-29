@@ -6,6 +6,12 @@ from models import DataBase as db
 
 def add_reservation(user, datetime_start, datetime_end, equipments_radio) -> None:
     print(user, datetime_start, datetime_end, equipments_radio)
+    raise NotImplementedError
+
+
+def edit_reservation(reservation_id, status) -> None:
+    print(reservation_id, status)
+    raise NotImplementedError
 
 
 def get_reservations() -> list:
@@ -15,6 +21,7 @@ def get_reservations() -> list:
     db.close(conn)
 
     return rows
+
 
 def get_by_id(reservation_id) -> list:
     conn = db.connect()

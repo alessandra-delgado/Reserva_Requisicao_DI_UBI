@@ -4,12 +4,15 @@ from models import Requisition, Req_Equip, Equipment, Devolution
 
 
 class FrameRequisitionEdit(ctk.CTkScrollableFrame):
-    def __init__(self, parent, requisition_id):
+    def __init__(self, parent, requisition_id, target_frame):
         super().__init__(parent, corner_radius=0, fg_color="#EBF3FA")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
+        self.target_frame = target_frame
+
         self.requisition = Requisition.get_by_id(requisition_id)
+        self.equipment_devolutions = {}
 
         self.form_frame = ctk.CTkFrame(self, fg_color="#EBF3FA")
         self.form_frame.grid(row=0, column=0, sticky="nsew")
@@ -42,9 +45,17 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
 
         self.reload()
 
+        # Buttons
+        self.buttons_frame = ctk.CTkFrame(self, fg_color="#EBF3FA")
+        self.buttons_frame.grid(row=9, column=0, sticky="nsew")
+
+        # Return button
+        self.button = ctk.CTkButton(self.buttons_frame, text="Voltar", command=self.back, width=200)
+        self.button.grid(row=0, column=0, pady=20, padx=20, sticky="w")
+
         # Submit button
-        self.button = ctk.CTkButton(self, text="Submeter", command=self.submit, width=200)
-        self.button.grid(row=9, column=0, pady=20, padx=20, sticky="e")
+        self.back = ctk.CTkButton(self.buttons_frame, text="Submeter", command=self.submit, width=200)
+        self.back.grid(row=0, column=3, pady=20, padx=20, sticky="e")
 
     def reload(self) -> None:
         """ Used by app.py to reload page data. """
@@ -71,8 +82,8 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
             l.grid(row=i, column=0, padx=5, pady=7, sticky="w")
 
             if equipment[1] not in returned:
-                l = ctk.CTkCheckBox(self.scrollableFrame, text="", text_color="#545F71")
-                l.grid(row=i, column=1, padx=5, pady=7, sticky="w")
+                self.equipment_devolutions[equipment[0]] = ctk.CTkCheckBox(self.scrollableFrame, text="", text_color="#545F71")
+                self.equipment_devolutions[equipment[0]].grid(row=i, column=1, padx=5, pady=7, sticky="w")
             else:
                 l = ctk.CTkLabel(self.scrollableFrame, text='Devolvido', text_color="#545F71")
                 l.grid(row=i, column=1, padx=5, pady=7, sticky="w")
@@ -86,9 +97,17 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
         ctk.CTkFrame(self.scrollableFrame, width=120, height=1, bg_color="#B3CBE5").grid(row=i, column=1, sticky="s")
         ctk.CTkFrame(self.scrollableFrame, width=120, height=1, bg_color="#B3CBE5").grid(row=i, column=2, sticky="s")
 
+    def back(self):
+        self.grid_forget()
+        self.target_frame.grid(row=0, column=1, sticky="nsew")
+
     def submit(self) -> None:
         """
         Submits the form.
         """
+        equipment_devolutions = {}
+        for k, v in self.equipment_devolutions.items():
+            equipment_devolutions[k] = v.get()
 
         # Todo: validate date entries
+        Requisition.edit_requisition(self.requisition[0], equipment_devolutions)

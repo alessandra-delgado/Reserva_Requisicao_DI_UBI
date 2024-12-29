@@ -5,7 +5,7 @@ from tktimepicker import constants, SpinTimePickerOld
 
 from enums.equipmentCategory import EquipmentCategory
 from enums.reservationEquipmentType import ReservationEquipmentType
-from models import UserDI, Equipment
+from models import UserDI, Equipment, Reservation, Requisition
 from views.widgets.ctk_date_picker import CTkDatePicker
 
 
@@ -181,6 +181,6 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
         mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(self.time_end.minutes())
         datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
 
-        #Reservation.add_reservation(self.user.get(), datetime_start, datetime_end, equipments_radio)
+        Requisition.add_requisition(self.user.get(), datetime_start, datetime_end, equipments_radio)
 
         # Todo: validate date entries
