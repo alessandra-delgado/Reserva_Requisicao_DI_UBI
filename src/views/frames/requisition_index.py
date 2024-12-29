@@ -71,9 +71,8 @@ class FrameRequisitionIndex(ctk.CTkFrame):
             l = ctk.CTkLabel(self.scrollableFrame, text=RequisitionStatus.label(requisition[2]), text_color="#545F71")
             l.grid(row=i, column=6, padx=5, pady=7, sticky="w")
 
-
             if RequisitionStatus.can_edit(requisition[2]) and not requisition[5]:
-                l =self.add_button(requisition[0])
+                l = self.add_button(requisition[0])
                 l.grid(row=i, column=7, padx=5, pady=7, sticky="w")
 
             i += 1
@@ -90,9 +89,8 @@ class FrameRequisitionIndex(ctk.CTkFrame):
         ctk.CTkFrame(self.scrollableFrame, width=130, height=1, bg_color="#B3CBE5").grid(row=i, column=6, sticky="s")
 
     def add_button(self, requisition_id) -> CTkButton:
-        return ctk.CTkButton(self.scrollableFrame, height=40, width=200, text=">", anchor="w", text_color="#163B61",
-                      hover_color="#6DA5DE",
-                      command=lambda: self.edit(requisition_id))
+        return ctk.CTkButton(self.scrollableFrame, height=30, width=30, text=" >", anchor="w", text_color="#ffffff",
+                             hover_color="#6DA5DE", command=lambda: self.edit(requisition_id))
 
     def delete_dependent(self):
         if self.frame_edit is not None:

@@ -80,12 +80,10 @@ class FrameReserveIndex(ctk.CTkFrame):
         ctk.CTkFrame(self.scrollableFrame, width=130, height=1, bg_color="#B3CBE5").grid(row=i, column=3, sticky="s")
         ctk.CTkFrame(self.scrollableFrame, width=130, height=1, bg_color="#B3CBE5").grid(row=i, column=4, sticky="s")
         ctk.CTkFrame(self.scrollableFrame, width=130, height=1, bg_color="#B3CBE5").grid(row=i, column=5, sticky="s")
-        ctk.CTkFrame(self.scrollableFrame, width=130, height=1, bg_color="#B3CBE5").grid(row=i, column=6, sticky="s")
 
     def add_button(self, reserve_id) -> CTkButton:
-        return ctk.CTkButton(self.scrollableFrame, height=40, width=200, text=">", anchor="w", text_color="#163B61",
-                      hover_color="#6DA5DE",
-                      command=lambda: self.edit(reserve_id))
+        return ctk.CTkButton(self.scrollableFrame, height=30, width=30, text=" >", anchor="w", text_color="#ffffff",
+                             hover_color="#6DA5DE", command=lambda: self.edit(reserve_id))
 
     def delete_dependent(self):
         if self.frame_edit is not None:

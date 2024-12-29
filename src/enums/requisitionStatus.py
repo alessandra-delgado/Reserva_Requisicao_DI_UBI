@@ -2,22 +2,16 @@ from enum import Enum
 
 
 class RequisitionStatus(Enum):
-    cancelled = 'Cancelled'
-    waiting = 'Waiting'
-    forgotten = 'Forgotten'
     active = 'Active'
+    closed = 'Closed'
 
     @staticmethod
     def label(status: str) -> str:
         match status:
-            case RequisitionStatus.cancelled.value:
-                return 'Cancelado'
-            case RequisitionStatus.waiting.value:
-                return 'Em espera'
-            case RequisitionStatus.forgotten.value:
-                return 'Esquecida'
             case RequisitionStatus.active.value:
                 return 'Ativa'
+            case RequisitionStatus.closed.value:
+                return 'Terminada'
             case _:
                 return status
 

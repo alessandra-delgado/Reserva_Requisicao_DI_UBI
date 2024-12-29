@@ -44,5 +44,4 @@ class FrameEquipmentNew(ctk.CTkFrame):
         Verify if the form data is valid.
         :return: True if valid, False otherwise.
         """
-        valid = True
-        return valid
+        return True
