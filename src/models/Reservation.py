@@ -15,3 +15,11 @@ def get_reservations() -> list:
     db.close(conn)
 
     return rows
+
+def get_by_id(reservation_id) -> list:
+    conn = db.connect()
+    result = conn.cursor().execute("SELECT * FROM TblReservation Where id_reserv=?", reservation_id)
+    rows = result.fetchone()
+    db.close(conn)
+
+    return rows

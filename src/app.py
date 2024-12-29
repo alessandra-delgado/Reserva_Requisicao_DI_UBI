@@ -2,8 +2,7 @@ import customtkinter as ctk
 import tkinter as tk
 import os
 from PIL import Image
-from views.frames import home, equipment_index, equipment_new,reserve_index, reserve_new, reserve_edit, requisition_index, requisition_new, \
-    requisition_edit, user_new, user_index
+from views.frames import home, equipment_index, equipment_new,reserve_index, reserve_new, requisition_index, requisition_new, user_new, user_index
 from views.nav import nav
 from controllers import about
 
@@ -33,10 +32,8 @@ class App(ctk.CTk):
             "Adicionar Equipamento": equipment_new.FrameEquipmentNew(self),
             "Lista de Reservas": reserve_index.FrameReserveIndex(self),
             "Criar Reserva": reserve_new.FrameReserveNew(self),
-            "Editar Reserva": reserve_edit.FrameReserveEdit(self),
             "Lista de Requisições": requisition_index.FrameRequisitionIndex(self),
             "Criar Requisição": requisition_new.FrameRequisitionNew(self),
-            "Editar Requisição": requisition_edit.FrameRequisitionEdit(self),
             "Lista de Utilizadores": user_index.FrameUserIndex(self),
             "Criar Utilizador": user_new.FrameUserNew(self),
         }
@@ -102,6 +99,8 @@ class App(ctk.CTk):
     def select_frame(self, frame_name, button_name):
         for name, frame in self.frames.items():
             frame.grid_forget()
+            if hasattr(frame, "delete_dependent"):
+                frame.delete_dependent()
 
         for name, frame in self.nav_frames.items():
             self.nav_frames[name].unselect()
