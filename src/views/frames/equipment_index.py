@@ -25,6 +25,9 @@ class FrameEquipmentIndex(ctk.CTkFrame):
 
     def reload(self) -> None:
         """ Used by app.py to reload page data. """
+        for widget in self.scrollableFrame.winfo_children():
+            widget.destroy()
+
         equipments = Equipment.get_equipments(EquipmentCategory.all.value)
 
         # Table header

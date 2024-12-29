@@ -29,6 +29,9 @@ class FrameRequisitionIndex(ctk.CTkFrame):
 
     def reload(self) -> None:
         """ Used by app.py to reload page data. """
+        for widget in self.scrollableFrame.winfo_children():
+            widget.destroy()
+
         requisitions = Requisition.get_requisitions()
 
         # Table header
@@ -64,7 +67,7 @@ class FrameRequisitionIndex(ctk.CTkFrame):
             l.grid(row=i, column=2, padx=5, pady=7, sticky="w")
             l = ctk.CTkLabel(self.scrollableFrame, text=requisition[4].strftime(date_format), text_color="#545F71")
             l.grid(row=i, column=3, padx=5, pady=7, sticky="w")
-            l = ctk.CTkLabel(self.scrollableFrame, text='Sim' if requisition[5] else 'Não', text_color="#545F71")
+            l = ctk.CTkLabel(self.scrollableFrame, text=requisition[5], text_color="#545F71")
             l.grid(row=i, column=4, padx=5, pady=7, sticky="w")
             l = ctk.CTkLabel(self.scrollableFrame, text=requisition[6], text_color="#545F71")
             l.grid(row=i, column=5, padx=5, pady=7, sticky="w")

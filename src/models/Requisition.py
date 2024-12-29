@@ -5,6 +5,7 @@ from models import DataBase as db
 
 
 def add_requisition(user, datetime_start, datetime_end, equipments_radio) -> None:
+    # todo: after insert, update number of collected equipments with size of equip list (radio)
     print(user, datetime_start, datetime_end, equipments_radio)
     raise NotImplementedError
 

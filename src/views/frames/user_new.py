@@ -64,6 +64,7 @@ class FrameUserNew(ctk.CTkFrame):
         Verify if the form data is valid.
         :return: True if valid, False otherwise.
         """
+        # todo: validat if user id and phone number are unique before insert
         valid = True
         # Validate name
         if self.name.get() == "" or len(self.name.get()) > 50:

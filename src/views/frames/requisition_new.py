@@ -71,7 +71,6 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
         # EndOf DATETIME pickers -----------------------------------------------------------------------
         # EndOf form_frame ------------------------------------------------------------------------------------------------------
 
-
         # Second frame (scrollable) ---------------------------------------------------------------------------------------------
         self.equipments_radio = {}
         # Select equipments field
@@ -82,13 +81,13 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
         self.scrollableFrame_error = ctk.CTkLabel(self, text="", text_color="red")
         self.scrollableFrame_error.grid(row=6, column=0, pady=0, padx=20, sticky="w")
 
-
         # EndOf scrollable frame ------------------------------------------------------------------------------------------------
 
         self.category = ctk.StringVar(self, EquipmentCategory.all.value)
 
         ctk.CTkLabel(self, text="Categoria do Equipamento").grid(row=3, column=0, padx=20, pady=(20, 0), sticky="w")
-        self.combo = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category, command=self.reload ,width=300)
+        self.combo = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category,
+                                     command=self.reload, width=300)
         self.combo.grid(row=4, column=0, pady=(3, 0), padx=20, sticky="w")
 
         # Submit button
@@ -178,17 +177,15 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
             for k, v in self.equipments_radio.items():
                 equipments_radio[k] = v.get()
 
-            mega_data = self.date_start.get_date() + " " + str(self.time_start.hours24()) + ":" + str(self.time_start.minutes())
+            mega_data = self.date_start.get_date() + " " + str(self.time_start.hours24()) + ":" + str(
+                self.time_start.minutes())
             datetime_start = datetime.strptime(mega_data, "%Y/%m/%d %H:%M")
 
-            mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(self.time_end.minutes())
+            mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(
+                self.time_end.minutes())
             datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
 
             Requisition.add_requisition(self.user.get(), datetime_start, datetime_end, equipments_radio)
-
-        # Todo: validate date entries
-
-
 
     def is_valid(self) -> bool:
         """
@@ -242,6 +239,8 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
             mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(
                 self.time_end.minutes())
             datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
+
+            # Verificar se a data de fim vem depois da data de início
             if datetime_start >= datetime_end:
                 self.date_start_error.configure(text="Data de inicio não pode ser\nmaior ou igual à de termino.")
                 self.date_start.configure(border_color="red")
@@ -250,8 +249,6 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
                 self.date_start.configure(border_color="#979DA2")
         except ValueError:
             pass
-
-
 
         has_equipments = False
         self.scrollableFrame_error.configure(text="Deve selecionar pelo menos um equipamento.")

@@ -22,6 +22,9 @@ class FrameUserIndex(ctk.CTkFrame):
 
     def reload(self) -> None:
         """ Used by app.py to reload page data. """
+        for widget in self.scrollableFrame.winfo_children():
+            widget.destroy()
+
         users = UserDI.get_users()
 
         # Table header

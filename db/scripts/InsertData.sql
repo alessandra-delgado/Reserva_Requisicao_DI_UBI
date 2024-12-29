@@ -92,9 +92,6 @@ INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
 VALUES ('BS_YUNA', GETDATE(), GETDATE(), GETDATE(), 'Cancelled');
 
 INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
-VALUES ('BS_CAROL', GETDATE(), GETDATE(), GETDATE(), 'Waiting');
-
-INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
 VALUES ('BS_ANA', GETDATE(), GETDATE(), GETDATE(), 'Forgotten');
 
 INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
@@ -104,5 +101,24 @@ INSERT INTO TblRes_Equip (id_reserv, id_equip, essential, assigned_to)
 VALUES ('20240001', 1, 1, 1);
 
 
-INSERT INTO TblRequisition (id_user, status_req, time_start, time_end, returned, collected)
-VALUES ('BS_YUNA',  'Active',GETDATE(), GETDATE(), 0, -1);
+INSERT INTO TblRequisition (id_user, status_req, time_start, time_end)
+VALUES ('BS_YUNA', 'Active', '2024-12-30 00:00:00', '2025-1-3 00:00:00');
+
+INSERT INTO TblReq_Equip(id_req, id_equip)
+VALUES (1, 1)
+INSERT INTO TblReq_Equip(id_req, id_equip)
+VALUES (1, 3)
+INSERT INTO TblReq_Equip(id_req, id_equip)
+VALUES (1, 5)
+INSERT INTO TblReq_Equip(id_req, id_equip)
+VALUES (1, 12)
+
+
+INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
+VALUES ('BS_CAROL', GETDATE(), GETDATE(), GETDATE(), 'Waiting');
+INSERT INTO TblRequisition(id_user, time_start, time_end)
+VALUES ('BS_CAROL', GETDATE(), GETDATE())
+INSERT INTO TblReq_Equip(id_req, id_equip)
+VALUES (2, 2)
+
+-- devolver equipamentos da requisição 1

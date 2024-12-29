@@ -26,6 +26,11 @@ class FrameReserveIndex(ctk.CTkFrame):
         self.reload()
 
     def reload(self) -> None:
+
+        for widget in self.scrollableFrame.winfo_children():
+            widget.destroy()
+
+
         """ Used by app.py to reload page data. """
         reservations = Reservation.get_reservations()
 

@@ -103,6 +103,7 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
     def back(self):
         self.grid_forget()
         self.target_frame.grid(row=0, column=1, sticky="nsew")
+        self.target_frame.reload()
 
     def submit(self) -> None:
         """
