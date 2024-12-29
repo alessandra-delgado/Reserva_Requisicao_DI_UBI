@@ -71,8 +71,10 @@ class FrameRequisitionIndex(ctk.CTkFrame):
             l = ctk.CTkLabel(self.scrollableFrame, text=RequisitionStatus.label(requisition[2]), text_color="#545F71")
             l.grid(row=i, column=6, padx=5, pady=7, sticky="w")
 
-            l =self.add_button(requisition[0])
-            l.grid(row=i, column=7, padx=5, pady=7, sticky="w")
+
+            if RequisitionStatus.can_edit(requisition[2]) and not requisition[5]:
+                l =self.add_button(requisition[0])
+                l.grid(row=i, column=7, padx=5, pady=7, sticky="w")
 
             i += 1
             self.add_divider(i)

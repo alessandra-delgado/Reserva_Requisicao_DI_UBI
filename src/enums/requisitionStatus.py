@@ -20,3 +20,8 @@ class RequisitionStatus(Enum):
                 return 'Ativa'
             case _:
                 return status
+
+
+    @staticmethod
+    def can_edit(status: str) -> bool:
+        return status in [RequisitionStatus.active.value]
