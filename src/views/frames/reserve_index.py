@@ -65,8 +65,11 @@ class FrameReserveIndex(ctk.CTkFrame):
             l = ctk.CTkLabel(self.scrollableFrame, text= ReservationStatus.label(reservation[5]), text_color="#545F71")
             l.grid(row=i, column=5, padx=5, pady=7, sticky="w")
 
-            l =self.add_button(reservation[0])
-            l.grid(row=i, column=6, padx=5, pady=7, sticky="w")
+            # Todo: Don't display button if can't be eddited
+
+            if ReservationStatus.can_edit(reservation[5]):
+                l =self.add_button(reservation[0])
+                l.grid(row=i, column=6, padx=5, pady=7, sticky="w")
 
             i += 1
             self.add_divider(i)

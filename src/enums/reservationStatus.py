@@ -30,3 +30,8 @@ class ReservationStatus(Enum):
     @staticmethod
     def get_status_edit():
         return [ReservationStatus.satisfied.value, ReservationStatus.cancelled.value]
+
+
+    @staticmethod
+    def can_edit(status: str) -> bool:
+        return status not in [ReservationStatus.satisfied.value, ReservationStatus.cancelled.value, ReservationStatus.cancelled.value]
