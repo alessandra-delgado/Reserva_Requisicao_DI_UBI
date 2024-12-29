@@ -99,3 +99,6 @@ VALUES ('BS_ANA', GETDATE(), GETDATE(), GETDATE(), 'Forgotten');
 
 INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
 VALUES ('PR_SPECIAL', GETDATE(), GETDATE(), GETDATE(), 'Active');
+
+INSERT INTO TblRes_Equip (id_reserv, id_equip, essential, assigned_to)
+VALUES ('20240001', 1, 1, 1);
