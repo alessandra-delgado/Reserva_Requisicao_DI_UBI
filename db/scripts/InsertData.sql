@@ -102,3 +102,7 @@ VALUES ('PR_SPECIAL', GETDATE(), GETDATE(), GETDATE(), 'Active');
 
 INSERT INTO TblRes_Equip (id_reserv, id_equip, essential, assigned_to)
 VALUES ('20240001', 1, 1, 1);
+
+
+INSERT INTO TblRequisition (id_user, status_req, time_start, time_end, returned, collected)
+VALUES ('BS_YUNA',  'Active',GETDATE(), GETDATE(), 0, -1);

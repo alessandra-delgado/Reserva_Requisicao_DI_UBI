@@ -15,3 +15,11 @@ def get_requisitions() -> list:
     db.close(conn)
 
     return rows
+
+def get_by_id(requisition_id) -> list:
+    conn = db.connect()
+    result = conn.cursor().execute("SELECT * FROM TblRequisition Where id_req=?", requisition_id)
+    rows = result.fetchone()
+    db.close(conn)
+
+    return rows

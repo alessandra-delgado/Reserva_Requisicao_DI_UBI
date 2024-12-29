@@ -1,7 +1,9 @@
 import customtkinter as ctk
+from customtkinter import CTkButton
 
 from enums.requisitionStatus import RequisitionStatus
 from models import Requisition
+from views.frames import requisition_edit
 
 
 class FrameRequisitionIndex(ctk.CTkFrame):
@@ -9,6 +11,9 @@ class FrameRequisitionIndex(ctk.CTkFrame):
         super().__init__(parent, corner_radius=0, fg_color="#EBF3FA")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
+
+        self.frame_edit = None
+        self.parent = parent
 
         # Page title
         title = ctk.CTkLabel(self, text="Lista de Requisições", text_color="#20558A", font=("", 20, 'bold'))
@@ -59,12 +64,15 @@ class FrameRequisitionIndex(ctk.CTkFrame):
             l.grid(row=i, column=2, padx=5, pady=7, sticky="w")
             l = ctk.CTkLabel(self.scrollableFrame, text=requisition[4].strftime(date_format), text_color="#545F71")
             l.grid(row=i, column=3, padx=5, pady=7, sticky="w")
-            l = ctk.CTkLabel(self.scrollableFrame, text=requisition[5], text_color="#545F71")
+            l = ctk.CTkLabel(self.scrollableFrame, text='Sim' if requisition[5] else 'Não', text_color="#545F71")
             l.grid(row=i, column=4, padx=5, pady=7, sticky="w")
             l = ctk.CTkLabel(self.scrollableFrame, text=requisition[6], text_color="#545F71")
             l.grid(row=i, column=5, padx=5, pady=7, sticky="w")
             l = ctk.CTkLabel(self.scrollableFrame, text=RequisitionStatus.label(requisition[2]), text_color="#545F71")
             l.grid(row=i, column=6, padx=5, pady=7, sticky="w")
+
+            l =self.add_button(requisition[0])
+            l.grid(row=i, column=7, padx=5, pady=7, sticky="w")
 
             i += 1
             self.add_divider(i)
@@ -78,3 +86,18 @@ class FrameRequisitionIndex(ctk.CTkFrame):
         ctk.CTkFrame(self.scrollableFrame, width=130, height=1, bg_color="#B3CBE5").grid(row=i, column=4, sticky="s")
         ctk.CTkFrame(self.scrollableFrame, width=130, height=1, bg_color="#B3CBE5").grid(row=i, column=5, sticky="s")
         ctk.CTkFrame(self.scrollableFrame, width=130, height=1, bg_color="#B3CBE5").grid(row=i, column=6, sticky="s")
+
+    def add_button(self, requisition_id) -> CTkButton:
+        return ctk.CTkButton(self.scrollableFrame, height=40, width=200, text=">", anchor="w", text_color="#163B61",
+                      hover_color="#6DA5DE",
+                      command=lambda: self.edit(requisition_id))
+
+    def delete_dependent(self):
+        if self.frame_edit is not None:
+            self.frame_edit.grid_forget()
+
+    def edit(self, reserve_id) -> None:
+        self.grid_forget()
+
+        self.frame_edit = requisition_edit.FrameRequisitionEdit(self.parent, reserve_id)
+        self.frame_edit.grid(row=0, column=1, sticky="nsew")
