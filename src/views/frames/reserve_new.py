@@ -51,14 +51,14 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         self.time_start = SpinTimePickerOld(self.form_frame)
         self.time_start.addAll(constants.HOURS24)
         self.time_start.grid(row=6, column=3, padx=20, pady=(3, 0), sticky="w")
-        self.time_start_error = ctk.CTkLabel(self, text="", text_color="red")
+        self.time_start_error = ctk.CTkLabel(self.form_frame, text="", text_color="red")
         self.time_start_error.grid(row=7, column=3, pady=0, padx=20, sticky="w")
 
         # PickEndDate field
         ctk.CTkLabel(self.form_frame, text="Data de Fim").grid(row=8, column=0, padx=20, pady=(20, 0), sticky="w")
         self.date_end = CTkDatePicker(self.form_frame, width=200)
         self.date_end.grid(row=9, column=0, padx=20, pady=(3, 0), sticky="w")
-        self.date_end_error = ctk.CTkLabel(self, text="", text_color="red")
+        self.date_end_error = ctk.CTkLabel(self.form_frame, text="", text_color="red")
         self.date_end_error.grid(row=10, column=0, pady=0, padx=20, sticky="w")
 
         # PickEndTime field
@@ -66,7 +66,7 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         self.time_end = SpinTimePickerOld(self.form_frame)
         self.time_end.addAll(constants.HOURS24)
         self.time_end.grid(row=9, column=3, padx=20, pady=(3, 0), sticky="w")
-        self.time_end_error = ctk.CTkLabel(self, text="", text_color="red")
+        self.time_end_error = ctk.CTkLabel(self.form_frame, text="", text_color="red")
         self.time_end_error.grid(row=10, column=3, pady=0, padx=20, sticky="w")
         # EndOf DATETIME pickers -----------------------------------------------------------------------
         # EndOf form_frame ------------------------------------------------------------------------------------------------------
@@ -105,10 +105,6 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             equipments = Equipment.get_equipments(category)
         else:
             equipments = Equipment.get_equipments(self.category.get())
-
-        # todo: make a combobox for category and load
-        #  equipments from that category, or put all
-        #  (select from equip where category in (...))
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="Reservar", text_color="#545F71", font=("", 12, "bold"))
@@ -199,8 +195,6 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
 
             Reservation.add_reservation(self.user.get(), datetime_start, datetime_end, equipments_radio)
 
-        # Todo: validate date entries
-
     def is_valid(self) -> bool:
         """
         Verify if the form data is valid.
@@ -244,13 +238,37 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             valid = False
             self.time_end_error.configure(text="Formato inválido.")
 
-        valid = False
+
+        try:
+            # Verify if end date is after start date
+            mega_data = self.date_start.get_date() + " " + str(self.time_start.hours24()) + ":" + str(
+                self.time_start.minutes())
+            datetime_start = datetime.strptime(mega_data, "%Y/%m/%d %H:%M")
+
+            mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(
+                self.time_end.minutes())
+            datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
+
+
+            if datetime_start >= datetime_end:
+                self.date_start_error.configure(text="Data de inicio não pode ser\nmaior ou igual à de termino.")
+                self.date_start.configure(border_color="red")
+            else:
+                self.date_start_error.configure(text="")
+                self.date_start.configure(border_color="#979DA2")
+        except ValueError:
+            pass
+
+        has_equipments = False
         self.scrollableFrame_error.configure(text="Deve selecionar pelo menos um equipamento.")
         # At least one equipment must be selected
-        for k,v in self.equipments_radio.values():
+        for v in self.equipments_radio.values():
             if v.get() in [ReservationEquipmentType.reserved.value, ReservationEquipmentType.essential.value]:
-                valid = True
+                has_equipments = True
                 self.scrollableFrame_error.configure(text="")
                 break
+
+        # Merge boolean values
+        valid = has_equipments and valid
 
         return valid
