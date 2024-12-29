@@ -42,12 +42,14 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
         self.scrollableFrame = ctk.CTkScrollableFrame(self, fg_color="#FFFFFF")
         self.scrollableFrame.grid(row=8, column=0, sticky="nsew", padx=30, pady=(3, 0))
         self.scrollableFrame.grid_columnconfigure(3, weight=1)
+        self.scrollableFrame_error = ctk.CTkLabel(self, text="", text_color="red")
+        self.scrollableFrame_error.grid(row=9, column=0, pady=0, padx=20, sticky="w")
 
         self.reload()
 
         # Buttons
         self.buttons_frame = ctk.CTkFrame(self, fg_color="#EBF3FA")
-        self.buttons_frame.grid(row=9, column=0, sticky="nsew")
+        self.buttons_frame.grid(row=10, column=0, sticky="nsew")
 
         # Return button
         self.button = ctk.CTkButton(self.buttons_frame, text="Voltar", command=self.back, width=200)
@@ -82,8 +84,9 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
             l.grid(row=i, column=0, padx=5, pady=7, sticky="w")
 
             if equipment[1] not in returned:
-                self.equipment_devolutions[equipment[0]] = ctk.CTkCheckBox(self.scrollableFrame, text="", text_color="#545F71")
-                self.equipment_devolutions[equipment[0]].grid(row=i, column=1, padx=5, pady=7, sticky="w")
+                self.equipment_devolutions[equipment[1]] = ctk.CTkCheckBox(self.scrollableFrame, text="",
+                                                                           text_color="#545F71")
+                self.equipment_devolutions[equipment[1]].grid(row=i, column=1, padx=5, pady=7, sticky="w")
             else:
                 l = ctk.CTkLabel(self.scrollableFrame, text='Devolvido', text_color="#545F71")
                 l.grid(row=i, column=1, padx=5, pady=7, sticky="w")
@@ -105,9 +108,27 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
         """
         Submits the form.
         """
-        equipment_devolutions = {}
-        for k, v in self.equipment_devolutions.items():
-            equipment_devolutions[k] = v.get()
+        if self.is_valid():
+            equipment_devolutions = {}
+            for k, v in self.equipment_devolutions.items():
+                equipment_devolutions[k] = v.get()
 
-        # Todo: validate date entries
-        Requisition.edit_requisition(self.requisition[0], equipment_devolutions)
+            Requisition.edit_requisition(self.requisition[0], equipment_devolutions)
+
+    def is_valid(self) -> bool:
+        """
+        Verify if the form data is valid.
+        :return: True if valid, False otherwise.
+        """
+        valid = True
+
+        has_equipments = False
+        self.scrollableFrame_error.configure(text="Deve selecionar pelo menos um equipamento como devolvido.")
+        # At least one equipment must be selected
+        for v in self.equipment_devolutions.values():
+            if v.get():
+                has_equipments = True
+                self.scrollableFrame_error.configure(text="")
+                break
+
+        return valid and has_equipments
