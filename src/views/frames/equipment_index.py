@@ -10,6 +10,8 @@ class FrameEquipmentIndex(ctk.CTkFrame):
         super().__init__(parent, corner_radius=0, fg_color="#EBF3FA")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
+        # col amount
+        self.cols = 4
 
         # Page title
         title = ctk.CTkLabel(self, text="Lista de Equipamentos", text_color="#20558A", font=("", 20, 'bold'))
@@ -18,7 +20,9 @@ class FrameEquipmentIndex(ctk.CTkFrame):
         # Table frame
         self.scrollableFrame = ctk.CTkScrollableFrame(self, fg_color="#FFFFFF")
         self.scrollableFrame.grid(row=1, column=0, sticky="nsew", padx=30, pady=50)
-        self.scrollableFrame.grid_columnconfigure(4, weight=1)
+
+        for i in range(self.cols):
+            self.scrollableFrame.grid_columnconfigure(i, weight=1)
 
         # Load table data
         self.reload()
@@ -32,34 +36,32 @@ class FrameEquipmentIndex(ctk.CTkFrame):
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="ID", text_color="#545F71", font=("", 12, "bold"))
-        l.grid(row=1, column=0, padx=5, pady=15, sticky="w")
+        l.grid(row=1, column=0, padx=5, pady=15, sticky="nsew")
         l = ctk.CTkLabel(self.scrollableFrame, text="Nome", text_color="#545F71", font=("", 12, "bold"))
-        l.grid(row=1, column=1, padx=5, pady=15, sticky="w")
+        l.grid(row=1, column=1, padx=5, pady=15, sticky="nsew")
         l = ctk.CTkLabel(self.scrollableFrame, text="Categoria", text_color="#545F71", font=("", 12, "bold"))
-        l.grid(row=1, column=2, padx=5, pady=20, sticky="w")
+        l.grid(row=1, column=2, padx=5, pady=20, sticky="nsew")
         l = ctk.CTkLabel(self.scrollableFrame, text="Estado", text_color="#545F71", font=("", 12, "bold"))
-        l.grid(row=1, column=3, padx=5, pady=20, sticky="w")
+        l.grid(row=1, column=3, padx=5, pady=20, sticky="nsew")
         self.add_divider(2)
         # Table Rows
         i = 2
         for equipment in equipments:
             i += 1
 
-            l = ctk.CTkLabel(self.scrollableFrame, text=equipment[0], text_color="#545F71")
-            l.grid(row=i, column=0, padx=5, pady=7, sticky="w")
-            l = ctk.CTkLabel(self.scrollableFrame, text=equipment[2], text_color="#545F71")
-            l.grid(row=i, column=1, padx=5, pady=7, sticky="w")
-            l = ctk.CTkLabel(self.scrollableFrame, text= equipment[3], text_color="#545F71")
-            l.grid(row=i, column=2, padx=5, pady=7, sticky="w")
-            l = ctk.CTkLabel(self.scrollableFrame, text=EquipmentStatus.label(equipment[1]), text_color="#545F71")
-            l.grid(row=i, column=3, padx=5, pady=7, sticky="w")
+            l = ctk.CTkLabel(self.scrollableFrame, text=equipment[0], text_color="#545F71", anchor="center")
+            l.grid(row=i, column=0, padx=5, pady=7, sticky="nsew")
+            l = ctk.CTkLabel(self.scrollableFrame, text=equipment[2], text_color="#545F71", anchor="center")
+            l.grid(row=i, column=1, padx=5, pady=7, sticky="nsew")
+            l = ctk.CTkLabel(self.scrollableFrame, text= equipment[3], text_color="#545F71", anchor="center")
+            l.grid(row=i, column=2, padx=5, pady=7, sticky="nsew")
+            l = ctk.CTkLabel(self.scrollableFrame, text=EquipmentStatus.label(equipment[1]), text_color="#545F71", anchor="center")
+            l.grid(row=i, column=3, padx=5, pady=7, sticky="nsew")
 
             i += 1
             self.add_divider(i)
 
-    # well, it simulates a divider...
     def add_divider(self, i) -> None:
-        ctk.CTkFrame(self.scrollableFrame, width=130, height=1, bg_color="#B3CBE5").grid(row=i, column=0, sticky="s")
-        ctk.CTkFrame(self.scrollableFrame, width=140, height=1, bg_color="#B3CBE5").grid(row=i, column=1, sticky="s")
-        ctk.CTkFrame(self.scrollableFrame, width=150, height=1, bg_color="#B3CBE5").grid(row=i, column=2, sticky="s")
-        ctk.CTkFrame(self.scrollableFrame, width=130, height=1, bg_color="#B3CBE5").grid(row=i, column=3, sticky="s")
+        div = ctk.CTkFrame(self.scrollableFrame, height=1, bg_color="#B3CBE5")
+        div.grid(row=i, column=0, columnspan=self.cols, sticky="sew")
+
