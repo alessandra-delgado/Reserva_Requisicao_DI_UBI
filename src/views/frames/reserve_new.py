@@ -15,6 +15,8 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
+        self.cols = 4
+
         # This page is divided in two frames
         # The first frame (form_frame) is directed to TblReservation ------------------------------------------------------------
         self.form_frame = ctk.CTkFrame(self, fg_color="#EBF3FA")
@@ -78,7 +80,9 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         ctk.CTkLabel(self, text="Lista de Equipamentos").grid(row=1, column=0, padx=20, pady=(20, 0), sticky="w")
         self.scrollableFrame = ctk.CTkScrollableFrame(self, fg_color="#FFFFFF")
         self.scrollableFrame.grid(row=5, column=0, sticky="nsew", padx=30, pady=(3, 0))
-        self.scrollableFrame.grid_columnconfigure(4, weight=1)
+        for i in range(self.cols):
+            self.scrollableFrame.grid_columnconfigure(i, weight=1)
+
         self.scrollableFrame_error = ctk.CTkLabel(self, text="", text_color="red")
         self.scrollableFrame_error.grid(row=6, column=0, pady=0, padx=20, sticky="w")
 
@@ -108,9 +112,9 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="Reservar", text_color="#545F71", font=("", 12, "bold"))
-        l.grid(row=1, column=0, padx=5, pady=15, sticky="w")
+        l.grid(row=1, column=0, padx=5, pady=5, sticky="w")
         l = ctk.CTkLabel(self.scrollableFrame, text="Equipamento", text_color="#545F71", font=("", 12, "bold"))
-        l.grid(row=1, column=3, padx=5, pady=20, sticky="w")
+        l.grid(row=1, column=3, padx=5, pady=5, sticky="w")
         self.add_divider(2)
 
         # Table Rows
@@ -142,12 +146,17 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             i += 1
             self.add_divider(i)
 
+        divider = ctk.CTkFrame(self.scrollableFrame, width=1, bg_color="#B3CBE5")
+        divider.grid(row=2, column=0, rowspan=i, sticky="nse", padx=5)
+        divider = ctk.CTkFrame(self.scrollableFrame, width=1, bg_color="#B3CBE5")
+        divider.grid(row=2, column=1, rowspan=i, sticky="nse", padx=5)
+        divider = ctk.CTkFrame(self.scrollableFrame, width=1, bg_color="#B3CBE5")
+        divider.grid(row=1, column=2, rowspan=i, sticky="nse", padx=5)
+
     # well, it simulates a divider...
     def add_divider(self, i) -> None:
-        ctk.CTkFrame(self.scrollableFrame, width=120, height=1, bg_color="#B3CBE5").grid(row=i, column=0, sticky="s")
-        ctk.CTkFrame(self.scrollableFrame, width=120, height=1, bg_color="#B3CBE5").grid(row=i, column=1, sticky="s")
-        ctk.CTkFrame(self.scrollableFrame, width=120, height=1, bg_color="#B3CBE5").grid(row=i, column=2, sticky="s")
-        ctk.CTkFrame(self.scrollableFrame, width=200, height=1, bg_color="#B3CBE5").grid(row=i, column=3, sticky="s")
+        div = ctk.CTkFrame(self.scrollableFrame, height=1, bg_color="#B3CBE5")
+        div.grid(row=i, column=0, columnspan=self.cols, sticky="sew")
 
     def filter_users(self, event):
         # Recebe o evento
