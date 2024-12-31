@@ -146,13 +146,6 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             i += 1
             self.add_divider(i)
 
-        divider = ctk.CTkFrame(self.scrollableFrame, width=1, bg_color="#B3CBE5")
-        divider.grid(row=2, column=0, rowspan=i, sticky="nse", padx=5)
-        divider = ctk.CTkFrame(self.scrollableFrame, width=1, bg_color="#B3CBE5")
-        divider.grid(row=2, column=1, rowspan=i, sticky="nse", padx=5)
-        divider = ctk.CTkFrame(self.scrollableFrame, width=1, bg_color="#B3CBE5")
-        divider.grid(row=1, column=2, rowspan=i, sticky="nse", padx=5)
-
     # well, it simulates a divider...
     def add_divider(self, i) -> None:
         div = ctk.CTkFrame(self.scrollableFrame, height=1, bg_color="#B3CBE5")

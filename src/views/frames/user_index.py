@@ -8,7 +8,7 @@ class FrameUserIndex(ctk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
         # Important: columns amount
-        self.cols = 6
+        self.cols = 5
 
         # Page title
         title = ctk.CTkLabel(self, text="Lista de Utilizadores", text_color="#20558A", font=("", 20, 'bold'))
@@ -64,9 +64,6 @@ class FrameUserIndex(ctk.CTkFrame):
             l.grid(row=i, column=3, padx=5, pady=7, sticky="nsew")
             l = ctk.CTkLabel(self.scrollableFrame, text=user[4], text_color="#545F71", anchor="center")
             l.grid(row=i, column=4, padx=5, pady=7, sticky="nsew")
-            button = ctk.CTkButton(self.scrollableFrame, height=40, width=60, text="Editar",
-                                   text_color="#ffffff", hover_color="#6DA5DE")
-            button.grid(row=i, column=5, padx=5, pady=7)
 
             i += 1
             self.add_divider(i)
