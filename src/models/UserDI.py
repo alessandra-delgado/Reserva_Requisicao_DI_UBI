@@ -1,7 +1,7 @@
 """
 UserDI table representation in code. Has the queries to UserDI table
 """
-import pyodbc
+from models import DataBase as db
 
 users = [
     {"id": "Primeiro User", "type": "Aluno", "email": "email1@email.com", "cellphone": "1111111111",
@@ -10,41 +10,32 @@ users = [
      "priority": "Baixa"}
 ]
 
-def connectBD():
-        conn = pyodbc.connect(
-                'DRIVER={ODBC Driver 17 for SQL Server};'
-                'SERVER=172.30.96.1,1433;'
-                'DATABASE=teste_di;'
-                'UID=sa;'
-                'PWD=sa;'
-        )
-        return conn
 
-conn = connectBD()
-cursor = conn.cursor()
-
-def add_user(id, name, user_type, email, cellphone) -> None:
+def add_user(id_input, name, id_type, email, cellphone) -> None:
     print("New User")
-    print("id: ", id)
+    print("id: ", id_input)
     print("name: ", name)
-    print("type: ", user_type)
+    print("type: ", id_type)
     print("email: ", email)
     print("cellphone: ", cellphone)
 
-    id_user = id_type+'_'+id
+    id_user = id_type+'_'+id_input
+    conn = db.connect()
+    conn.cursor().execute("INSERT INTO TblUser_DI (id_user, id_type, name, phone_no) VALUES (?,?,?,?)", (id_user, id_type, name, cellphone))
 
-    cursor.execute("INSERT INTO TblUser_DI (id_user, id_type, name, phone_no) VALUES (?,?,?,?)", (id_user, id_type, name, cellphone,))
+    if email != "":
+        conn.cursor().execute("INSERT INTO TblContact (id_user, email) VALUES (?,?)", (id_user, email))
 
-    if(email != ""):
-        cursor.execute("INSERT INTO TblContact (id_user, email) VALUES (?,?)", (id_user, email,))
+    conn.commit()
+
+    db.close(conn)
 
 def get_users() -> list:
-    cursor.execute("SELECT * FROM TblUser_DI")
-    rows = cursor.fetchall()
+    conn = db.connect()
+    result = conn.cursor().execute("SELECT * FROM TblUser_DI")
+    rows = result.fetchall()
+    db.close(conn)
 
     return rows
 
-#cursor.commit()
-#if you want it to affect the bd for real, you need to uncomment the cursor.commit()
-cursor.close()
-conn.close()
+
