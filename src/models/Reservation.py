@@ -3,6 +3,7 @@ Reservation table representation in code. Has the queries to Reservation table
 """
 from models import DataBase as db
 from datetime import datetime
+from enums.reservationEquipmentType import ReservationEquipmentType
 
 def add_reservation(user, datetime_start, datetime_end, equipments_radio) -> None:
     conn = db.connect()
@@ -14,7 +15,6 @@ def add_reservation(user, datetime_start, datetime_end, equipments_radio) -> Non
     current_date = datetime.today()
     status_res = "Waiting"
     assigned_to = 0
-    id_reserv = ''
 
     sql = """
         SET NOCOUNT ON;
@@ -22,28 +22,25 @@ def add_reservation(user, datetime_start, datetime_end, equipments_radio) -> Non
         EXEC MakeId @GeneratedID = @rv OUTPUT;
         SELECT @rv AS return_value;
     """
+
     cursor.execute(sql)
     return_value = cursor.fetchval()
 
     id_reserv = return_value
-    print(id_reserv)
 
     cursor.execute("""
         INSERT INTO TblReservation (id_reserv, id_user, time_start, time_end, reg_date, status_res)
         VALUES (?,?,?,?,?,?);
     """, (id_reserv, id_user, datetime_start, datetime_end, current_date, status_res,))
 
-    print(id_reserv)
-
     for equipment, selection in equipments_radio.items():
+        if(selection == ReservationEquipmentType.essential.value):
+           essential = 1
+        else:
+           essential = 0
+
         if (selection != "not_reserved"):
-
-            if(selection == "essential"):
-                essencial=1
-            else:
-                essencial=0
-
-            cursor.execute("INSERT INTO TblRes_Equip (id_reserv, id_equip, essential, assigned_to) VALUES (?,?,?,?)", (id_reserv, equipment, essencial, assigned_to,))
+            cursor.execute("INSERT INTO TblRes_Equip (id_reserv, id_equip, essential, assigned_to) VALUES (?,?,?,?)", (id_reserv, equipment, essential, assigned_to,))
 
     conn.commit()
     db.close(conn)
