@@ -26,7 +26,7 @@ BEGIN
                  WHEN @qntes = 0 AND @qnteq = @qntas THEN 'Active'
                  WHEN @qntes = 0 AND @qnteq != @qntas THEN 'Waiting'
                  WHEN @qntes >= 1 AND @qntesas = @qntes THEN 'Active'
-                 WHEN @qntes >= 1 AND @antesas != @qntes THEN 'Waiting'
+                 WHEN @qntes >= 1 AND @qntesas != @qntes THEN 'Waiting'
                  ELSE R.status_res
             END
             WHERE R.id_reserv = RE.id_reserv;
@@ -46,4 +46,5 @@ ELSE
 
         END
     END
+END
 END
