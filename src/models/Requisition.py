@@ -27,13 +27,25 @@ def add_requisition(user, datetime_start, datetime_end, equipments_radio) -> Non
             collected+=1
 
     cursor.execute("UPDATE TblRequisition SET collected = ? WHERE id_req = ?", (collected, id_req,))
+
     conn.commit()
+    db.close(conn)
     print(user, datetime_start, datetime_end, equipments_radio)
 
 def edit_requisition(requisition_id, equipment_devolutions) -> None:
-    print(requisition_id, equipment_devolutions)
-    raise NotImplementedError
+    conn = db.connect()
+    cursor = conn.cursor()
+    returned = 0
 
+    for equipment, selection in equipment_devolutions.items():
+        if(selection == 1):
+            returned+=1
+
+    cursor.execute("UPDATE TblRequisition SET returned = ? WHERE id_req = ?", (returned, requisition_id,))
+    conn.commit()
+
+    db.close(conn)
+    print(requisition_id, equipment_devolutions)
 
 def get_requisitions() -> list:
     conn = db.connect()
