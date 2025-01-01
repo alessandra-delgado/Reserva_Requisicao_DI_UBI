@@ -3,7 +3,7 @@ GO
 CREATE PROCEDURE AssignEquipmentToUser @ide INT
 AS
 BEGIN
-    DECLARE @IDR INT;
+    DECLARE @IDR VARCHAR(8);
 
     SELECT u.current_priority, r.status_res, re.essential, re.assigned_to, r.id_reserv
     INTO #temp_results
