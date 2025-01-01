@@ -21,10 +21,10 @@ def add_user(id_input, name, id_type, email, cellphone) -> None:
 
     id_user = id_type+'_'+id_input
     conn = db.connect()
-    conn.cursor().execute("INSERT INTO TblUser_DI (id_user, id_type, name, phone_no) VALUES (?,?,?,?)", (id_user, id_type, name, cellphone))
+    conn.cursor().execute("INSERT INTO TblUser_DI (id_user, id_type, name, phone_no) VALUES (?,?,?,?)", (id_user, id_type, name, cellphone,))
 
     if email != "":
-        conn.cursor().execute("INSERT INTO TblContact (id_user, email) VALUES (?,?)", (id_user, email))
+        conn.cursor().execute("INSERT INTO TblContact (id_user, email) VALUES (?,?)", (id_user, email,))
 
     conn.commit()
 
