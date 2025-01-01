@@ -5,6 +5,7 @@ ON TblRes_Equip
 AFTER INSERT
 AS
 BEGIN
+    print 'AAAAAAAA\n'
 	DECLARE @id_equip INT = (SELECT id_equip FROM INSERTED);
-	EXEC AssignEquipmentToUser ide
+	EXEC AssignEquipmentToUser @id_equip
 END

@@ -16,37 +16,37 @@ VALUES ('PD', 'Presidente', 5),
        ('XT', 'Externo', 3);
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('Frutuos', 'PD', 'frutuoso', '274638468');
+VALUES ('PD_Frutuos', 'PD', 'frutuoso', '274638468');
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('SPECIAL', 'PR', 'mr special', '123456789');
+VALUES ('PR_SPECIAL', 'PR', 'mr special', '123456789');
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('FABIO', 'RS', 'Fabio Craveiro', '347826592');
+VALUES ('RS_FABIO', 'RS', 'Fabio Craveiro', '347826592');
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('DARIO', 'DS', 'Dario Santos', '48527573');
+VALUES ('DS_DARIO', 'DS', 'Dario Santos', '48527573');
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('DAVINA', 'MS', 'Davinas', '384396001');
+VALUES ('MS_DAVINA', 'MS', 'Davinas', '384396001');
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('Dragon', 'BS', 'Doragon', '999028458');
+VALUES ('BS_Dragon', 'BS', 'Doragon', '999028458');
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('YUNA', 'BS', 'alessandra', '448566772');
+VALUES ('BS_YUNA', 'BS', 'alessandra', '448566772');
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('ANA', 'BS', 'Ana Silva', '999586709');
+VALUES ('BS_ANA', 'BS', 'Ana Silva', '999586709');
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('CAROL', 'BS', 'Carolina Gegaloto', '88857472');
+VALUES ('BS_CAROL', 'BS', 'Carolina Gegaloto', '88857472');
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('BETTEN', 'SF', 'Guilherme Paulo', '848393582');
+VALUES ('SF_BETTEN', 'SF', 'Guilherme Paulo', '848393582');
 
 INSERT INTO TblUser_DI(id_user, id_type, name, phone_no)
-VALUES ('MONIZ', 'XT', 'Moniz', '885748209');
+VALUES ('XT_MONIZ', 'XT', 'Moniz', '885748209');
 
 
 INSERT INTO TblContact(id_user, email)
@@ -88,14 +88,5 @@ VALUES ('Toshiba TDP-S8U DLP'),
        ('Asus Tuff'),
        ('GB 5KF');
 
-INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
-VALUES ('BS_YUNA', GETDATE(), GETDATE(), GETDATE(), 'Cancelled');
 
-INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
-VALUES ('BS_CAROL', GETDATE(), GETDATE(), GETDATE(), 'Waiting');
 
-INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
-VALUES ('BS_ANA', GETDATE(), GETDATE(), GETDATE(), 'Forgotten');
-
-INSERT INTO TblReservation (id_user, reg_date, time_start, time_end, status_res)
-VALUES ('PR_SPECIAL', GETDATE(), GETDATE(), GETDATE(), 'Active');

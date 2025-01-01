@@ -21,7 +21,7 @@ for /R "%triggers%" %%f in (*.sql) do (
     sqlcmd -S localhost -d teste_di -U sa -P sa -i "%%f"
 )
 
-rem sqlcmd -S localhost -d teste_di -U sa -P sa -i ".\scripts\InsertData.sql"
+sqlcmd -S localhost -d teste_di -U sa -P sa -i ".\scripts\InsertData.sql"
 
 echo Done running all SQL scripts.
 pause

@@ -1,6 +1,7 @@
 """
 UserDI table representation in code. Has the queries to UserDI table
 """
+from models import DataBase as db
 
 users = [
     {"id": "Primeiro User", "type": "Aluno", "email": "email1@email.com", "cellphone": "1111111111",
@@ -10,14 +11,31 @@ users = [
 ]
 
 
-def add_user(user_type, email, cellphone) -> None:
+def add_user(id_input, name, id_type, email, cellphone) -> None:
     print("New User")
-    print("type: ", user_type)
+    print("id: ", id_input)
+    print("name: ", name)
+    print("type: ", id_type)
     print("email: ", email)
     print("cellphone: ", cellphone)
 
-    users.append({"id": "Names", "type": user_type, "email": email, "cellphone": cellphone, "priority": "Alta"})
+    id_user = id_type+'_'+id_input
+    conn = db.connect()
+    conn.cursor().execute("INSERT INTO TblUser_DI (id_user, id_type, name, phone_no) VALUES (?,?,?,?)", (id_user, id_type, name, cellphone,))
 
+    if email != "":
+        conn.cursor().execute("INSERT INTO TblContact (id_user, email) VALUES (?,?)", (id_user, email,))
+
+    conn.commit()
+
+    db.close(conn)
 
 def get_users() -> list:
-    return users
+    conn = db.connect()
+    result = conn.cursor().execute("SELECT * FROM TblUser_DI")
+    rows = result.fetchall()
+    db.close(conn)
+
+    return rows
+
+

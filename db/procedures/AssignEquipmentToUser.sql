@@ -1,25 +1,32 @@
 DROP PROCEDURE IF EXISTS AssignEquipmentToUser;
 GO
-CREATE PROCEDURE AssignEquipmentToUser @ide VARCHAR(10)
+CREATE PROCEDURE AssignEquipmentToUser @ide INT
 AS
 BEGIN
-    DECLARE @IDR INT;
+    DECLARE @idr VARCHAR(8);
 
-    SELECT u.current_priority, r.status_res, re.essential, re.assigned_to, r.id_reserv
-    INTO #temp_results
-    FROM TblUser_DI u,
-         TblReservation r,
-         TblRes_Equip re
-    WHERE u.id_user = r.id_user
-      AND re.id_reserv = r.id_reserv
-      AND r.status_res IN ('Waiting', 'Active')
-    ORDER BY R.time_start DESC, U.current_priority DESC, RE.essential DESC, R.reg_date DESC
+    SET @idr = (
+        (SELECT TOP 1 re.id_reserv
+         FROM TblUser_DI u,
+              TblReservation r,
+              TblRes_Equip re
+         WHERE u.id_user = r.id_user
+           AND re.id_reserv = r.id_reserv
+           AND r.status_res IN ('Waiting', 'Active')
+           AND re.id_equip = @ide
+         ORDER BY r.time_start ASC, u.current_priority DESC, re.essential DESC, r.reg_date ASC))
 
-
-    SET @IDR = (SELECT TOP 1 id_reserv FROM #temp_results)
     UPDATE TblRes_Equip
-        SET assigned_to = 1
-    WHERE id_reserv = @IDR
+    SET assigned_to = 0
+    WHERE id_equip = @ide
+
+
+    UPDATE TblRes_Equip
+    SET assigned_to = 1
+    WHERE id_reserv = @idr
       AND id_equip = @ide
 
+    UPDATE TblEquipment
+    SET status_equip = 'Reserved'
+    WHERE id_equip = @ide
 END
