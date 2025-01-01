@@ -39,7 +39,7 @@ def add_reservation(user, datetime_start, datetime_end, equipments_radio) -> Non
         else:
            essential = 0
 
-        if (selection != "not_reserved"):
+        if (selection != ReservationEquipmentType.not_reserved.value):
             cursor.execute("INSERT INTO TblRes_Equip (id_reserv, id_equip, essential, assigned_to) VALUES (?,?,?,?)", (id_reserv, equipment, essential, assigned_to,))
 
     conn.commit()
@@ -52,6 +52,7 @@ def edit_reservation(reservation_id, status) -> None:
 
     cursor.execute("UPDATE TblReservation SET status_res = ? WHERE id_reserv = ?", (status, reservation_id,))
 
+    conn.commit()
     db.close(conn)
     print(reservation_id, status)
 
