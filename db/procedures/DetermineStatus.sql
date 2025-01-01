@@ -2,49 +2,49 @@ DROP PROCEDURE IF EXISTS DetermineStatus
 GO
 CREATE PROCEDURE DetermineStatus @idr INT
 AS
-
-DECLARE @qnteq INT = (SELECT COUNT(id_equip) FROM TblRes_Equip );
-DECLARE @qntes INT = (SELECT COUNT(id_equip) FROM TblRes_Equip WHERE  essential=1);
-DECLARE @qntas INT = (SELECT COUNT(id_equip) FROM TblRes_Equip WHERE assigned_to=1);
-DECLARE @qntesas INT = (SELECT COUNT(id_equip) FROM TblRes_Equip WHERE essential=1 AND assigned_to=1);
-DECLARE @qntcol INT = (SELECT collected FROM TblRes_Equip);
-
-SELECT R.time_start, R.status_res, RE.essential, R.id_reserv, RE.id_reserv 
-FROM Tb1Reservation R, TblRes_Equip RE
-
-
-IF R.status_res NOT LIKE 'Cancelled'
-
 BEGIN
-    IF (DATEDIFF(HOUR, R.time_start, GETDATE()) > 6)
-    BEGIN
-        IF R.status_res IN ('Waiting' , 'Active')
-        BEGIN
-            UPDATE TblReservation
-            SET R.status_res = 
-             CASE 
-                 WHEN @qntes = 0 AND @qnteq = @qntas THEN 'Active'
-                 WHEN @qntes = 0 AND @qnteq != @qntas THEN 'Waiting'
-                 WHEN @qntes >= 1 AND @qntesas = @qntes THEN 'Active'
-                 WHEN @qntes >= 1 AND @qntesas != @qntes THEN 'Waiting'
-                 ELSE R.status_res
-            END
-            WHERE R.id_reserv = RE.id_reserv;
-END
-ELSE
-    BEGIN
-        IF @qntcol = -1
-        BEGIN
+    DECLARE
+        @num_equips INT = (SELECT COUNT(id_equip)
+                           FROM TblRes_Equip
+                           WHERE id_reserv = @idr);
+    DECLARE
+        @equip_attribuidos INT = (SELECT COUNT(id_equip)
+                                  FROM TblRes_Equip
+                                  WHERE assigned_to = 1
+                                    AND id_reserv = @idr);
 
-        UPDATE TblReservation
-        SET R.status_res =
-            CASE
-                WHEN @qntas = 0 THEN 'NotSatisfied'
-                WHEN DATEDIFF(HOUR, GETDATE, R.time_end) = 0 THEN 'Forgotten'
-        END
-        WHERE R.id_reserv = RE.id_reserv
+    DECLARE
+        @time_end DATETIME = (SELECT TOP 1 time_end
+                              FROM TblReservation
+                              WHERE id_reserv = @idr);
 
+    DECLARE
+        @status_res DATETIME = (SELECT TOP 1 status_res
+                                FROM TblReservation
+                                WHERE id_reserv = @idr);
+
+
+    IF @status_res IN ('Active', 'Waiting')
+        BEGIN
+            IF (DATEDIFF(HOUR, @time_end, GETDATE()) > 0)
+                BEGIN
+                    UPDATE TblReservation
+                    SET status_res =
+                            CASE
+                                WHEN @equip_attribuidos = 0 THEN 'NotSatisfied'
+                                ELSE 'Forgotten'
+                                END
+                    WHERE id_reserv = @idr;
+                END
+            ELSE
+                BEGIN
+                    UPDATE TblReservation
+                    SET status_res =
+                            CASE
+                                WHEN @equip_attribuidos = @num_equips THEN 'Active'
+                                ELSE 'Waiting'
+                                END
+                    WHERE id_reserv = @idr;
+                END
         END
-    END
-END
 END
