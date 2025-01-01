@@ -2,7 +2,8 @@
 Reservation table representation in code. Has the queries to Reservation table
 """
 from models import DataBase as db
-from datetime import date
+from datetime import datetime
+from enums.reservationEquipmentType import ReservationEquipmentType
 
 def add_reservation(user, datetime_start, datetime_end, equipments_radio) -> None:
     conn = db.connect()
@@ -11,39 +12,37 @@ def add_reservation(user, datetime_start, datetime_end, equipments_radio) -> Non
     id_user = user.split()[0]
     print(id_user)
 
-    current_date = date.today()
+    current_date = datetime.today()
     status_res = "Waiting"
     assigned_to = 0
+
+    sql = """
+        SET NOCOUNT ON;
+        DECLARE @rv VARCHAR(8);
+        EXEC MakeId @GeneratedID = @rv OUTPUT;
+        SELECT @rv AS return_value;
+    """
+
+    cursor.execute(sql)
+    return_value = cursor.fetchval()
+
+    id_reserv = return_value
+
     cursor.execute("""
-        INSERT INTO TblReservation (id_user, time_start, time_end, reg_date, status_res)
-        VALUES (?,?,?,?,?);
-    """, (id_user, datetime_start, datetime_end, current_date, status_res,))
+        INSERT INTO TblReservation (id_reserv, id_user, time_start, time_end, reg_date, status_res)
+        VALUES (?,?,?,?,?,?);
+    """, (id_reserv, id_user, datetime_start, datetime_end, current_date, status_res,))
 
-    cursor.execute("SELECT * FROM TblRes_SeqId")
-    id = cursor.fetchone()
-
-    id_reserv = str(id[0]) + str(id[1]).zfill(4)
-    id_reserv = id_reserv[:8]
-
-    cursor.execute("SELECT 1 FROM TblReservation WHERE id_reserv = ?", (id_reserv,))
-    id_exists = cursor.fetchone()
-
-    while id_exists[0] != id_reserv:
-        cursor.execute("SELECT id_reserv FROM TblReservation WHERE id_reserv = ?", (id_reserv,))
-        id_exists = cursor.fetchone()
-
-    print(id_reserv)
-    print(id_exists)
     for equipment, selection in equipments_radio.items():
-        if (selection != "Not Reserved"):
+        if(selection == ReservationEquipmentType.essential.value):
+           essential = 1
+        else:
+           essential = 0
 
-            if(selection == "Essential"):
-                essencial=1
-            else:
-                essencial=0
+        if (selection != "not_reserved"):
+            cursor.execute("INSERT INTO TblRes_Equip (id_reserv, id_equip, essential, assigned_to) VALUES (?,?,?,?)", (id_reserv, equipment, essential, assigned_to,))
 
-            cursor.execute("INSERT INTO TblRes_Equip (id_reserv, id_equip, essential, assigned_to) VALUES (?,?,?,?)", (id_reserv, equipment, essencial, assigned_to,))
-
+    conn.commit()
     db.close(conn)
     print(user, datetime_start, datetime_end, equipments_radio)
 
