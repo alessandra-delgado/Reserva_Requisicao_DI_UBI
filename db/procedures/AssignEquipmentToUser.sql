@@ -13,8 +13,8 @@ BEGIN
          WHERE u.id_user = r.id_user
            AND re.id_reserv = r.id_reserv
            AND r.status_res IN ('Waiting', 'Active')
-           AND re.id_equip = 1
-         ORDER BY r.time_start DESC, u.current_priority DESC, re.essential DESC, r.reg_date ASC))
+           AND re.id_equip = @ide
+         ORDER BY r.time_start ASC, u.current_priority DESC, re.essential DESC, r.reg_date ASC))
 
     UPDATE TblRes_Equip
     SET assigned_to = 0
