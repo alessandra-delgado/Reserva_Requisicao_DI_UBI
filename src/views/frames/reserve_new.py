@@ -255,6 +255,7 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             if datetime_start >= datetime_end:
                 self.date_start_error.configure(text="Data de inicio não pode ser\nmaior ou igual à de termino.")
                 self.date_start.configure(border_color="red")
+                valid = False
             else:
                 self.date_start_error.configure(text="")
                 self.date_start.configure(border_color="#979DA2")
