@@ -1,5 +1,7 @@
 DROP TRIGGER IF EXISTS SetReservationID;
 GO
+/* GONE FR
+
 CREATE TRIGGER SetReservationID
     ON TblReservation
     AFTER INSERT
@@ -40,4 +42,4 @@ BEGIN
     DEALLOCATE set_id_at; --FREE DO CURSOR (POTERO)
 END;
 GO
-
+*/

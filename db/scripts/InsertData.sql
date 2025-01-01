@@ -122,3 +122,17 @@ INSERT INTO TblReq_Equip(id_req, id_equip)
 VALUES (2, 2)
 
 -- devolver equipamentos da requisição 1
+----------------------------------
+
+
+-- reserva nova
+
+-- Executar o MakeID e guardar numa var
+declare @id_res VARCHAR(8)
+EXEC MakeID @id_res OUTPUT
+
+-- Inserir nas tabelas com o id recebido
+INSERT INTO TblReservation (id_reserv ,id_user, reg_date, time_start, time_end, status_res)
+VALUES (@id_res, 'PR_SPECIAL', GETDATE(), GETDATE(), GETDATE(), 'Waiting');
+INSERT INTO TblRes_Equip(ID_RESERV, ID_EQUIP, ESSENTIAL) VALUES (@id_res, 5, 0)
+
