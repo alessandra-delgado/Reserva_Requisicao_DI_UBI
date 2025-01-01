@@ -6,8 +6,13 @@ from models import DataBase as db
 
 
 def add_equipment(name, category) -> None:
-    raise NotImplementedError
+    conn = db.connect()
+    cursor = conn.cursor()
 
+    cursor.execute("INSERT INTO TblEquipment (name_equip, category) VALUES (?,?)", (name, category,))
+    cursor.commit()
+
+    db.close(conn)
 
 def get_equipments(category) -> list:
     conn = db.connect()

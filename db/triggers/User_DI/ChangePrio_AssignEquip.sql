@@ -10,7 +10,7 @@ CREATE TRIGGER PrioChange_AssignEquip
                INNER JOIN DELETED D ON I.id_user = D.id_user
                WHERE I.current_priority != D.current_priority)
         BEGIN
-            DECLARE @id_user INT = (SELECT I.id_user
+            DECLARE @id_user VARCHAR(10) = (SELECT I.id_user
                                     FROM INSERTED I
                                     INNER JOIN DELETED D ON I.id_user = D.id_user
                                     WHERE I.current_priority != D.current_priority)
