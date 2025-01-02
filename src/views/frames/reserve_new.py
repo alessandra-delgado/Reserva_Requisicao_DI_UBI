@@ -91,9 +91,9 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         self.category = ctk.StringVar(self, EquipmentCategory.all.value)
 
         ctk.CTkLabel(self, text="Categoria do Equipamento").grid(row=3, column=0, padx=20, pady=(20, 0), sticky="w")
-        self.combo = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category,
+        self.categories = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category,
                                      command=self.reload, width=300)
-        self.combo.grid(row=4, column=0, pady=(3, 0), padx=20, sticky="w")
+        self.categories.grid(row=4, column=0, pady=(3, 0), padx=20, sticky="w")
 
         # Submit button
         self.button = ctk.CTkButton(self, text="Submeter", command=self.submit, width=200)
