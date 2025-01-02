@@ -12,10 +12,45 @@ from views.widgets.ctk_date_picker import CTkDatePicker
 class FrameReserveNew(ctk.CTkScrollableFrame):
     def __init__(self, parent):
         super().__init__(parent, corner_radius=0, fg_color="#EBF3FA")
+
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
         self.cols = 4
+
+        self.button = None
+        self.categories = None
+        self.category = None
+
+        self.scrollableFrame = None
+        self.scrollableFrame_error = None
+
+        self.equipments_radio = None
+
+        self.date_start = None
+        self.date_start_error = None
+
+        self.time_start_error = None
+        self.time_start = None
+
+        self.time_end = None
+        self.time_end_error = None
+
+        self.date_end = None
+        self.date_end_error = None
+
+        self.combo = None
+        self.combo_error = None
+
+        self.user = None
+        self.form_frame = None
+
+        self.reload()
+
+
+    def reload(self) -> None:
+        for widget in self.winfo_children():
+            widget.destroy()
 
         # This page is divided in two frames
         # The first frame (form_frame) is directed to TblReservation ------------------------------------------------------------
@@ -92,14 +127,16 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
 
         ctk.CTkLabel(self, text="Categoria do Equipamento").grid(row=3, column=0, padx=20, pady=(20, 0), sticky="w")
         self.categories = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category,
-                                     command=self.reload, width=300)
+                                     command=self.reload_scroll, width=300)
         self.categories.grid(row=4, column=0, pady=(3, 0), padx=20, sticky="w")
+
+        self.reload_scroll()
 
         # Submit button
         self.button = ctk.CTkButton(self, text="Submeter", command=self.submit, width=200)
         self.button.grid(row=7, column=0, pady=20, padx=20, sticky="e")
 
-    def reload(self, category=None) -> None:
+    def reload_scroll(self, category=None) -> None:
         """ Used by app.py to reload page data. """
 
         for widget in self.scrollableFrame.winfo_children():
@@ -196,6 +233,8 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
 
             Reservation.add_reservation(self.user.get(), datetime_start, datetime_end, equipments_radio)
+
+            self.reload()
 
     def is_valid(self) -> bool:
         """
