@@ -112,7 +112,8 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
         if self.is_valid():
             equipment_devolutions = {}
             for k, v in self.equipment_devolutions.items():
-                equipment_devolutions[k] = v.get()
+                if v.get():
+                    equipment_devolutions[k] = v.get()
 
             Requisition.edit_requisition(self.requisition[0], equipment_devolutions)
 
