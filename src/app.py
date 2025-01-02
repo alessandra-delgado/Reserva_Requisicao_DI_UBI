@@ -117,12 +117,12 @@ class App(ctk.CTk):
 if __name__ == "__main__":
     app = App()
 
-    stop = False
+    stop = threading.Event()
     # Starts cronjob thread
-    thread = threading.Thread(target = crono.init, args=(lambda: stop,))
+    thread = threading.Thread(target = crono.init, args=(stop,))
     thread.start()
 
     app.mainloop()
     # Marks cronjob to stop
-    stop = True
+    stop.set()
     thread.join()

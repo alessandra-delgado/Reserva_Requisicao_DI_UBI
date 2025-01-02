@@ -4,4 +4,3 @@ pillow==11.0.0
 pyodbc~=5.2.0
 tkcalendar~=1.6.1
 tkTimePicker~=2.0.2
-croniter~=6.0.0

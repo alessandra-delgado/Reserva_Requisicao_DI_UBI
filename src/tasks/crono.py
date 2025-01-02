@@ -1,27 +1,21 @@
 import time
 from models import DataBase as db, Reservation
-from datetime import datetime
-from croniter import croniter
 
 
 def init(stop):
-    while True:
-        if stop:
-             break
-        scheduler = croniter('*/1 * * * *', datetime.now())
-        next_schedule = scheduler.get_next(datetime)
-
-        # Aguardar até o próximo agendamento
-        wait = next_schedule - datetime.now()
-        time.sleep(wait.total_seconds())
-
+    while not stop.is_set():
         # Executar a tarefa
         run()
+
+        for _ in range(60):
+            if stop.is_set():
+                return
+            time.sleep(1)
 
 
 def run():
     conn = db.connect()
-    print ("Running task")
+    print("Running task")
 
     for reservation in Reservation.get_reservations():
         conn.execute(
