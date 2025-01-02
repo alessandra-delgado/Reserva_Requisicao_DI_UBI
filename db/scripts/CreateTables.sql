@@ -72,7 +72,7 @@ CREATE TABLE TblReservation
 
     CONSTRAINT CHECK_STATUS_RESERVATION CHECK (status_res IN
                                                ('Active', 'Satisfied', 'Cancelled', 'Forgotten', 'Waiting',
-                                                'NotSatisfied')),
+                                                'NotSatisfied' , 'Suspended')),
     PRIMARY KEY (id_reserv),
     FOREIGN KEY (id_user) REFERENCES TblUser_DI (id_user)
         ON DELETE NO ACTION ON UPDATE NO ACTION,

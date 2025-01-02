@@ -1,6 +1,6 @@
-DROP TRIGGER IF EXISTS ApplyPenaltyForUncollectedEquipment;
+DROP TRIGGER IF EXISTS PenaltyOnUncollectedEquipment;
 GO
-CREATE TRIGGER ApplyPenaltyForUncollectedEquipment
+CREATE TRIGGER PenaltyOnUncollectedEquipment
     ON TblReservation
     AFTER UPDATE
     AS

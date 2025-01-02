@@ -163,3 +163,14 @@ WHERE u.id_user = r.id_user
 ORDER BY r.time_start DESC, U.current_priority DESC, RE.essential DESC, R.reg_date ASC
 
 
+update TblUser_DI set current_priority = 5 where id_user like 'PD_Frutuos'
+
+SELECT *
+FROM TblUser_DI u,
+     TblReservation r,
+     TblRes_Equip re
+WHERE u.id_user = r.id_user
+  AND re.id_reserv = r.id_reserv
+  AND r.status_res IN ('Waiting', 'Active')
+ORDER BY r.time_start ASC, u.current_priority DESC, re.essential DESC, r.reg_date ASC
+

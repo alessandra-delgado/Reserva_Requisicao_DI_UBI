@@ -89,9 +89,9 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
         self.category = ctk.StringVar(self, EquipmentCategory.all.value)
 
         ctk.CTkLabel(self, text="Categoria do Equipamento").grid(row=3, column=0, padx=20, pady=(20, 0), sticky="w")
-        self.combo = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category,
+        self.categories = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category,
                                      command=self.reload, width=300)
-        self.combo.grid(row=4, column=0, pady=(3, 0), padx=20, sticky="w")
+        self.categories.grid(row=4, column=0, pady=(3, 0), padx=20, sticky="w")
 
         # Submit button
         self.button = ctk.CTkButton(self, text="Submeter", command=self.submit, width=200)
@@ -177,7 +177,8 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
         if self.is_valid():
             equipments_radio = {}
             for k, v in self.equipments_radio.items():
-                equipments_radio[k] = v.get()
+                if v.get() == ReservationEquipmentType.reserved.value:
+                    equipments_radio[k] = v.get()
 
             mega_data = self.date_start.get_date() + " " + str(self.time_start.hours24()) + ":" + str(
                 self.time_start.minutes())
@@ -246,6 +247,7 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
             if datetime_start >= datetime_end:
                 self.date_start_error.configure(text="Data de inicio não pode ser\nmaior ou igual à de termino.")
                 self.date_start.configure(border_color="red")
+                valid = False
             else:
                 self.date_start_error.configure(text="")
                 self.date_start.configure(border_color="#979DA2")
