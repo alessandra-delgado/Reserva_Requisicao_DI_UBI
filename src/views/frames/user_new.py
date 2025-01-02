@@ -6,6 +6,28 @@ from models import UserDI
 class FrameUserNew(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent, corner_radius=0, fg_color="#EBF3FA")
+        self.button = None
+
+        self.email = None
+        self.email_error = None
+
+        self.cellphone = None
+        self.cellphone_error = None
+
+        self.id = None
+        self.id_error = None
+
+        self.name = None
+        self.name_error = None
+
+        self.user_type = None
+
+        self.reload()
+
+    def reload(self) -> None:
+        """ Used by app.py to reload page data. """
+        for widget in self.winfo_children():
+            widget.destroy()
 
         # Page title
         title = ctk.CTkLabel(self, text="Criação de Utilizador", text_color="#20558A", font=("", 20, 'bold'))
@@ -23,8 +45,8 @@ class FrameUserNew(ctk.CTkFrame):
         self.name_error = ctk.CTkLabel(self, text="", text_color="red")
         self.name_error.grid(row=3, column=0, pady=0, padx=20, sticky="w")
 
-        # Id field
-        ctk.CTkLabel(self, text="Id").grid(row=1, column=3, padx=20, pady=(20, 0), sticky="w")
+        # ID field
+        ctk.CTkLabel(self, text="ID").grid(row=1, column=3, padx=20, pady=(20, 0), sticky="w")
         self.id = ctk.CTkEntry(self, width=200)
         self.id.grid(row=2, column=3, pady=(3, 0), padx=20, sticky="w")
         self.id_error = ctk.CTkLabel(self, text="", text_color="red")
@@ -49,7 +71,6 @@ class FrameUserNew(ctk.CTkFrame):
         self.email_error = ctk.CTkLabel(self, text="", text_color="red")
         self.email_error.grid(row=11, column=0, pady=0, padx=20, sticky="w")
 
-
         # Submit button
         self.button = ctk.CTkButton(self, text="Submeter", command=self.submit, width=200)
         self.button.grid(row=10, column=3, pady=0, padx=20, sticky="s")
@@ -59,14 +80,16 @@ class FrameUserNew(ctk.CTkFrame):
         Submits the form.
         """
         if self.is_valid():
-            UserDI.add_user(self.id.get(), self.name.get(), self.user_type.get(), self.email.get(), self.cellphone.get())
+            UserDI.add_user(self.id.get(), self.name.get(), self.user_type.get(), self.email.get(),
+                            self.cellphone.get())
+            self.reload()
 
     def is_valid(self) -> bool:
         """
         Verify if the form data is valid.
         :return: True if valid, False otherwise.
         """
-        # todo: validat if user id and phone number are unique before insert
+        # todo: validate if user id and phone number are unique before insert
         valid = True
         # Validate name
         if self.name.get() == "" or len(self.name.get()) > 50:
