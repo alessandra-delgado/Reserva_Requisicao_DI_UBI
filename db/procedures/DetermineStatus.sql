@@ -19,14 +19,14 @@ BEGIN
                               WHERE id_reserv = @idr);
 
     DECLARE
-        @status_res DATETIME = (SELECT TOP 1 status_res
+        @status_res VARCHAR(12) = (SELECT TOP 1 status_res
                                 FROM TblReservation
                                 WHERE id_reserv = @idr);
 
 
     IF @status_res IN ('Active', 'Waiting')
         BEGIN
-            IF (DATEDIFF(HOUR, @time_end, GETDATE()) > 0)
+            IF (DATEDIFF(MINUTE, @time_end, GETDATE()) > 0)
                 BEGIN
                     UPDATE TblReservation
                     SET status_res =
