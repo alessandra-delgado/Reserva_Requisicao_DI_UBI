@@ -303,9 +303,9 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
 
         has_equipments = False
         self.scrollableFrame_error.configure(text="Deve selecionar pelo menos um equipamento.")
-        # At least one equipment must be selected
+        # At least one equipment must be essential
         for v in self.equipments_radio.values():
-            if v.get() in [ReservationEquipmentType.reserved.value, ReservationEquipmentType.essential.value]:
+            if v.get() in [ReservationEquipmentType.essential.value]:
                 has_equipments = True
                 self.scrollableFrame_error.configure(text="")
                 break
