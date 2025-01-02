@@ -27,8 +27,9 @@ BEGIN
         END,
         hits   =
             CASE
-                WHEN DATEDIFF(MINUTE, d.return_date, req.time_end) > 15 THEN hits + 1
-                ELSE 0
+                WHEN DATEDIFF(MINUTE, d.return_date, req.time_end) > 15 AND
+                     req.status_req LIKE 'Closed' THEN hits + 1
+                ELSE hits
                 END
     FROM TblUser_DI u
              INNER JOIN TblRequisition req ON u.id_user = req.id_user
