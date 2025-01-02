@@ -52,12 +52,12 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
         self.buttons_frame.grid(row=10, column=0, sticky="nsew")
 
         # Return button
-        self.button = ctk.CTkButton(self.buttons_frame, text="Voltar", command=self.back, width=200)
-        self.button.grid(row=0, column=0, pady=20, padx=20, sticky="w")
+        self.back = ctk.CTkButton(self.buttons_frame, text="Voltar", command=self.back_def, width=200)
+        self.back.grid(row=0, column=0, pady=20, padx=20, sticky="w")
 
         # Submit button
-        self.back = ctk.CTkButton(self.buttons_frame, text="Submeter", command=self.submit, width=200)
-        self.back.grid(row=0, column=3, pady=20, padx=20, sticky="e")
+        self.button = ctk.CTkButton(self.buttons_frame, text="Submeter", command=self.submit, width=200)
+        self.button.grid(row=0, column=3, pady=20, padx=20, sticky="e")
 
     def reload(self) -> None:
         """ Used by app.py to reload page data. """
@@ -100,7 +100,7 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
         ctk.CTkFrame(self.scrollableFrame, width=120, height=1, bg_color="#B3CBE5").grid(row=i, column=1, sticky="s")
         ctk.CTkFrame(self.scrollableFrame, width=120, height=1, bg_color="#B3CBE5").grid(row=i, column=2, sticky="s")
 
-    def back(self):
+    def back_def(self):
         self.grid_forget()
         self.target_frame.grid(row=0, column=1, sticky="nsew")
         self.target_frame.reload()
@@ -116,6 +116,7 @@ class FrameRequisitionEdit(ctk.CTkScrollableFrame):
                     equipment_devolutions[k] = v.get()
 
             Requisition.edit_requisition(self.requisition[0], equipment_devolutions)
+            self.back_def()
 
     def is_valid(self) -> bool:
         """
