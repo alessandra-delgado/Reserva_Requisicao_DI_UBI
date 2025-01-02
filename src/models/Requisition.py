@@ -1,8 +1,11 @@
 """
 Requisition table representation in code. Has the queries to Requisition table
 """
+from datetime import datetime
+
 from models import DataBase as db
 from enums.reservationEquipmentType import ReservationEquipmentType
+
 
 def add_requisition(user, datetime_start, datetime_end, equipments_radio) -> None:
     # todo: after insert, update number of collected equipments with size of equip list (radio)
@@ -11,7 +14,7 @@ def add_requisition(user, datetime_start, datetime_end, equipments_radio) -> Non
 
     id_user = user.split()[0]
     status_req = 'Active'
-    collected = 0
+    collected = len(equipments_radio)
 
     cursor.execute("""
         INSERT INTO TblRequisition (id_user, time_start, time_end, status_req)
@@ -22,9 +25,7 @@ def add_requisition(user, datetime_start, datetime_end, equipments_radio) -> Non
     id_req = cursor.fetchone()[0]
 
     for equipment, selection in equipments_radio.items():
-        if(selection == ReservationEquipmentType.reserved.value):
-            cursor.execute("INSERT INTO TblReq_Equip (id_req, id_equip) VALUES (?,?)", (id_req, equipment,))
-            collected+=1
+        cursor.execute("INSERT INTO TblReq_Equip (id_req, id_equip) VALUES (?,?)", (id_req, equipment,))
 
     cursor.execute("UPDATE TblRequisition SET collected = ? WHERE id_req = ?", (collected, id_req,))
 
@@ -32,20 +33,22 @@ def add_requisition(user, datetime_start, datetime_end, equipments_radio) -> Non
     db.close(conn)
     print(user, datetime_start, datetime_end, equipments_radio)
 
+
 def edit_requisition(requisition_id, equipment_devolutions) -> None:
     conn = db.connect()
     cursor = conn.cursor()
-    returned = 0
 
     for equipment, selection in equipment_devolutions.items():
-        if(selection == 1):
-            returned+=1
+        cursor.execute("""
+                INSERT INTO TblDevolution (id_req, id_equip, return_date )
+                VALUES (?, ?, ?);
+            """, (requisition_id, equipment, datetime.today()))
 
-    cursor.execute("UPDATE TblRequisition SET returned = ? WHERE id_req = ?", (returned, requisition_id,))
     conn.commit()
 
     db.close(conn)
     print(requisition_id, equipment_devolutions)
+
 
 def get_requisitions() -> list:
     conn = db.connect()
@@ -54,6 +57,7 @@ def get_requisitions() -> list:
     db.close(conn)
 
     return rows
+
 
 def get_by_id(requisition_id) -> list:
     conn = db.connect()
