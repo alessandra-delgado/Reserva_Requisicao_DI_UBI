@@ -17,6 +17,15 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
 
         self.cols = 3
 
+        self.reload()
+
+
+    def reload(self) -> None:
+        """ Used by app.py to reload page data. """
+
+        for widget in self.winfo_children():
+            widget.destroy()
+
         # This page is divided in two frames
         # The first frame (form_frame) is directed to TblReservation ------------------------------------------------------------
         self.form_frame = ctk.CTkFrame(self, fg_color="#EBF3FA")
@@ -90,16 +99,16 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
 
         ctk.CTkLabel(self, text="Categoria do Equipamento").grid(row=3, column=0, padx=20, pady=(20, 0), sticky="w")
         self.categories = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category,
-                                     command=self.reload, width=300)
+                                     command=self.reload_scroll, width=300)
         self.categories.grid(row=4, column=0, pady=(3, 0), padx=20, sticky="w")
+
+        self.reload_scroll()
 
         # Submit button
         self.button = ctk.CTkButton(self, text="Submeter", command=self.submit, width=200)
         self.button.grid(row=6, column=0, pady=20, padx=20, sticky="e")
 
-    def reload(self, category=None) -> None:
-        """ Used by app.py to reload page data. """
-
+    def reload_scroll(self, category=None) -> None:
         for widget in self.scrollableFrame.winfo_children():
             widget.destroy()
 
@@ -189,6 +198,8 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
             datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
 
             Requisition.add_requisition(self.user.get(), datetime_start, datetime_end, equipments_radio)
+
+            self.reload()
 
     def is_valid(self) -> bool:
         """
