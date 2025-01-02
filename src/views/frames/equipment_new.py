@@ -8,6 +8,21 @@ class FrameEquipmentNew(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent, corner_radius=0, fg_color="#EBF3FA")
 
+        self.button = None
+
+        self.category = None
+        self.combo = None
+        self.category_error = None
+
+        self.name = None
+        self.name_error = None
+
+        self.reload()
+
+    def reload(self) -> None:
+        for widget in self.winfo_children():
+            widget.destroy()
+
         # Page title
         title = ctk.CTkLabel(self, text="Adicionar Equipamento", text_color="#20558A", font=("", 20, 'bold'))
         title.grid(row=0, column=0, padx=20, pady=(30, 40), sticky="w")
@@ -37,11 +52,23 @@ class FrameEquipmentNew(ctk.CTkFrame):
         """
         Submits the form.
         """
-        Equipment.add_equipment(self.name.get(), self.category.get())
+        if self.is_valid():
+            Equipment.add_equipment(self.name.get(), self.category.get())
+            self.reload()
 
     def is_valid(self) -> bool:
         """
         Verify if the form data is valid.
         :return: True if valid, False otherwise.
         """
-        return True
+        valid = True
+
+        if self.category.get() == EquipmentCategory.all.value:
+            self.category_error.configure(text="Deve selecionar uma categoria.")
+            self.combo.configure(border_color="red")
+            valid = False
+        else:
+            self.category_error.configure(text="")
+            self.combo.configure(border_color="#979DA2")
+
+        return valid
