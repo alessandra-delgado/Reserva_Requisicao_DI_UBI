@@ -27,7 +27,5 @@ def run():
         conn.execute(
             "exec DetermineStatus @idr = ? ", reservation[0])
 
-
-
     conn.commit()
     db.close(conn)

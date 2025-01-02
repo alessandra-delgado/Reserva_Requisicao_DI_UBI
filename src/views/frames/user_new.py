@@ -11,8 +11,10 @@ class FrameUserNew(ctk.CTkFrame):
         title = ctk.CTkLabel(self, text="Criação de Utilizador", text_color="#20558A", font=("", 20, 'bold'))
         title.grid(row=0, column=0, padx=20, pady=(30, 40), sticky="w")
 
+        user_priorities = UserPriority.get_user_priorities()
+
         # Var used by CTkComboBox to store selected value. Default it to first entry
-        self.user_type = ctk.StringVar(self, UserPriority.get_user_priorities()[0])
+        self.user_type = ctk.StringVar(self, user_priorities[0])
 
         # Name field
         ctk.CTkLabel(self, text="Nome").grid(row=1, column=0, padx=20, pady=(20, 0), sticky="w")
@@ -30,7 +32,7 @@ class FrameUserNew(ctk.CTkFrame):
 
         # Type field
         ctk.CTkLabel(self, text="Tipo de Utilizador").grid(row=5, column=0, padx=20, pady=(20, 0), sticky="w")
-        combo = ctk.CTkComboBox(self, values=UserPriority.get_user_priorities(), variable=self.user_type, width=200)
+        combo = ctk.CTkComboBox(self, values=user_priorities, variable=self.user_type, width=200)
         combo.grid(row=6, column=0, pady=(3, 0), padx=20, sticky="w")
 
         # Cellphone field

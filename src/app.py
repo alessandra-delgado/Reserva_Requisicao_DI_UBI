@@ -118,11 +118,11 @@ if __name__ == "__main__":
     app = App()
 
     stop = False
-    # Starts cronojob thread
+    # Starts cronjob thread
     thread = threading.Thread(target = crono.init, args=(lambda: stop,))
     thread.start()
 
     app.mainloop()
-    # Marks cronojob to stop
+    # Marks cronjob to stop
     stop = True
     thread.join()
