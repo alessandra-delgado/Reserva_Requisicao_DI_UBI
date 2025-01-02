@@ -122,4 +122,6 @@ class FrameReserveEdit(ctk.CTkScrollableFrame):
         """
 
         # Todo: validate date entries
+        # Todo: Só pode aceitar o satisfeito se tiver todos os essenciais
         Reservation.edit_reservation(self.reservation[0], self.status.get())
+        self.back_def()
