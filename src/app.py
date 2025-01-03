@@ -5,7 +5,8 @@ from PIL import Image
 from views.frames import home, equipment_index, equipment_new,reserve_index, reserve_new, requisition_index, requisition_new, user_new, user_index
 from views.nav import nav
 from controllers import about
-
+import threading
+from tasks import crono
 
 class App(ctk.CTk):
     def __init__(self):
@@ -115,4 +116,13 @@ class App(ctk.CTk):
 
 if __name__ == "__main__":
     app = App()
+
+    stop = threading.Event()
+    # Starts cronjob thread
+    thread = threading.Thread(target = crono.init, args=(stop,))
+    thread.start()
+
     app.mainloop()
+    # Marks cronjob to stop
+    stop.set()
+    thread.join()

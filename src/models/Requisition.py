@@ -39,8 +39,7 @@ def edit_requisition(requisition_id, equipment_devolutions) -> None:
     cursor = conn.cursor()
 
     for equipment, selection in equipment_devolutions.items():
-        if(selection == 1):
-            cursor.execute("""
+        cursor.execute("""
                     INSERT INTO TblDevolution (id_req, id_equip, return_date )
                     VALUES (?, ?, ?);
                 """, (requisition_id, equipment, datetime.today()))

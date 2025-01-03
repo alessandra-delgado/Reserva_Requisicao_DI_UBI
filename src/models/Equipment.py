@@ -14,18 +14,21 @@ def add_equipment(name, category) -> None:
 
     db.close(conn)
 
+
 def get_equipments(category) -> list:
     conn = db.connect()
 
     if category == EquipmentCategory.all.value:
         result = conn.cursor().execute("SELECT * FROM TblEquipment WHERE status_equip IN ('Available', 'Reserved')")
     else:
-        result = conn.cursor().execute("SELECT * FROM TblEquipment WHERE status_equip IN ('Available1', 'Reserved') AND category like '%s'" % category)
+        result = conn.cursor().execute(
+            "SELECT * FROM TblEquipment WHERE status_equip IN ('Available', 'Reserved') AND category like '%s'" % category)
 
     rows = result.fetchall()
     db.close(conn)
 
     return rows
+
 
 def get_by_id(equipment_id) -> list:
     conn = db.connect()

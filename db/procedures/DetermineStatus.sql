@@ -4,9 +4,18 @@ CREATE PROCEDURE DetermineStatus @idr INT
 AS
 BEGIN
     DECLARE
-        @num_equips INT = (SELECT COUNT(id_equip)
-                           FROM TblRes_Equip
-                           WHERE id_reserv = @idr);
+        @num_equips_essenciais INT = (SELECT COUNT(id_equip)
+                                      FROM TblRes_Equip
+                                      WHERE id_reserv = @idr
+                                        AND essential = 1);
+
+    DECLARE
+        @num_equips_essenciais_attr INT = (SELECT COUNT(id_equip)
+                                           FROM TblRes_Equip
+                                           WHERE id_reserv = @idr
+                                             AND essential = 1
+                                             AND assigned_to = 1);
+
     DECLARE
         @equip_attribuidos INT = (SELECT COUNT(id_equip)
                                   FROM TblRes_Equip
@@ -19,14 +28,14 @@ BEGIN
                               WHERE id_reserv = @idr);
 
     DECLARE
-        @status_res DATETIME = (SELECT TOP 1 status_res
-                                FROM TblReservation
-                                WHERE id_reserv = @idr);
+        @status_res VARCHAR(12) = (SELECT TOP 1 status_res
+                                   FROM TblReservation
+                                   WHERE id_reserv = @idr);
 
 
     IF @status_res IN ('Active', 'Waiting')
         BEGIN
-            IF (DATEDIFF(HOUR, @time_end, GETDATE()) > 0)
+            IF (DATEDIFF(MINUTE, @time_end, GETDATE()) > 0)
                 BEGIN
                     UPDATE TblReservation
                     SET status_res =
@@ -41,7 +50,8 @@ BEGIN
                     UPDATE TblReservation
                     SET status_res =
                             CASE
-                                WHEN @equip_attribuidos = @num_equips THEN 'Active'
+                                -- todos os equipamentos essenciais estiverem atríbuídos
+                                WHEN @num_equips_essenciais_attr = @num_equips_essenciais THEN 'Active'
                                 ELSE 'Waiting'
                                 END
                     WHERE id_reserv = @idr;

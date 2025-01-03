@@ -12,10 +12,45 @@ from views.widgets.ctk_date_picker import CTkDatePicker
 class FrameReserveNew(ctk.CTkScrollableFrame):
     def __init__(self, parent):
         super().__init__(parent, corner_radius=0, fg_color="#EBF3FA")
+
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
         self.cols = 4
+
+        self.button = None
+        self.categories = None
+        self.category = None
+
+        self.scrollableFrame = None
+        self.scrollableFrame_error = None
+
+        self.equipments_radio = None
+
+        self.date_start = None
+        self.date_start_error = None
+
+        self.time_start_error = None
+        self.time_start = None
+
+        self.time_end = None
+        self.time_end_error = None
+
+        self.date_end = None
+        self.date_end_error = None
+
+        self.combo = None
+        self.combo_error = None
+
+        self.user = None
+        self.form_frame = None
+
+        self.reload()
+
+
+    def reload(self) -> None:
+        for widget in self.winfo_children():
+            widget.destroy()
 
         # This page is divided in two frames
         # The first frame (form_frame) is directed to TblReservation ------------------------------------------------------------
@@ -92,14 +127,16 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
 
         ctk.CTkLabel(self, text="Categoria do Equipamento").grid(row=3, column=0, padx=20, pady=(20, 0), sticky="w")
         self.categories = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category,
-                                     command=self.reload, width=300)
+                                     command=self.reload_scroll, width=300)
         self.categories.grid(row=4, column=0, pady=(3, 0), padx=20, sticky="w")
+
+        self.reload_scroll()
 
         # Submit button
         self.button = ctk.CTkButton(self, text="Submeter", command=self.submit, width=200)
         self.button.grid(row=7, column=0, pady=20, padx=20, sticky="e")
 
-    def reload(self, category=None) -> None:
+    def reload_scroll(self, category=None) -> None:
         """ Used by app.py to reload page data. """
 
         for widget in self.scrollableFrame.winfo_children():
@@ -197,6 +234,8 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
 
             Reservation.add_reservation(self.user.get(), datetime_start, datetime_end, equipments_radio)
 
+            self.reload()
+
     def is_valid(self) -> bool:
         """
         Verify if the form data is valid.
@@ -209,6 +248,19 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             datetime.strptime(self.date_start.get_date(), "%Y/%m/%d")
             self.date_start_error.configure(text="")
             self.date_start.configure(border_color="#979DA2")
+
+            mega_data = self.date_start.get_date() + " " + str(self.time_start.hours24()) + ":" + str(
+                self.time_start.minutes())
+            datetime_start = datetime.strptime(mega_data, "%Y/%m/%d %H:%M")
+
+            # datetime_start needs to be after now
+            if datetime_start <= datetime.now():
+                self.date_start_error.configure(text="Data de inicio não pode ser\nanterior à atual.")
+                self.date_start.configure(border_color="red")
+                valid = False
+            else:
+                self.date_start_error.configure(text="")
+                self.date_start.configure(border_color="#979DA2")
         except ValueError:
             valid = False
             self.date_start_error.configure(text="Formato inválido.")
@@ -227,6 +279,39 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             datetime.strptime(self.date_end.get_date(), "%Y/%m/%d")
             self.date_end_error.configure(text="")
             self.date_end.configure(border_color="#979DA2")
+
+            mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(
+                self.time_end.minutes())
+            datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
+
+            # datetime_end needs to be after now
+            if datetime_end < datetime.now():
+                self.date_end_error.configure(text="Data de fim não pode ser\nanterior à atual.")
+                self.date_end.configure(border_color="red")
+                valid = False
+            else:
+                self.date_end_error.configure(text="")
+                self.date_end.configure(border_color="#979DA2")
+
+            try:
+                # Verify if end date is after start date
+                mega_data = self.date_start.get_date() + " " + str(self.time_start.hours24()) + ":" + str(
+                    self.time_start.minutes())
+                datetime_start = datetime.strptime(mega_data, "%Y/%m/%d %H:%M")
+
+                mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(
+                    self.time_end.minutes())
+                datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
+
+                if datetime_start >= datetime_end:
+                    self.date_end_error.configure(text="Data de inicio não pode ser\nmaior ou igual à de termino.")
+                    self.date_start.configure(border_color="red")
+                    valid = False
+                else:
+                    self.date_end_error.configure(text="")
+                    self.date_start.configure(border_color="#979DA2")
+            except ValueError:
+                pass
         except ValueError:
             valid = False
             self.date_end_error.configure(text="Formato inválido.")
@@ -241,32 +326,11 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             self.time_end_error.configure(text="Formato inválido.")
 
 
-        try:
-            # Verify if end date is after start date
-            mega_data = self.date_start.get_date() + " " + str(self.time_start.hours24()) + ":" + str(
-                self.time_start.minutes())
-            datetime_start = datetime.strptime(mega_data, "%Y/%m/%d %H:%M")
-
-            mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(
-                self.time_end.minutes())
-            datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
-
-
-            if datetime_start >= datetime_end:
-                self.date_start_error.configure(text="Data de inicio não pode ser\nmaior ou igual à de termino.")
-                self.date_start.configure(border_color="red")
-                valid = False
-            else:
-                self.date_start_error.configure(text="")
-                self.date_start.configure(border_color="#979DA2")
-        except ValueError:
-            pass
-
         has_equipments = False
         self.scrollableFrame_error.configure(text="Deve selecionar pelo menos um equipamento.")
-        # At least one equipment must be selected
+        # At least one equipment must be essential
         for v in self.equipments_radio.values():
-            if v.get() in [ReservationEquipmentType.reserved.value, ReservationEquipmentType.essential.value]:
+            if v.get() in [ReservationEquipmentType.essential.value]:
                 has_equipments = True
                 self.scrollableFrame_error.configure(text="")
                 break
