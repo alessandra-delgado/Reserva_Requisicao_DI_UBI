@@ -30,6 +30,17 @@ def get_equipments(category) -> list:
     return rows
 
 
+def get_all_equipments() -> list:
+    conn = db.connect()
+
+    result = conn.cursor().execute("SELECT * FROM TblEquipment")
+
+    rows = result.fetchall()
+    db.close(conn)
+
+    return rows
+
+
 def get_by_id(equipment_id) -> list:
     conn = db.connect()
 
