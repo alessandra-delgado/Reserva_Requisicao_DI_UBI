@@ -139,7 +139,8 @@ class FrameReserveEdit(ctk.CTkScrollableFrame):
         # Verify if at least one equipment is assigned to reserve
         equipments = Res_Equip.get_by_reservation(self.reservation[0])
 
-        has_equipment_attr = False
+        has_equipment_attr = False or self.status.get() == ReservationStatus.cancelled.value
+
         for equipment in equipments:
             if equipment[3]:
                 has_equipment_attr = True
