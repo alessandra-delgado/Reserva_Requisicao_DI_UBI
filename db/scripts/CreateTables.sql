@@ -3,9 +3,8 @@ CREATE TABLE TblRes_SeqId
     current_year INT PRIMARY KEY,
     current_seq  INT
 );
---Perguntar ao stor se no esquema fica s� l� � parte
 
-CREATE TABLE TblPriority_Map --horrible creation not anymore (what did it even do D:)
+CREATE TABLE TblPriority_Map
 (
     id_priority   INT        NOT NULL,
     desc_priority VARCHAR(6) NOT NULL,
@@ -101,7 +100,6 @@ CREATE TABLE TblRes_Equip
     id_equip    INT NOT NULL,
     essential   BIT NOT NULL,
     assigned_to BIT NOT NULL DEFAULT 0,
-    --estado VARCHAR(10), (DA RESERVA?)
     FOREIGN KEY (id_reserv) REFERENCES TblReservation (id_reserv)
         ON DELETE NO ACTION ON UPDATE CASCADE,
     FOREIGN KEY (id_equip) REFERENCES TblEquipment (id_equip)
