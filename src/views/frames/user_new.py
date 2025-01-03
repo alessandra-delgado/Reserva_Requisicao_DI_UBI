@@ -89,8 +89,8 @@ class FrameUserNew(ctk.CTkFrame):
         Verify if the form data is valid.
         :return: True if valid, False otherwise.
         """
-        # todo: validate if user id and phone number are unique before insert
         valid = True
+
         # Validate name
         if self.name.get() == "" or len(self.name.get()) > 50:
             valid = False
@@ -104,6 +104,10 @@ class FrameUserNew(ctk.CTkFrame):
         if self.id.get() == "" or len(self.id.get()) > 7:
             valid = False
             self.id_error.configure(text="ID inválido.")
+            self.id.configure(border_color="red")
+        elif len(UserDI.get_user_by_id(self.user_type.get()+'_'+self.id.get())) > 0:
+            valid = False
+            self.id_error.configure(text="Já existe um utilizador com este Tipo + ID.")
             self.id.configure(border_color="red")
         else:
             self.id_error.configure(text="")
