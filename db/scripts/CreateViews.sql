@@ -81,13 +81,15 @@ CREATE VIEW RankedRequisition AS
         r.time_end AS 'Requisition End Time',
         u.name AS 'Last User Name',
         u.current_priority AS 'Priority',
-        ROW_NUMBER() OVER (PARTITION BY e.id_equip ORDER BY r.time_end DESC) AS rn 
+		r.status_req,
+    ROW_NUMBER() OVER (PARTITION BY e.id_equip ORDER BY r.time_end DESC) AS rn 
     FROM TblEquipment e
     LEFT JOIN TblReq_Equip re ON e.id_equip = re.id_equip
     LEFT JOIN TblRequisition r ON re.id_req = r.id_req
     LEFT JOIN TblUser_DI u ON r.id_user = u.id_user
     LEFT JOIN TblUser_Priority up ON u.id_type = up.id_type
     LEFT JOIN TblPriority_Map pm ON up.id_priority = pm.id_priority
+	WHERE r.status_req LIKE 'Closed'
 go
 
 DROP VIEW IF EXISTS ViewEquipmentLastPriority
