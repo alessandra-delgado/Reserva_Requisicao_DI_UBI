@@ -69,39 +69,35 @@ AS SELECT e.id_equip AS 'Equipment ID', e.name_equip AS 'Name', e.status_equip A
    LEFT JOIN TblRequisition req ON reqe.id_req = req.id_req;
 GO
 
-DROP VIEW IF EXISTS RankedRequisition
+DROP VIEW IF EXISTS ViewEquipmentPriority
 GO
-CREATE VIEW RankedRequisition AS
+CREATE VIEW ViewEquipmentPriority AS
  SELECT 
         e.id_equip AS 'Equipment ID',
         e.name_equip AS 'Name',
         e.status_equip AS 'Status',
         e.category AS 'Category',
-        r.id_req AS 'Requisition ID',
-        r.time_end AS 'Requisition End Time',
-        u.name AS 'Last User Name',
-        u.current_priority AS 'Priority',
-		r.status_req,
-    ROW_NUMBER() OVER (PARTITION BY e.id_equip ORDER BY r.time_end DESC) AS rn 
+        u.current_priority AS 'Priority'
     FROM TblEquipment e
     LEFT JOIN TblReq_Equip re ON e.id_equip = re.id_equip
     LEFT JOIN TblRequisition r ON re.id_req = r.id_req
     LEFT JOIN TblUser_DI u ON r.id_user = u.id_user
-    LEFT JOIN TblUser_Priority up ON u.id_type = up.id_type
-    LEFT JOIN TblPriority_Map pm ON up.id_priority = pm.id_priority
-	WHERE r.status_req LIKE 'Closed'
-go
-
-DROP VIEW IF EXISTS ViewEquipmentLastPriority
+	WHERE e.id_equip NOT IN (
+		SELECT DISTINCT re.id_equip
+		FROM TblRes_Equip re
+		LEFT JOIN TblReservation r ON re.id_reserv = r.id_reserv
+		WHERE re.assigned_to = 1 )
+	AND r.status_req LIKE 'Active'
+UNION ALL
+SELECT 
+        e.id_equip AS 'Equipment ID',
+        e.name_equip AS 'Name',
+        e.status_equip AS 'Status',
+        e.category AS 'Category',
+        u.current_priority AS 'Priority'
+FROM TblEquipment e
+LEFT JOIN TblRes_Equip re ON e.id_equip = re.id_equip
+LEFT JOIN TblReservation r ON re.id_reserv = r.id_reserv
+LEFT JOIN TblUser_DI u ON r.id_user = u.id_user
+WHERE re.assigned_to = 1
 GO
-CREATE VIEW ViewEquipmentLastPriority AS
-SELECT
-    'Equipment ID' = [Equipment ID],
-    'Name' = [Name],
-    'Status' = [Status],
-    'Category' = [Category],
-    'Last User Name' = [Last User Name],
-    'Priority' = [Priority]
-FROM RankedRequisition
-WHERE rn = 1; 
-go
