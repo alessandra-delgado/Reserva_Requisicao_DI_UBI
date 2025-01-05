@@ -1,6 +1,6 @@
-DROP TRIGGER IF EXISTS ReducePriorityOnMissLimit;
+DROP TRIGGER IF EXISTS ChangePriorityOnHitOrMissLimit;
 GO
-CREATE TRIGGER ReducePriorityOnMissLimit
+CREATE TRIGGER ChangePriorityOnHitOrMissLimit
     ON TblUser_DI
     AFTER UPDATE
     AS

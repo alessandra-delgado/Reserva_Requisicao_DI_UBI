@@ -29,22 +29,6 @@ def get_equipments(category, priority) -> list:
 
     return rows
 
-def get_equipments_req(category) -> list:
-    conn = db.connect()
-
-    if category == EquipmentCategory.all.value:
-        result = conn.cursor().execute("SELECT * FROM TblEquipment WHERE status_equip IN ('Available', 'Reserved')")
-    else:
-        result = conn.cursor().execute(
-            "SELECT * FROM TblEquipment WHERE status_equip IN ('Available', 'Reserved') AND category like ?", (category,))
-
-
-    rows = result.fetchall()
-    db.close(conn)
-
-    return rows
-
-
 def get_all_equipments() -> list:
     conn = db.connect()
 

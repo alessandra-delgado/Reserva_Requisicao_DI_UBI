@@ -12,6 +12,7 @@ BEGIN
     -- Após 15 minutos, cada hora é uma falta. ex: 1h 2mins após 15 minutos de tolerância = 2 faltas
     UPDATE TblUser_DI
     SET misses = CASE
+                     WHEN u.id_type LIKE  'PD' THEN 0
                      WHEN (misses +
                            CASE
                                WHEN DATEDIFF(MINUTE, req.time_end, d.return_date) > 15
@@ -27,6 +28,7 @@ BEGIN
         END,
         hits   =
             CASE
+                WHEN u.id_type LIKE  'PD' THEN 0
                 WHEN DATEDIFF(MINUTE, d.return_date, req.time_end) > 15 AND
                      req.status_req LIKE 'Closed' THEN hits + 1
                 ELSE hits

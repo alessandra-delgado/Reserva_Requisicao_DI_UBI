@@ -48,6 +48,7 @@ def get_user_by_id(user_id: str) -> list:
 
 def get_user_priority(user_id: str) -> list:
     conn = db.connect()
+
     result = conn.cursor().execute("SELECT current_priority FROM TblUser_DI WHERE id_user LIKE ?", (user_id,))
     rows = result.fetchone()
     db.close(conn)

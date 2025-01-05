@@ -6,7 +6,6 @@ from tktimepicker import constants, SpinTimePickerOld
 from enums.equipmentCategory import EquipmentCategory
 from enums.reservationEquipmentType import ReservationEquipmentType
 from models import Reservation, UserDI, Equipment
-from models.UserDI import get_user_priority
 from views.widgets.ctk_date_picker import CTkDatePicker
 
 
@@ -146,10 +145,10 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             widget.destroy()
 
         if category is not None:
-            equipments = Equipment.get_equipments(category, get_user_priority(self.user.get().split(' ')[0])[0])
+            equipments = Equipment.get_equipments(category, UserDI.get_user_priority(self.user.get().split(' ')[0])[0])
         else:
             equipments = Equipment.get_equipments(self.category.get(),
-                                                  get_user_priority(self.user.get().split(' ')[0])[0])
+                                                  UserDI.get_user_priority(self.user.get().split(' ')[0])[0])
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="Reservar", text_color="#545F71", font=("", 12, "bold"))
@@ -356,6 +355,7 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
                         if equip is not None and equip[4] is not None and (equip[4] - datetime_end).seconds // 3600 < 48:
                             preempcao = False
                             break
+                            #todo: conexao e por isto na requisição
         except ValueError: #formato da data errado
             pass
 
