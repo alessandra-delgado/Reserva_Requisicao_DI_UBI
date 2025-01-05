@@ -76,6 +76,7 @@ SELECT
         e.id_equip AS 'Equipment ID',
         e.name_equip AS 'Name',
         e.status_equip AS 'Status',
+		e.category AS 'Category',
 		r.time_start AS 'Time start',
 		r.time_end AS 'Time end',
         u.current_priority AS 'Priority'
