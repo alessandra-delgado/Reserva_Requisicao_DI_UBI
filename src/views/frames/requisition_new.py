@@ -113,9 +113,9 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
             widget.destroy()
 
         if category is not None:
-            equipments = Equipment.get_equipments(category)
+            equipments = Equipment.get_equipments_req(category)
         else:
-            equipments = Equipment.get_equipments(self.category.get())
+            equipments = Equipment.get_equipments_req(self.category.get())
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="Reservar", text_color="#545F71", font=("", 12, "bold"))

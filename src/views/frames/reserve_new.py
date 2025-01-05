@@ -6,6 +6,8 @@ from tktimepicker import constants, SpinTimePickerOld
 from enums.equipmentCategory import EquipmentCategory
 from enums.reservationEquipmentType import ReservationEquipmentType
 from models import Reservation, UserDI, Equipment
+from models.Equipment import get_by_id_view
+from models.UserDI import get_user_priority
 from views.widgets.ctk_date_picker import CTkDatePicker
 
 
@@ -143,9 +145,9 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             widget.destroy()
 
         if category is not None:
-            equipments = Equipment.get_equipments(category)
+            equipments = Equipment.get_equipments(category, get_user_priority(self.combo.get().split(' ')[0])[0])
         else:
-            equipments = Equipment.get_equipments(self.category.get())
+            equipments = Equipment.get_equipments(self.category.get(), get_user_priority(self.combo.get().split(' ')[0])[0])
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="Reservar", text_color="#545F71", font=("", 12, "bold"))
@@ -177,7 +179,7 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
                                    text_color="#545F71")
             l.grid(row=i, column=2, padx=5, pady=7, sticky="w")
 
-            l = ctk.CTkLabel(self.scrollableFrame, text=equipment[2], text_color="#545F71")
+            l = ctk.CTkLabel(self.scrollableFrame, text=equipment[1], text_color="#545F71")
             l.grid(row=i, column=3, padx=5, pady=7, sticky="w")
 
             i += 1
@@ -335,7 +337,19 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
                 self.scrollableFrame_error.configure(text="")
                 break
 
+        #validar priority
+        preempcao = False
+        for id, v in self.equipments_radio.items():
+            if v.get() in [ReservationEquipmentType.essential.value,ReservationEquipmentType.reserved.value]:
+                if get_by_id_view(id)[4] >= self.time_start+48:
+                    preempcao = True
+                elif self.combo.get()[:2] != "PD":
+                    preempcao = False
+                    break
+                else:
+                    preempcao = True
+
         # Merge boolean values
-        valid = has_equipments and valid
+        valid = has_equipments and valid and preempcao
 
         return valid
