@@ -6,7 +6,6 @@ from tktimepicker import constants, SpinTimePickerOld
 from enums.equipmentCategory import EquipmentCategory
 from enums.reservationEquipmentType import ReservationEquipmentType
 from models import Reservation, UserDI, Equipment
-from models.Equipment import get_by_id_view
 from models.UserDI import get_user_priority
 from views.widgets.ctk_date_picker import CTkDatePicker
 
@@ -22,10 +21,11 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
 
         self.button = None
         self.categories = None
-        self.category = None
+        self.category = ctk.StringVar(self, EquipmentCategory.all.value)
 
         self.scrollableFrame = None
         self.scrollableFrame_error = None
+        self.scrollableFrame_error2 = None
 
         self.equipments_radio = None
 
@@ -49,7 +49,6 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
 
         self.reload()
 
-
     def reload(self) -> None:
         for widget in self.winfo_children():
             widget.destroy()
@@ -67,15 +66,6 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         users = [u[0] + " - " + u[2] for u in UserDI.get_users()]
         # Var used by CTkComboBox to store selected value. Default it to first entry
         self.user = ctk.StringVar(self.form_frame, users[0])
-
-        # User field
-        ctk.CTkLabel(self.form_frame, text="Utilizador").grid(row=1, column=0, padx=20, pady=(20, 0), sticky="w")
-        self.combo = ctk.CTkComboBox(self.form_frame, values=users, variable=self.user, width=300)
-        self.combo.bind('<KeyRelease>', self.filter_users)
-        #  ^^^ faz bind de um evento: quando largo uma qualquer tecla chama o filter_users
-        self.combo.grid(row=2, column=0, pady=(3, 0), padx=20, sticky="w")
-        self.combo_error = ctk.CTkLabel(self.form_frame, text="", text_color="red")
-        self.combo_error.grid(row=3, column=0, pady=0, padx=20, sticky="w")
 
         # DATETIME pickers -----------------------------------------------------------------------------
         # PickStartDate field
@@ -123,20 +113,31 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         self.scrollableFrame_error = ctk.CTkLabel(self, text="", text_color="red")
         self.scrollableFrame_error.grid(row=6, column=0, pady=0, padx=20, sticky="w")
 
-        # EndOf scrollable frame ------------------------------------------------------------------------------------------------
+        self.scrollableFrame_error2 = ctk.CTkLabel(self, text="", text_color="red")
+        self.scrollableFrame_error2.grid(row=7, column=0, pady=0, padx=20, sticky="w")
 
-        self.category = ctk.StringVar(self, EquipmentCategory.all.value)
+        # EndOf scrollable frame ------------------------------------------------------------------------------------------------
 
         ctk.CTkLabel(self, text="Categoria do Equipamento").grid(row=3, column=0, padx=20, pady=(20, 0), sticky="w")
         self.categories = ctk.CTkComboBox(self, values=EquipmentCategory.get_categories(), variable=self.category,
-                                     command=self.reload_scroll, width=300)
+                                          command=self.reload_scroll, width=300)
         self.categories.grid(row=4, column=0, pady=(3, 0), padx=20, sticky="w")
 
         self.reload_scroll()
 
+        # User field
+        ctk.CTkLabel(self.form_frame, text="Utilizador").grid(row=1, column=0, padx=20, pady=(20, 0), sticky="w")
+        self.combo = ctk.CTkComboBox(self.form_frame, values=users, variable=self.user,
+                                     command=lambda _: self.reload_scroll(self.category.get()), width=300)
+        self.combo.bind('<KeyRelease>', self.filter_users)
+        #  ^^^ faz bind de um evento: quando largo uma qualquer tecla chama o filter_users
+        self.combo.grid(row=2, column=0, pady=(3, 0), padx=20, sticky="w")
+        self.combo_error = ctk.CTkLabel(self.form_frame, text="", text_color="red")
+        self.combo_error.grid(row=3, column=0, pady=0, padx=20, sticky="w")
+
         # Submit button
         self.button = ctk.CTkButton(self, text="Submeter", command=self.submit, width=200)
-        self.button.grid(row=7, column=0, pady=20, padx=20, sticky="e")
+        self.button.grid(row=8, column=0, pady=20, padx=20, sticky="e")
 
     def reload_scroll(self, category=None) -> None:
         """ Used by app.py to reload page data. """
@@ -145,9 +146,10 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             widget.destroy()
 
         if category is not None:
-            equipments = Equipment.get_equipments(category, get_user_priority(self.combo.get().split(' ')[0])[0])
+            equipments = Equipment.get_equipments(category, get_user_priority(self.user.get().split(' ')[0])[0])
         else:
-            equipments = Equipment.get_equipments(self.category.get(), get_user_priority(self.combo.get().split(' ')[0])[0])
+            equipments = Equipment.get_equipments(self.category.get(),
+                                                  get_user_priority(self.user.get().split(' ')[0])[0])
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="Reservar", text_color="#545F71", font=("", 12, "bold"))
@@ -327,7 +329,6 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
             valid = False
             self.time_end_error.configure(text="Formato inválido.")
 
-
         has_equipments = False
         self.scrollableFrame_error.configure(text="Deve selecionar pelo menos um equipamento.")
         # At least one equipment must be essential
@@ -337,17 +338,31 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
                 self.scrollableFrame_error.configure(text="")
                 break
 
-        #validar priority
-        preempcao = False
-        for id, v in self.equipments_radio.items():
-            if v.get() in [ReservationEquipmentType.essential.value,ReservationEquipmentType.reserved.value]:
-                if get_by_id_view(id)[4] >= self.time_start+48:
-                    preempcao = True
-                elif self.combo.get()[:2] != "PD":
-                    preempcao = False
-                    break
-                else:
-                    preempcao = True
+        # validar priority
+        preempcao = True
+
+        try:
+            mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(
+                self.time_end.minutes())
+            datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
+
+            # Qualquer utilizador que não seja o presidente
+            if self.combo.get()[:2] != "PD":
+                for id, v in self.equipments_radio.items():
+                    if v.get() in [ReservationEquipmentType.essential.value, ReservationEquipmentType.reserved.value]:
+                        equip = Equipment.get_by_id_view(id)
+
+                        #não há comparação por hora -> converter para segundos
+                        if equip is not None and equip[4] is not None and (equip[4] - datetime_end).seconds // 3600 < 48:
+                            preempcao = False
+                            break
+        except ValueError: #formato da data errado
+            pass
+
+        if preempcao:
+            self.scrollableFrame_error2.configure(text="")
+        else:
+            self.scrollableFrame_error2.configure(text="Preempção.")
 
         # Merge boolean values
         valid = has_equipments and valid and preempcao
