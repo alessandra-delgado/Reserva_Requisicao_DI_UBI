@@ -38,4 +38,10 @@ def get_users() -> list:
 
     return rows
 
+def get_user_by_id(user_id: str) -> list:
+    conn = db.connect()
+    result = conn.cursor().execute("SELECT * FROM TblUser_DI WHERE id_user LIKE ?", (user_id.upper(),))
+    rows = result.fetchall()
+    db.close(conn)
 
+    return rows

@@ -32,7 +32,7 @@ class FrameEquipmentIndex(ctk.CTkFrame):
         for widget in self.scrollableFrame.winfo_children():
             widget.destroy()
 
-        equipments = Equipment.get_equipments(EquipmentCategory.all.value)
+        equipments = Equipment.get_all_equipments()
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="ID", text_color="#545F71", font=("", 12, "bold"))

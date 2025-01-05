@@ -58,10 +58,14 @@ class FrameReserveEdit(ctk.CTkScrollableFrame):
         self.scrollableFrame.grid(row=8, column=0, sticky="nsew", padx=30, pady=(3, 0))
         self.scrollableFrame.grid_columnconfigure(3, weight=1)
 
+        self.scrollableFrame_error = ctk.CTkLabel(self, text="", text_color="red")
+        self.scrollableFrame_error.grid(row=9, column=0, pady=0, padx=20, sticky="w")
+
+
         self.reload()
 
         self.buttons_frame = ctk.CTkFrame(self, fg_color="#EBF3FA")
-        self.buttons_frame.grid(row=9, column=0, sticky="nsew")
+        self.buttons_frame.grid(row=10, column=0, sticky="nsew")
 
         # Return button
         self.back = ctk.CTkButton(self.buttons_frame, text="Voltar", command=self.back_def, width=200)
@@ -121,7 +125,31 @@ class FrameReserveEdit(ctk.CTkScrollableFrame):
         Submits the form.
         """
 
-        # Todo: validate date entries
-        # Todo: Só pode aceitar o satisfeito se tiver todos os essenciais
-        Reservation.edit_reservation(self.reservation[0], self.status.get())
-        self.back_def()
+        if self.is_valid():
+            Reservation.edit_reservation(self.reservation[0], self.status.get())
+            self.back_def()
+
+    def is_valid(self) -> bool:
+        """
+        Verify if the form data is valid.
+        :return: True if valid, False otherwise.
+        """
+        valid = True
+
+        # Verify if at least one equipment is assigned to reserve
+        equipments = Res_Equip.get_by_reservation(self.reservation[0])
+
+        has_equipment_attr = False or self.status.get() == ReservationStatus.cancelled.value
+
+        for equipment in equipments:
+            if equipment[3]:
+                has_equipment_attr = True
+                break
+
+        if not has_equipment_attr:
+            self.scrollableFrame_error.configure(text="É necessário existir pelo menos um equipamento\n associado para marcar uma reserva como satisfeita.")
+            valid = False
+        else:
+            self.scrollableFrame_error.configure(text="")
+
+        return valid and has_equipment_attr

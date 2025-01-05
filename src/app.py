@@ -6,7 +6,7 @@ from views.frames import home, equipment_index, equipment_new,reserve_index, res
 from views.nav import nav
 from controllers import about
 import threading
-from tasks import crono
+from tasks import cron
 
 class App(ctk.CTk):
     def __init__(self):
@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
     stop = threading.Event()
     # Starts cronjob thread
-    thread = threading.Thread(target = crono.init, args=(stop,))
+    thread = threading.Thread(target = cron.init, args=(stop,))
     thread.start()
 
     app.mainloop()

@@ -4,11 +4,9 @@ Requisition table representation in code. Has the queries to Requisition table
 from datetime import datetime
 
 from models import DataBase as db
-from enums.reservationEquipmentType import ReservationEquipmentType
 
 
 def add_requisition(user, datetime_start, datetime_end, equipments_radio) -> None:
-    # todo: after insert, update number of collected equipments with size of equip list (radio)
     conn = db.connect()
     cursor = conn.cursor()
 
