@@ -73,16 +73,16 @@ DROP VIEW IF EXISTS ViewEquipmentPriority
 GO
 CREATE VIEW ViewEquipmentPriority AS
 SELECT 
-        e.id_equip AS 'Equipment ID',
+        e.id_equip AS 'Equipment_ID',
         e.name_equip AS 'Name',
         e.status_equip AS 'Status',
 		e.category AS 'Category',
-		r.time_start AS 'Time start',
-		r.time_end AS 'Time end',
+		r.time_start AS 'Time_start',
+		r.time_end AS 'Time_end',
         u.current_priority AS 'Priority'
 FROM TblEquipment e
-LEFT JOIN TblRes_Equip re ON e.id_equip = re.id_equip
-LEFT JOIN TblReservation r ON re.id_reserv = r.id_reserv
+LEFT JOIN TblRes_Equip re ON e.id_equip = re.id_equip AND re.assigned_to = 1
+LEFT JOIN TblReservation r ON re.id_reserv = r.id_reserv AND r.status_res IN ('Active', 'Waiting')
 LEFT JOIN TblUser_DI u ON r.id_user = u.id_user
-WHERE r.status_res IN ('Active', 'Waiting')
+WHERE e.status_equip NOT LIKE 'InUse'
 GO

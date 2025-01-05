@@ -19,10 +19,10 @@ def get_equipments(category, priority) -> list:
     conn = db.connect()
 
     if category == EquipmentCategory.all.value:
-        result = conn.cursor().execute("SELECT * FROM ViewEquipmentPriority WHERE Status IN ('Available', 'Reserved') AND Priority <= ?", (priority,))
+        result = conn.cursor().execute("SELECT * FROM ViewEquipmentPriority WHERE Priority <= ? or Priority IS NULL ", (priority,))
     else:
         result = conn.cursor().execute(
-            "SELECT * FROM ViewEquipmentPriority WHERE Status IN ('Available', 'Reserved') AND Priority <= ? AND category like ?", (priority,category,))
+            "SELECT * FROM ViewEquipmentPriority WHERE (Priority <= ? OR Priority is NULL) AND Category like ?", (priority,category,))
 
     rows = result.fetchall()
     db.close(conn)

@@ -52,6 +52,4 @@ def get_user_priority(user_id: str) -> list:
     rows = result.fetchone()
     db.close(conn)
 
-    print(rows)
-
     return rows
