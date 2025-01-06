@@ -323,7 +323,7 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
                                 equip[4] - datetime_end).seconds // 3600 < 48:
                             preempcao = False
                             break
-                            # todo: conexao e por isto na requisição
+                            # todo: conexao
         except ValueError:  # formato da data errado
             pass
 
