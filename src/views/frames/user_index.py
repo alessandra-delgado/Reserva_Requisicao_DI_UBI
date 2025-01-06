@@ -1,4 +1,7 @@
 import customtkinter as ctk
+
+from enums.priorityType import PriorityType
+from enums.userType import UserType
 from models import UserDI
 
 
@@ -56,11 +59,11 @@ class FrameUserIndex(ctk.CTkFrame):
 
             l = ctk.CTkLabel(self.scrollableFrame, text=user[0], text_color="#545F71", anchor="center")
             l.grid(row=i, column=0, padx=5, pady=7, sticky="nsew")
-            l = ctk.CTkLabel(self.scrollableFrame, text=user[1], text_color="#545F71", anchor="center")
+            l = ctk.CTkLabel(self.scrollableFrame, text=UserType.label(user[1]), text_color="#545F71", anchor="center")
             l.grid(row=i, column=1, padx=5, pady=7, sticky="nsew")
             l = ctk.CTkLabel(self.scrollableFrame, text=user[2], text_color="#545F71", anchor="center")
             l.grid(row=i, column=2, padx=5, pady=7, sticky="nsew")
-            l = ctk.CTkLabel(self.scrollableFrame, text=user[3], text_color="#545F71", anchor="center")
+            l = ctk.CTkLabel(self.scrollableFrame, text=PriorityType.label(user[3]), text_color="#545F71", anchor="center")
             l.grid(row=i, column=3, padx=5, pady=7, sticky="nsew")
             l = ctk.CTkLabel(self.scrollableFrame, text=user[4], text_color="#545F71", anchor="center")
             l.grid(row=i, column=4, padx=5, pady=7, sticky="nsew")
