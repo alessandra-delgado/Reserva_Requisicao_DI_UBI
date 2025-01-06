@@ -341,6 +341,11 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         preempcao = True
 
         try:
+            # Verify if end date is after start date
+            mega_data = self.date_start.get_date() + " " + str(self.time_start.hours24()) + ":" + str(
+                self.time_start.minutes())
+            datetime_start = datetime.strptime(mega_data, "%Y/%m/%d %H:%M")
+
             mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(
                 self.time_end.minutes())
             datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
@@ -351,12 +356,16 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
                     if v.get() in [ReservationEquipmentType.essential.value, ReservationEquipmentType.reserved.value]:
                         equip = Equipment.get_by_id_view(id)
 
-                        #não há comparação por hora -> converter para segundos
-                        if equip is not None and equip[4] is not None and (equip[4] - datetime_end).seconds // 3600 < 48:
-                            preempcao = False
-                            break
-                            #todo: conexao e por isto na requisição
-        except ValueError: #formato da data errado
+                        # não há comparação por hora -> converter para segundos
+                        print(equip)
+                        if equip is not None and equip[4] is not None:
+                            delta = (equip[4] - datetime_end).total_seconds() / 3600
+
+                            if 0 <= delta < 48:
+                                preempcao = False
+                                break
+                        # todo: conexao e por isto na requisição
+        except ValueError:  # formato da data errado
             pass
 
         if preempcao:
