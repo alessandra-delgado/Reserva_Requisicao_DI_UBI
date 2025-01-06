@@ -5,6 +5,7 @@ class EquipmentCategory(Enum):
     peripherals = 'peripherals'
     computer = 'computer'
     projector = 'projector'
+    stationery = 'stationery'
     other = 'other'
     all = 'all'
 
@@ -17,6 +18,8 @@ class EquipmentCategory(Enum):
                 return 'Computador'
             case EquipmentCategory.projector.value:
                 return 'Projetor'
+            case EquipmentCategory.stationery.value:
+                return 'Papelaria'
             case EquipmentCategory.other.value:
                 return 'Outro'
             case EquipmentCategory.all.value:
@@ -26,4 +29,4 @@ class EquipmentCategory(Enum):
 
     @staticmethod
     def get_categories():
-        return ['all', 'peripherals', 'computer', 'projector','other']
+        return ['all', 'peripherals', 'computer', 'projector', 'stationery','other']

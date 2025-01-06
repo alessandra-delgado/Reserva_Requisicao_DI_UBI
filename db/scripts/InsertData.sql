@@ -86,7 +86,8 @@ VALUES ('Toshiba TDP-S8U DLP', 'projector'),
        ('Sony DCR405', 'other'),
        ('Sony DCR405', 'other'),
        ('Asus TUF', 'computer'),
-       ('Gigabyte GB 5KF', 'computer');
+       ('Gigabyte GB 5KF', 'computer'),
+    ('Whiteboard Marker BIC', 'stationery');
 
 
 
