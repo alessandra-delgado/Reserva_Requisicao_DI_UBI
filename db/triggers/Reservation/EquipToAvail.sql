@@ -7,14 +7,12 @@ AS
 IF EXISTS (
 	SELECT 1
 	FROM INSERTED I
-	LEFT JOIN DELETED D ON I.id_reserv = D.id_reserv
 	WHERE I.status_res IN ('Cancelled','Forgotten')
 )
 BEGIN
     DECLARE @id_reserv VARCHAR(8) = (
 		SELECT I.id_reserv
 		FROM INSERTED I
-		LEFT JOIN DELETED D ON I.id_reserv = D.id_reserv
 		WHERE I.status_res IN ('Cancelled','Forgotten')
 	)
 	DECLARE @id_equip INT;
