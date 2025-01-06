@@ -64,15 +64,23 @@ def get_requisitions() -> list:
 
 def get_by_id(requisition_id) -> list:
     conn = db.conn
+
+    if conn is None:
+        return []
+    
     result = conn.cursor().execute("SELECT * FROM TblRequisition Where id_req=?", requisition_id)
     rows = result.fetchone()
 
     return rows
 
 def pending_requisitions() -> list:
-    conn = db.connect()
+    conn = db.conn
+
+    if conn is None:
+        return []
+
     result = conn.cursor().execute("SELECT COUNT(DISTINCT [Requisition id]) FROM PendingRequisitions")
 
     rows = result.fetchone()
-    db.close(conn)
+
     return rows

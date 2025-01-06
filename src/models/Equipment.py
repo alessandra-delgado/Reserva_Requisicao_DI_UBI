@@ -71,7 +71,11 @@ def get_by_id_view(equipment_id) -> list:
     return rows
 
 def avail_equipments() -> list:
-    conn = db.connect()
+    conn = db.conn
+
+    if conn is None:
+        return []
+    
     result = conn.cursor().execute("""
         SELECT COUNT(DISTINCT [Equipment ID])
         FROM ResourceState
@@ -79,5 +83,5 @@ def avail_equipments() -> list:
         """)
 
     rows = result.fetchone()
-    db.close(conn)
+
     return rows
