@@ -26,6 +26,7 @@ for /R "%triggers%" %%f in (*.sql) do (
 
 sqlcmd -S "%address%" -d "%database%" -U "%user%" -P "%password%" -i ".\scripts\SetTriggerOrder.sql"
 sqlcmd -S "%address%" -d "%database%" -U "%user%" -P "%password%" -i ".\scripts\InsertData.sql"
+sqlcmd -S "%address%" -d "%database%" -U "%user%" -P "%password%" -i ".\scripts\CreateViews.sql"
 
 echo Done running all SQL scripts.
 pause
