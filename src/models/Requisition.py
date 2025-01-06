@@ -64,3 +64,11 @@ def get_by_id(requisition_id) -> list:
     db.close(conn)
 
     return rows
+
+def pending_requisitions() -> list:
+    conn = db.connect()
+    result = conn.cursor().execute("SELECT COUNT(DISTINCT [Requisition id]) FROM PendingRequisitions")
+
+    rows = result.fetchone()
+    db.close(conn)
+    return rows

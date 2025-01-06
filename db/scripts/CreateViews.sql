@@ -31,7 +31,7 @@ AS SELECT r.id_user AS 'User', r.id_reserv AS 'Reservation id', r.time_start AS 
     END AS [Time left to start]
    ,r.status_res AS 'Status'
    FROM TblReservation r
-   WHERE r.status_res IN ('Active', 'Waiting')
+   WHERE r.status_res IN ('Active','Waiting')
 GO
 
 DROP VIEW IF EXISTS PendingRequisitions

@@ -73,3 +73,11 @@ def get_by_id(reservation_id) -> list:
     db.close(conn)
 
     return rows
+
+def active_reservations(status) -> list:
+    conn = db.connect()
+    result = conn.cursor().execute("SELECT COUNT(DISTINCT [Reservation id]) FROM ActiveReservations WHERE [Status] = ?", (status,))
+
+    rows = result.fetchone()
+    db.close(conn)
+    return rows
