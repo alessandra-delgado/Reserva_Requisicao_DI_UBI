@@ -2,7 +2,7 @@ import customtkinter as ctk
 
 from enums.priorityType import PriorityType
 from enums.userType import UserType
-from models import UserDI
+from models import UserDI, Contact
 
 
 class FrameUserIndex(ctk.CTkFrame):
@@ -11,7 +11,7 @@ class FrameUserIndex(ctk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
         # Important: columns amount
-        self.cols = 5
+        self.cols = 8
 
         # Page title
         title = ctk.CTkLabel(self, text="Lista de Utilizadores", text_color="#20558A", font=("", 20, 'bold'))
@@ -49,6 +49,15 @@ class FrameUserIndex(ctk.CTkFrame):
         l = ctk.CTkLabel(self.scrollableFrame, text="Telemóvel", text_color="#545F71", font=("", 12, "bold"),
                          anchor="center")
         l.grid(row=1, column=4, padx=5, pady=20, sticky="nsew")
+        l = ctk.CTkLabel(self.scrollableFrame, text="Penalizações", text_color="#545F71", font=("", 12, "bold"),
+                         anchor="center")
+        l.grid(row=1, column=5, padx=5, pady=20, sticky="nsew")
+        l = ctk.CTkLabel(self.scrollableFrame, text="Cumprimentos", text_color="#545F71", font=("", 12, "bold"),
+                         anchor="center")
+        l.grid(row=1, column=6, padx=5, pady=20, sticky="nsew")
+        l = ctk.CTkLabel(self.scrollableFrame, text="Contacto", text_color="#545F71", font=("", 12, "bold"),
+                         anchor="center")
+        l.grid(row=1, column=7, padx=5, pady=20, sticky="nsew")
 
         self.add_divider(2)
 
@@ -67,6 +76,12 @@ class FrameUserIndex(ctk.CTkFrame):
             l.grid(row=i, column=3, padx=5, pady=7, sticky="nsew")
             l = ctk.CTkLabel(self.scrollableFrame, text=user[4], text_color="#545F71", anchor="center")
             l.grid(row=i, column=4, padx=5, pady=7, sticky="nsew")
+            l = ctk.CTkLabel(self.scrollableFrame, text=user[5], text_color="#545F71", anchor="center")
+            l.grid(row=i, column=5, padx=5, pady=7, sticky="nsew")
+            l = ctk.CTkLabel(self.scrollableFrame, text=user[6], text_color="#545F71", anchor="center")
+            l.grid(row=i, column=6, padx=5, pady=7, sticky="nsew")
+            l = ctk.CTkLabel(self.scrollableFrame, text=Contact.get_by_id(user[0]), text_color="#545F71", anchor="center")
+            l.grid(row=i, column=7, padx=5, pady=7, sticky="nsew")
 
             i += 1
             self.add_divider(i)
