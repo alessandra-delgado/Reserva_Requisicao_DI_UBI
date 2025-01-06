@@ -36,7 +36,7 @@ class FrameUserNew(ctk.CTkFrame):
         user_priorities = UserPriority.get_user_priorities()
 
         # Var used by CTkComboBox to store selected value. Default it to first entry
-        self.user_type = ctk.StringVar(self, user_priorities[0])
+        self.user_type = ctk.StringVar(self, user_priorities[0] if len(user_priorities) > 0 else '')
 
         # Name field
         ctk.CTkLabel(self, text="Nome").grid(row=1, column=0, padx=20, pady=(20, 0), sticky="w")

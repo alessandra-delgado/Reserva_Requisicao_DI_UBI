@@ -2,9 +2,11 @@ import customtkinter as ctk
 import tkinter as tk
 import os
 from PIL import Image
+
+from models import DataBase
 from views.frames import home, equipment_index, equipment_new,reserve_index, reserve_new, requisition_index, requisition_new, user_new, user_index
 from views.nav import nav
-from controllers import about
+from controllers import about, connect
 import threading
 from tasks import cron
 
@@ -61,7 +63,7 @@ class App(ctk.CTk):
 
         # Create menu Tools
         menu_tools = tk.Menu(menu_bar, tearoff=0)
-        menu_tools.add_command(label="Conectar à Base de Dados")
+        menu_tools.add_command(label="Conectar à Base de Dados", command=connect.to_db)
         menu_tools.add_separator()
         menu_tools.add_command(label="Sair", command=self.quit)
 
@@ -119,6 +121,7 @@ if __name__ == "__main__":
 
     stop = threading.Event()
     # Starts cronjob thread
+
     thread = threading.Thread(target = cron.init, args=(stop,))
     thread.start()
 
@@ -126,3 +129,6 @@ if __name__ == "__main__":
     # Marks cronjob to stop
     stop.set()
     thread.join()
+
+    if DataBase.conn is not None:
+        DataBase.close()

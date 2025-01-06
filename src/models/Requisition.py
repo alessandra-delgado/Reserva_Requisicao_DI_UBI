@@ -2,12 +2,15 @@
 Requisition table representation in code. Has the queries to Requisition table
 """
 from datetime import datetime
-
 from models import DataBase as db
 
 
 def add_requisition(user, datetime_start, datetime_end, equipments_radio) -> None:
-    conn = db.connect()
+    conn = db.conn
+
+    if conn is None:
+        return None
+
     cursor = conn.cursor()
 
     id_user = user.split()[0]
@@ -28,12 +31,14 @@ def add_requisition(user, datetime_start, datetime_end, equipments_radio) -> Non
     cursor.execute("UPDATE TblRequisition SET collected = ? WHERE id_req = ?", (collected, id_req,))
 
     conn.commit()
-    db.close(conn)
-    print(user, datetime_start, datetime_end, equipments_radio)
 
 
 def edit_requisition(requisition_id, equipment_devolutions) -> None:
-    conn = db.connect()
+    conn = db.conn
+
+    if conn is None:
+        return None
+
     cursor = conn.cursor()
 
     for equipment, selection in equipment_devolutions.items():
@@ -44,23 +49,22 @@ def edit_requisition(requisition_id, equipment_devolutions) -> None:
 
     conn.commit()
 
-    db.close(conn)
-    print(requisition_id, equipment_devolutions)
-
 
 def get_requisitions() -> list:
-    conn = db.connect()
+    conn = db.conn
+
+    if conn is None:
+        return []
+
     result = conn.cursor().execute("SELECT * FROM TBLRequisition")
     rows = result.fetchall()
-    db.close(conn)
 
     return rows
 
 
 def get_by_id(requisition_id) -> list:
-    conn = db.connect()
+    conn = db.conn
     result = conn.cursor().execute("SELECT * FROM TblRequisition Where id_req=?", requisition_id)
     rows = result.fetchone()
-    db.close(conn)
 
     return rows

@@ -4,6 +4,7 @@ from enum import Enum
 class EquipmentCategory(Enum):
     peripherals = 'peripherals'
     computer = 'computer'
+    projector = 'projector'
     other = 'other'
     all = 'all'
 
@@ -14,6 +15,8 @@ class EquipmentCategory(Enum):
                 return 'Periféricos'
             case EquipmentCategory.computer.value:
                 return 'Computador'
+            case EquipmentCategory.projector.value:
+                return 'Projetor'
             case EquipmentCategory.other.value:
                 return 'Outro'
             case EquipmentCategory.all.value:
@@ -23,4 +26,4 @@ class EquipmentCategory(Enum):
 
     @staticmethod
     def get_categories():
-        return ['all', 'peripherals', 'computer', 'other']
+        return ['all', 'peripherals', 'computer', 'projector','other']

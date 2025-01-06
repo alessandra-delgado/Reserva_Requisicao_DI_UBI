@@ -14,7 +14,11 @@ def init(stop):
 
 
 def run():
-    conn = db.connect()
+    conn = db.conn
+    # ignore run if there's no connection
+    if conn is None:
+        return
+
     print("Running task")
 
     for reservation in Reservation.get_reservations():
@@ -22,4 +26,3 @@ def run():
             "exec DetermineStatus @idr = ? ", reservation[0])
 
     conn.commit()
-    db.close(conn)

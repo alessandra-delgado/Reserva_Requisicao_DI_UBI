@@ -64,7 +64,8 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         # Select all users from database
         users = [u[0] + " - " + u[2] for u in UserDI.get_users()]
         # Var used by CTkComboBox to store selected value. Default it to first entry
-        self.user = ctk.StringVar(self.form_frame, users[0])
+
+        self.user = ctk.StringVar(self.form_frame, users[0] if len(users) > 0 else '')
 
         # DATETIME pickers -----------------------------------------------------------------------------
         # PickStartDate field
@@ -144,11 +145,12 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
         for widget in self.scrollableFrame.winfo_children():
             widget.destroy()
 
+        user_priority = UserDI.get_user_priority(self.user.get().split(' ')[0])[0] if self.user.get() != '' else 1
+
         if category is not None:
-            equipments = Equipment.get_equipments(category, UserDI.get_user_priority(self.user.get().split(' ')[0])[0])
+            equipments = Equipment.get_equipments(category, user_priority)
         else:
-            equipments = Equipment.get_equipments(self.category.get(),
-                                                  UserDI.get_user_priority(self.user.get().split(' ')[0])[0])
+            equipments = Equipment.get_equipments(self.category.get(), user_priority)
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="Reservar", text_color="#545F71", font=("", 12, "bold"))
@@ -364,7 +366,6 @@ class FrameReserveNew(ctk.CTkScrollableFrame):
                             if 0 <= delta < 48:
                                 preempcao = False
                                 break
-                        # todo: conexao e por isto na requisição
         except ValueError:  # formato da data errado
             pass
 

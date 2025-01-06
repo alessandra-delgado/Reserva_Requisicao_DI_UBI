@@ -40,7 +40,7 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
         # Select all users from database
         users = [u[0] + " - " + u[2] for u in UserDI.get_users()]
         # Var used by CTkComboBox to store selected value. Default it to first entry
-        self.user = ctk.StringVar(self.form_frame, users[0])
+        self.user = ctk.StringVar(self.form_frame, users[0] if len(users) > 0 else '')
 
         # DATETIME pickers -----------------------------------------------------------------------------
         # PickStartDate field
@@ -116,11 +116,12 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
         for widget in self.scrollableFrame.winfo_children():
             widget.destroy()
 
+        user_priority = UserDI.get_user_priority(self.user.get().split(' ')[0])[0] if self.user.get() != '' else 1
+
         if category is not None:
-            equipments = Equipment.get_equipments(category, UserDI.get_user_priority(self.user.get().split(' ')[0])[0])
+            equipments = Equipment.get_equipments(category, user_priority)
         else:
-            equipments = Equipment.get_equipments(self.category.get(),
-                                                  UserDI.get_user_priority(self.user.get().split(' ')[0])[0])
+            equipments = Equipment.get_equipments(self.category.get(), user_priority)
 
         # Table header
         l = ctk.CTkLabel(self.scrollableFrame, text="Reservar", text_color="#545F71", font=("", 12, "bold"))
@@ -308,6 +309,11 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
         preempcao = True
 
         try:
+            # Verify if end date is after start date
+            mega_data = self.date_start.get_date() + " " + str(self.time_start.hours24()) + ":" + str(
+                self.time_start.minutes())
+            datetime_start = datetime.strptime(mega_data, "%Y/%m/%d %H:%M")
+
             mega_data2 = self.date_end.get_date() + " " + str(self.time_end.hours24()) + ":" + str(
                 self.time_end.minutes())
             datetime_end = datetime.strptime(mega_data2, "%Y/%m/%d %H:%M")
@@ -315,15 +321,17 @@ class FrameRequisitionNew(ctk.CTkScrollableFrame):
             # Qualquer utilizador que não seja o presidente
             if self.combo.get()[:2] != "PD":
                 for id, v in self.equipments_radio.items():
-                    if v.get() in [ReservationEquipmentType.reserved.value]:
+                    if v.get() in [ReservationEquipmentType.essential.value, ReservationEquipmentType.reserved.value]:
                         equip = Equipment.get_by_id_view(id)
 
                         # não há comparação por hora -> converter para segundos
-                        if equip is not None and equip[4] is not None and (
-                                equip[4] - datetime_end).seconds // 3600 < 48:
-                            preempcao = False
-                            break
-                            # todo: conexao
+                        print(equip)
+                        if equip is not None and equip[4] is not None:
+                            delta = (equip[4] - datetime_end).total_seconds() / 3600
+
+                            if 0 <= delta < 48:
+                                preempcao = False
+                                break
         except ValueError:  # formato da data errado
             pass
 

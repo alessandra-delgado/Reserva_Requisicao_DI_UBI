@@ -6,7 +6,11 @@ from datetime import datetime
 from enums.reservationEquipmentType import ReservationEquipmentType
 
 def add_reservation(user, datetime_start, datetime_end, equipments_radio) -> None:
-    conn = db.connect()
+    conn = db.conn
+
+    if conn is None:
+        return None
+
     cursor = conn.cursor()
 
     id_user = user.split()[0]
@@ -34,42 +38,48 @@ def add_reservation(user, datetime_start, datetime_end, equipments_radio) -> Non
     """, (id_reserv, id_user, datetime_start, datetime_end, current_date, status_res,))
 
     for equipment, selection in equipments_radio.items():
-        if(selection == ReservationEquipmentType.essential.value):
+        if selection == ReservationEquipmentType.essential.value:
            essential = 1
         else:
            essential = 0
 
-        if (selection != ReservationEquipmentType.not_reserved.value):
+        if selection != ReservationEquipmentType.not_reserved.value:
             cursor.execute("INSERT INTO TblRes_Equip (id_reserv, id_equip, essential, assigned_to) VALUES (?,?,?,?)", (id_reserv, equipment, essential, assigned_to,))
 
     conn.commit()
-    db.close(conn)
-    print(user, datetime_start, datetime_end, equipments_radio)
 
 def edit_reservation(reservation_id, status) -> None:
-    conn = db.connect()
+    conn = db.conn
+
+    if conn is None:
+        return None
+
     cursor = conn.cursor()
 
     cursor.execute("UPDATE TblReservation SET status_res = ? WHERE id_reserv = ?", (status, reservation_id,))
 
     conn.commit()
-    db.close(conn)
-    print(reservation_id, status)
 
 
 def get_reservations() -> list:
-    conn = db.connect()
+    conn = db.conn
+
+    if conn is None:
+        return []
+
     result = conn.cursor().execute("SELECT * FROM TblReservation")
     rows = result.fetchall()
-    db.close(conn)
 
     return rows
 
 
 def get_by_id(reservation_id) -> list:
-    conn = db.connect()
+    conn = db.conn
+
+    if conn is None:
+        return []
+
     result = conn.cursor().execute("SELECT * FROM TblReservation Where id_reserv=?", reservation_id)
     rows = result.fetchone()
-    db.close(conn)
 
     return rows
