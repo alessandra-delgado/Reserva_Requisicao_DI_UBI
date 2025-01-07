@@ -2,10 +2,13 @@ import customtkinter as ctk
 import tkinter as tk
 import os
 from PIL import Image
-from views.frames import home, requisition, reserve, user_new, user_index
-from views.nav import nav
-from controllers import about
 
+from models import DataBase
+from views.frames import home, equipment_index, equipment_new,reserve_index, reserve_new, requisition_index, requisition_new, user_new, user_index
+from views.nav import nav
+from controllers import about, connect
+import threading
+from tasks import cron
 
 class App(ctk.CTk):
     def __init__(self):
@@ -28,8 +31,12 @@ class App(ctk.CTk):
         # Frames mapping
         self.frames = {
             "Página Inicial": home.FrameHome(self),
-            "Requisição": requisition.FrameRequisicao(self),
-            "Reserva": reserve.FrameReserva(self),
+            "Lista de Equipamentos": equipment_index.FrameEquipmentIndex(self),
+            "Adicionar Equipamento": equipment_new.FrameEquipmentNew(self),
+            "Lista de Reservas": reserve_index.FrameReserveIndex(self),
+            "Criar Reserva": reserve_new.FrameReserveNew(self),
+            "Lista de Requisições": requisition_index.FrameRequisitionIndex(self),
+            "Criar Requisição": requisition_new.FrameRequisitionNew(self),
             "Lista de Utilizadores": user_index.FrameUserIndex(self),
             "Criar Utilizador": user_new.FrameUserNew(self),
         }
@@ -56,7 +63,7 @@ class App(ctk.CTk):
 
         # Create menu Tools
         menu_tools = tk.Menu(menu_bar, tearoff=0)
-        menu_tools.add_command(label="Conectar à Base de Dados")
+        menu_tools.add_command(label="Conectar à Base de Dados", command=connect.to_db)
         menu_tools.add_separator()
         menu_tools.add_command(label="Sair", command=self.quit)
 
@@ -80,8 +87,10 @@ class App(ctk.CTk):
         )
 
         nav_entries = {
-            'Página Inicial': ['Página Inicial', 'Reserva'],
-            'Requisição': ['Requisição', 'Reserva'],
+            'Página Inicial': ['Página Inicial'],
+            'Equipamento': ['Lista de Equipamentos', 'Adicionar Equipamento'],
+            'Reserva': ['Lista de Reservas', 'Criar Reserva'],
+            'Requisição': ['Lista de Requisições', 'Criar Requisição'],
             'Utilizador': ['Lista de Utilizadores', 'Criar Utilizador'],
         }
 
@@ -93,6 +102,8 @@ class App(ctk.CTk):
     def select_frame(self, frame_name, button_name):
         for name, frame in self.frames.items():
             frame.grid_forget()
+            if hasattr(frame, "delete_dependent"):
+                frame.delete_dependent()
 
         for name, frame in self.nav_frames.items():
             self.nav_frames[name].unselect()
@@ -107,4 +118,17 @@ class App(ctk.CTk):
 
 if __name__ == "__main__":
     app = App()
+
+    stop = threading.Event()
+    # Starts cronjob thread
+
+    thread = threading.Thread(target = cron.init, args=(stop,))
+    thread.start()
+
     app.mainloop()
+    # Marks cronjob to stop
+    stop.set()
+    thread.join()
+
+    if DataBase.conn is not None:
+        DataBase.close()

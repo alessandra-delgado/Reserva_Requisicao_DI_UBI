@@ -1,7 +1,7 @@
 DROP TRIGGER IF EXISTS ReservationToSatisfied;
 GO
 CREATE TRIGGER ReservationToSatisfied
-    ON Reservation
+    ON TblReservation
     AFTER UPDATE
     AS
     IF (UPDATE(status_res))

@@ -27,3 +27,9 @@ src/views/frames/__pycache__/
 src/views/nav/__pycache__/
 
 src/controllers/__pycache__/
+
+src/.idea/
+
+src/enums/__pycache__/
+
+src/models/__pycache__/
