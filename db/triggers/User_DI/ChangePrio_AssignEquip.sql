@@ -1,4 +1,4 @@
-DROP TRIGGER IF EXISTS PrioChange_AssignEquip
+DROP TRIGGER IF EXISTS PrioChange_AssignEquip;
 GO
 CREATE TRIGGER PrioChange_AssignEquip
     ON
